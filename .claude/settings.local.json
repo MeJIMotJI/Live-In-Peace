@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git -C \"C:/Users/MeJI/Live-In-Peace\" add .)",
+      "Bash(git -C \"C:/Users/MeJI/Live-In-Peace\" status)"
+    ]
+  }
+}

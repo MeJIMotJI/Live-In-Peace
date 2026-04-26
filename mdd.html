@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>โรคซึมเศร้า — Live In Peace</title>
+<style>
+:root {
+  --bg: #f5fbf9;
+  --surface: #ffffff;
+  --primary: #3a9b8a;
+  --primary-dark: #2d7a6a;
+  --primary-light: #e8f7f4;
+  --indigo: #5c6bc0;
+  --indigo-light: #eeeffc;
+  --text: #1e3240;
+  --text-muted: #6b849a;
+  --border: #cde8e2;
+  --radius: 16px;
+  --shadow: 0 2px 16px rgba(58,155,138,0.10);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Leelawadee UI', 'Leelawadee', Tahoma, 'Lucida Sans Unicode', Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 17px;
+  line-height: 1.9;
+  min-height: 100vh;
+}
+.topbar {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 14px 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+.back-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--primary);
+  text-decoration: none;
+  font-size: 16px;
+  font-weight: 700;
+  padding: 6px 12px;
+  border-radius: 20px;
+  background: var(--primary-light);
+  transition: background 0.2s;
+}
+.back-btn:hover { background: #d4f0ea; }
+.topbar-title { font-size: 17px; font-weight: 700; color: var(--text); }
+.hero {
+  background: linear-gradient(135deg, #3d4fa0 0%, #5c6bc0 60%, #7b8fe8 100%);
+  color: white;
+  padding: 40px 24px 48px;
+  text-align: center;
+}
+.hero-icon { font-size: 56px; margin-bottom: 12px; }
+.hero h1 { font-size: 26px; font-weight: 700; margin-bottom: 10px; }
+.hero p { font-size: 16px; opacity: 0.9; max-width: 380px; margin: 0 auto; }
+main { max-width: 640px; margin: 0 auto; padding: 28px 20px 60px; }
+.tip-box {
+  background: var(--indigo-light);
+  border-left: 4px solid var(--indigo);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 16px 20px;
+  margin-bottom: 24px;
+  font-size: 15px;
+  color: #3d4fa0;
+}
+.accordion { display: flex; flex-direction: column; gap: 12px; }
+.acc-item {
+  background: var(--surface);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  border: 1.5px solid transparent;
+  transition: border-color 0.2s;
+}
+.acc-item.open { border-color: var(--border); }
+.acc-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 22px;
+  cursor: pointer;
+  user-select: none;
+  gap: 12px;
+}
+.acc-header:hover { background: #fafffe; }
+.acc-header-left { display: flex; align-items: center; gap: 12px; }
+.acc-num {
+  width: 32px; height: 32px;
+  background: var(--indigo-light);
+  color: var(--indigo);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 14px; flex-shrink: 0;
+}
+.acc-item.open .acc-num { background: var(--indigo); color: white; }
+.acc-title { font-size: 17px; font-weight: 700; color: var(--text); line-height: 1.4; }
+.acc-arrow {
+  width: 24px; height: 24px;
+  color: var(--text-muted);
+  transition: transform 0.3s ease;
+  flex-shrink: 0;
+}
+.acc-item.open .acc-arrow { transform: rotate(180deg); color: var(--indigo); }
+.acc-body { max-height: 0; overflow: hidden; transition: max-height 0.35s ease; }
+.acc-body-inner { padding: 4px 22px 24px; border-top: 1px solid var(--border); }
+.acc-body-inner p { margin-bottom: 12px; }
+.acc-body-inner p:last-child { margin-bottom: 0; }
+.tips-list { list-style: none; display: flex; flex-direction: column; gap: 10px; margin-top: 8px; }
+.tips-list li { display: flex; gap: 10px; align-items: flex-start; }
+.tip-dot { width: 8px; height: 8px; border-radius: 50%; margin-top: 9px; flex-shrink: 0; }
+.highlight {
+  background: var(--primary-light);
+  border-radius: 8px;
+  padding: 14px 16px;
+  margin: 12px 0;
+  font-size: 15px;
+}
+.highlight-indigo {
+  background: var(--indigo-light);
+  border-radius: 8px;
+  padding: 14px 16px;
+  margin: 12px 0;
+  font-size: 15px;
+  color: #3d4fa0;
+}
+.symptom-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 10px;
+}
+.symptom-card {
+  background: var(--indigo-light);
+  border-radius: 10px;
+  padding: 12px 14px;
+  font-size: 14px;
+  color: #3d4fa0;
+}
+.symptom-card strong { display: block; margin-bottom: 2px; }
+.support-card {
+  background: var(--primary-light);
+  border-radius: 10px;
+  padding: 14px 16px;
+  margin-bottom: 10px;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+.support-icon { font-size: 22px; flex-shrink: 0; margin-top: 2px; }
+@media (max-width: 400px) { .symptom-grid { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a href="index.html" class="back-btn">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+    กลับ
+  </a>
+  <span class="topbar-title">โรคซึมเศร้า</span>
+</div>
+
+<div class="hero">
+  <div class="hero-icon">🌱</div>
+  <h1>โรคซึมเศร้า (MDD)</h1>
+  <p>ความเข้าใจที่ถูกต้องคือก้าวแรกของการฟื้นตัว</p>
+</div>
+
+<main>
+  <div class="tip-box">
+    💙 โรคซึมเศร้าไม่ใช่ความอ่อนแอ ไม่ใช่การแกล้งทำ และ<strong>ไม่ใช่ความผิดของคุณ</strong> มันเป็นโรคที่รักษาได้เหมือนโรคอื่น ๆ
+  </div>
+
+  <div class="accordion">
+
+    <div class="acc-item" onclick="toggle(this)">
+      <div class="acc-header">
+        <div class="acc-header-left">
+          <div class="acc-num">1</div>
+          <div class="acc-title">โรคซึมเศร้าคืออะไร?</div>
+        </div>
+        <svg class="acc-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="acc-body">
+        <div class="acc-body-inner">
+          <p>โรคซึมเศร้า (Major Depressive Disorder) คือโรคที่ส่งผลต่อความรู้สึก ความคิด และพฤติกรรมอย่างรุนแรง ไม่ใช่แค่ "ความเศร้าทั่วไป" ที่หายได้เอง</p>
+          <p>ต่างจากความเศร้าปกติตรงที่ อาการจะ<strong>นานกว่า 2 สัปดาห์</strong> รุนแรงกว่า และรบกวนการใช้ชีวิตประจำวันอย่างชัดเจน</p>
+          <div class="highlight">
+            📊 โรคซึมเศร้าเป็นหนึ่งในโรคที่พบบ่อยที่สุดในโลก พบในประชากรประมาณ 1 ใน 6 คนตลอดชีวิต
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="acc-item" onclick="toggle(this)">
+      <div class="acc-header">
+        <div class="acc-header-left">
+          <div class="acc-num">2</div>
+          <div class="acc-title">อาการของโรคซึมเศร้า</div>
+        </div>
+        <svg class="acc-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="acc-body">
+        <div class="acc-body-inner">
+          <p>อาการอาจแตกต่างกันในแต่ละคน แต่มักครอบคลุมด้านต่าง ๆ เหล่านี้:</p>
+          <div class="symptom-grid">
+            <div class="symptom-card">
+              <strong>😔 อารมณ์</strong>เศร้า ว่างเปล่า หมดหวัง ร้องไห้ง่าย
+            </div>
+            <div class="symptom-card">
+              <strong>😴 พลังงาน</strong>เหนื่อยล้ามาก ไม่มีแรง แม้พักแล้ว
+            </div>
+            <div class="symptom-card">
+              <strong>🧠 ความคิด</strong>คิดช้า ตัดสินใจยาก สมาธิสั้น
+            </div>
+            <div class="symptom-card">
+              <strong>😴 การนอน</strong>นอนไม่หลับหรือนอนมากเกินไป
+            </div>
+            <div class="symptom-card">
+              <strong>🍽️ ความอยากอาหาร</strong>ลดลงหรือเพิ่มขึ้นผิดปกติ
+            </div>
+            <div class="symptom-card">
+              <strong>🎭 ความสนใจ</strong>หมดสนุกกับสิ่งที่เคยชอบ
+            </div>
+            <div class="symptom-card">
+              <strong>😰 ความรู้สึก</strong>รู้สึกผิด ไร้คุณค่า โทษตัวเอง
+            </div>
+            <div class="symptom-card">
+              <strong>💭 ความคิดร้าย</strong>คิดอยากตาย หรืออยากทำร้ายตัวเอง
+            </div>
+          </div>
+          <div class="highlight-indigo" style="margin-top:14px">
+            ⚠️ หากมีความคิดอยากทำร้ายตัวเอง กรุณาโทรสายด่วนสุขภาพจิต <strong>1323</strong> ได้ทันที ตลอด 24 ชั่วโมง
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="acc-item" onclick="toggle(this)">
+      <div class="acc-header">
+        <div class="acc-header-left">
+          <div class="acc-num">3</div>
+          <div class="acc-title">สาเหตุของโรคซึมเศร้า</div>
+        </div>
+        <svg class="acc-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="acc-body">
+        <div class="acc-body-inner">
+          <p>โรคซึมเศร้าเกิดจากหลายปัจจัยร่วมกัน ไม่มีสาเหตุเดียว:</p>
+          <ul class="tips-list">
+            <li><div class="tip-dot" style="background:var(--indigo)"></div><span><strong>ชีววิทยา</strong> — ความไม่สมดุลของสารสื่อประสาทในสมอง เช่น Serotonin, Dopamine, Norepinephrine</span></li>
+            <li><div class="tip-dot" style="background:var(--indigo)"></div><span><strong>พันธุกรรม</strong> — มีประวัติคนในครอบครัวเป็นโรคซึมเศร้าเพิ่มความเสี่ยง แต่ไม่ได้หมายความว่าต้องเป็นเสมอไป</span></li>
+            <li><div class="tip-dot" style="background:var(--indigo)"></div><span><strong>เหตุการณ์ชีวิต</strong> — การสูญเสีย ความเครียดสะสม การถูกทำร้าย หรือการเปลี่ยนแปลงครั้งใหญ่</span></li>
+            <li><div class="tip-dot" style="background:var(--indigo)"></div><span><strong>รูปแบบความคิด</strong> — ความคิดเชิงลบซ้ำ ๆ การตำหนิตัวเองมาก การมองโลกในแง่ร้าย</span></li>
+            <li><div class="tip-dot" style="background:var(--indigo)"></div><span><strong>โรคทางกาย</strong> — โรคบางอย่างหรือยาบางชนิดอาจกระตุ้นอาการซึมเศร้า</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="acc-item" onclick="toggle(this)">
+      <div class="acc-header">
+        <div class="acc-header-left">
+          <div class="acc-num">4</div>
+          <div class="acc-title">การรักษาโรคซึมเศร้า</div>
+        </div>
+        <svg class="acc-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="acc-body">
+        <div class="acc-body-inner">
+          <p>การรักษาที่มีประสิทธิภาพสูงสุดมักใช้ทั้งสองวิธีร่วมกัน:</p>
+          <ul class="tips-list">
+            <li><div class="tip-dot" style="background:var(--primary)"></div><span><strong>ยาต้านเศร้า (Antidepressants)</strong> — ยากลุ่ม SSRI ปลอดภัย ไม่ติด ต้องกินอย่างน้อย 2–4 สัปดาห์จึงเห็นผล ห้ามหยุดเองโดยไม่ปรึกษาแพทย์</span></li>
+            <li><div class="tip-dot" style="background:var(--primary)"></div><span><strong>จิตบำบัด (CBT)</strong> — ช่วยเปลี่ยนรูปแบบความคิดและพฤติกรรมที่ทำให้เศร้า ได้ผลดีทั้งระยะสั้นและยาว</span></li>
+            <li><div class="tip-dot" style="background:var(--primary)"></div><span><strong>การปรับวิถีชีวิต</strong> — ออกกำลังกายสม่ำเสมอ นอนหลับพอ ทานอาหารมีประโยชน์ ลดแอลกอฮอล์</span></li>
+            <li><div class="tip-dot" style="background:var(--primary)"></div><span><strong>การสนับสนุนทางสังคม</strong> — ไม่อยู่คนเดียว พูดคุยกับคนที่ไว้ใจ เข้ากลุ่มสนับสนุน</span></li>
+          </ul>
+          <div class="highlight" style="margin-top:14px">
+            🌟 ผู้ป่วย 80–90% ตอบสนองต่อการรักษา อย่าลังเลที่จะขอความช่วยเหลือ
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="acc-item" onclick="toggle(this)">
+      <div class="acc-header">
+        <div class="acc-header-left">
+          <div class="acc-num">5</div>
+          <div class="acc-title">คนรอบข้างช่วยได้อย่างไร?</div>
+        </div>
+        <svg class="acc-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="acc-body">
+        <div class="acc-body-inner">
+          <div class="support-card">
+            <span class="support-icon">👂</span>
+            <div><strong>ฟังโดยไม่ตัดสิน</strong> — แค่ "ฉันอยู่ตรงนี้" และ "ฉันฟังอยู่" มีคุณค่ามาก ไม่ต้องมีคำตอบเสมอไป</div>
+          </div>
+          <div class="support-card">
+            <span class="support-icon">🚫</span>
+            <div><strong>อย่าพูดว่า</strong> "คิดมากเอง" "อย่าอ่อนแอ" "คนอื่นยังแย่กว่า" หรือ "แค่ลุกขึ้นมาทำอะไรสักอย่าง" — ประโยคเหล่านี้ทำให้ผู้ป่วยรู้สึกแย่ลง</div>
+          </div>
+          <div class="support-card">
+            <span class="support-icon">🤝</span>
+            <div><strong>ช่วยทำสิ่งเล็กน้อย</strong> — พาไปพบแพทย์ ทานข้าวด้วยกัน หรือแค่นั่งเงียบ ๆ อยู่เป็นเพื่อน</div>
+          </div>
+          <div class="support-card">
+            <span class="support-icon">💪</span>
+            <div><strong>ดูแลตัวเองด้วย</strong> — การดูแลผู้ที่เป็นโรคซึมเศร้าอาจเหนื่อยมาก อย่าละเลยสุขภาพจิตของตัวเอง</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="acc-item" onclick="toggle(this)">
+      <div class="acc-header">
+        <div class="acc-header-left">
+          <div class="acc-num">6</div>
+          <div class="acc-title">การฟื้นตัวและชีวิตข้างหน้า</div>
+        </div>
+        <svg class="acc-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="acc-body">
+        <div class="acc-body-inner">
+          <p>การฟื้นตัวจากโรคซึมเศร้าใช้เวลา และอาจไม่ได้เป็นเส้นตรงเสมอไป มีขึ้นมีลงเป็นเรื่องปกติ</p>
+          <ul class="tips-list">
+            <li><div class="tip-dot" style="background:var(--primary)"></div><span>ฉลองความก้าวหน้าเล็กน้อย เช่น ลุกจากเตียงได้ ทานข้าวได้ ออกไปข้างนอกได้</span></li>
+            <li><div class="tip-dot" style="background:var(--primary)"></div><span>กินยาตามแพทย์สั่งอย่างสม่ำเสมอ ไม่หยุดยาเองแม้รู้สึกดีขึ้นแล้ว</span></li>
+            <li><div class="tip-dot" style="background:var(--primary)"></div><span>เรียนรู้สัญญาณเตือนของตัวเองเพื่อป้องกันการกลับเป็นซ้ำ</span></li>
+            <li><div class="tip-dot" style="background:var(--primary)"></div><span>สร้างกิจวัตรที่ดีต่อสุขภาพจิต เช่น นอนหลับ ออกกำลังกาย สังสรรค์</span></li>
+          </ul>
+          <div class="highlight" style="margin-top:14px">
+            🌱 หลายคนที่ผ่านโรคซึมเศร้ามาได้ บอกว่าช่วงเวลานั้นทำให้พวกเขาเข้าใจตัวเองและชีวิตได้ลึกซึ้งขึ้น ชีวิตที่ดียังรออยู่ข้างหน้า
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<script>
+function toggle(item) {
+  const body = item.querySelector('.acc-body');
+  const inner = item.querySelector('.acc-body-inner');
+  const isOpen = item.classList.contains('open');
+  document.querySelectorAll('.acc-item.open').forEach(el => {
+    el.classList.remove('open');
+    el.querySelector('.acc-body').style.maxHeight = '0';
+  });
+  if (!isOpen) {
+    item.classList.add('open');
+    body.style.maxHeight = inner.scrollHeight + 32 + 'px';
+  }
+}
+</script>
+</body>
+</html>

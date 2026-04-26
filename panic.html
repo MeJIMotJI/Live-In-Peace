@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>โรคแพนิค — Live In Peace</title>
+<style>
+:root {
+  --bg: #f5fbf9;
+  --surface: #ffffff;
+  --primary: #3a9b8a;
+  --primary-dark: #2d7a6a;
+  --primary-light: #e8f7f4;
+  --rose: #e07b8a;
+  --rose-light: #fdf0f2;
+  --text: #1e3240;
+  --text-muted: #6b849a;
+  --border: #cde8e2;
+  --radius: 16px;
+  --shadow: 0 2px 16px rgba(58,155,138,0.10);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Leelawadee UI', 'Leelawadee', Tahoma, 'Lucida Sans Unicode', Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 17px;
+  line-height: 1.9;
+  min-height: 100vh;
+}
+.topbar {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 14px 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+.back-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--primary);
+  text-decoration: none;
+  font-size: 16px;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: 20px;
+  background: var(--primary-light);
+  transition: background 0.2s;
+}
+.back-btn:hover { background: #d4f0ea; }
+.topbar-title { font-size: 17px; font-weight: 700; color: var(--text); }
+.hero {
+  background: linear-gradient(135deg, #b85c72 0%, #e07b8a 100%);
+  color: white;
+  padding: 40px 24px 48px;
+  text-align: center;
+}
+.hero-icon { font-size: 56px; margin-bottom: 12px; }
+.hero h1 { font-size: 26px; font-weight: 700; margin-bottom: 10px; }
+.hero p { font-size: 16px; opacity: 0.9; max-width: 380px; margin: 0 auto; }
+main { max-width: 640px; margin: 0 auto; padding: 28px 20px 60px; }
+.tip-box {
+  background: var(--rose-light);
+  border-left: 4px solid var(--rose);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 16px 20px;
+  margin-bottom: 24px;
+  font-size: 15px;
+  color: #8b3a4a;
+}
+.accordion { display: flex; flex-direction: column; gap: 12px; }
+.acc-item {
+  background: var(--surface);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  border: 1.5px solid transparent;
+  transition: border-color 0.2s;
+}
+.acc-item.open { border-color: var(--border); }
+.acc-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 22px;
+  cursor: pointer;
+  user-select: none;
+  gap: 12px;
+}
+.acc-header:hover { background: #fafffe; }
+.acc-header-left { display: flex; align-items: center; gap: 12px; }
+.acc-num {
+  width: 32px; height: 32px;
+  background: var(--rose-light);
+  color: var(--rose);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 14px; flex-shrink: 0;
+}
+.acc-item.open .acc-num { background: var(--rose); color: white; }
+.acc-title { font-size: 17px; font-weight: 700; color: var(--text); line-height: 1.4; }
+.acc-arrow {
+  width: 24px; height: 24px;
+  color: var(--text-muted);
+  transition: transform 0.3s ease;
+  flex-shrink: 0;
+}
+.acc-item.open .acc-arrow { transform: rotate(180deg); color: var(--rose); }
+.acc-body { max-height: 0; overflow: hidden; transition: max-height 0.35s ease; }
+.acc-body-inner {
+  padding: 4px 22px 24px;
+  border-top: 1px solid var(--border);
+}
+.acc-body-inner p { margin-bottom: 12px; }
+.acc-body-inner p:last-child { margin-bottom: 0; }
+.tips-list { list-style: none; display: flex; flex-direction: column; gap: 10px; margin-top: 8px; }
+.tips-list li { display: flex; gap: 10px; align-items: flex-start; }
+.tip-dot { width: 8px; height: 8px; border-radius: 50%; margin-top: 9px; flex-shrink: 0; }
+.highlight {
+  background: var(--primary-light);
+  border-radius: 8px;
+  padding: 14px 16px;
+  margin: 12px 0;
+  font-size: 15px;
+}
+.highlight-rose {
+  background: var(--rose-light);
+  border-radius: 8px;
+  padding: 14px 16px;
+  margin: 12px 0;
+  font-size: 15px;
+  color: #8b3a4a;
+}
+.myth-grid { display: flex; flex-direction: column; gap: 12px; margin-top: 8px; }
+.myth-card {
+  border-radius: 10px;
+  overflow: hidden;
+}
+.myth-header {
+  background: #fde8eb;
+  color: #8b3a4a;
+  padding: 10px 16px;
+  font-weight: 700;
+  font-size: 15px;
+}
+.myth-body {
+  background: #f9fffe;
+  border: 1px solid var(--border);
+  border-top: none;
+  padding: 12px 16px;
+  font-size: 15px;
+  border-radius: 0 0 10px 10px;
+}
+.step-card {
+  background: var(--primary-light);
+  border-radius: 10px;
+  padding: 14px 16px;
+  margin-bottom: 10px;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+.step-num {
+  background: var(--primary);
+  color: white;
+  border-radius: 50%;
+  width: 28px; height: 28px;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 13px; flex-shrink: 0; margin-top: 2px;
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a href="index.html" class="back-btn">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+    กลับ
+  </a>
+  <span class="topbar-title">โรคแพนิค</span>
+</div>
+
+<div class="hero">
+  <div class="hero-icon">💗</div>
+  <h1>โรคแพนิค (Panic Disorder)</h1>
+  <p>เข้าใจอาการ รู้สาเหตุ และรับมือได้อย่างถูกวิธี</p>
+</div>
+
+<main>
+  <div class="tip-box">
+    🤍 โรคแพนิคพบบ่อยมากและ<strong>รักษาได้</strong> คุณไม่ได้บ้า และไม่ได้กำลังจะตาย แม้อาการจะรู้สึกน่ากลัวมาก
+  </div>
+
+  <div class="accordion">
+
+    <div class="acc-item" onclick="toggle(this)">
+      <div class="acc-header">
+        <div class="acc-header-left">
+          <div class="acc-num">1</div>
+          <div class="acc-title">โรคแพนิคคืออะไร?</div>
+        </div>
+        <svg class="acc-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="acc-body">
+        <div class="acc-body-inner">
+          <p>โรคแพนิค คือ โรควิตกกังวลชนิดหนึ่ง ที่ทำให้เกิด <strong>อาการแพนิคซ้ำ ๆ</strong> โดยไม่มีสาเหตุชัดเจน และมักมีความกลัวว่าจะเกิดอาการอีก</p>
+          <p>อาการแพนิค (Panic Attack) คือความรู้สึกหวาดกลัวหรือตื่นตระหนกอย่างรุนแรงและฉับพลัน มักกินเวลา 5–20 นาที แล้วหายไปเอง</p>
+          <div class="highlight">
+            📊 โรคแพนิคพบได้ในประชากรประมาณ 2–3% และมักเริ่มในวัยรุ่นถึงวัยผู้ใหญ่ตอนต้น
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="acc-item" onclick="toggle(this)">
+      <div class="acc-header">
+        <div class="acc-header-left">
+          <div class="acc-num">2</div>
+          <div class="acc-title">อาการของโรคแพนิค</div>
+        </div>
+        <svg class="acc-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="acc-body">
+        <div class="acc-body-inner">
+          <p>ในระหว่างอาการแพนิค ร่างกายจะสร้างอาการทางกายที่น่ากลัวมาก ซึ่งเป็นอาการจริง ไม่ได้แกล้งทำ:</p>
+          <ul class="tips-list">
+            <li><div class="tip-dot" style="background:#e07b8a"></div><span>ใจสั่น หัวใจเต้นเร็วหรือแรงผิดปกติ</span></li>
+            <li><div class="tip-dot" style="background:#e07b8a"></div><span>หายใจไม่ออก รู้สึกหายใจติดขัด</span></li>
+            <li><div class="tip-dot" style="background:#e07b8a"></div><span>เวียนหัว หน้ามืด รู้สึกจะเป็นลม</span></li>
+            <li><div class="tip-dot" style="background:#e07b8a"></div><span>มือเท้าชา หรือรู้สึกเสียว</span></li>
+            <li><div class="tip-dot" style="background:#e07b8a"></div><span>รู้สึกร้อนวูบวาบหรือหนาวสั่น</span></li>
+            <li><div class="tip-dot" style="background:#e07b8a"></div><span>แน่นหน้าอก เจ็บหน้าอก</span></li>
+            <li><div class="tip-dot" style="background:#e07b8a"></div><span>คลื่นไส้ ปวดท้อง</span></li>
+            <li><div class="tip-dot" style="background:#e07b8a"></div><span>รู้สึกว่าตัวเองไม่จริง หรือโลกไม่จริง (Derealization)</span></li>
+            <li><div class="tip-dot" style="background:#e07b8a"></div><span>กลัวตาย กลัวบ้า หรือกลัวขาดการควบคุม</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="acc-item" onclick="toggle(this)">
+      <div class="acc-header">
+        <div class="acc-header-left">
+          <div class="acc-num">3</div>
+          <div class="acc-title">ทำไมถึงเกิดอาการแพนิค?</div>
+        </div>
+        <svg class="acc-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="acc-body">
+        <div class="acc-body-inner">
+          <p>อาการแพนิคเกิดจาก <strong>ระบบเตือนภัยของร่างกาย (Fight-or-Flight)</strong> ทำงานผิดปกติ สมองส่งสัญญาณอันตรายทั้งที่ไม่มีอันตรายจริง ๆ</p>
+          <p>ร่างกายจึงปล่อยสาร Adrenaline ออกมา ทำให้หัวใจเต้นเร็ว หายใจถี่ กล้ามเนื้อตึง — เป็นการตอบสนองที่ถูกต้อง แต่เกิดขึ้นในเวลาที่ไม่เหมาะสม</p>
+          <div class="highlight">
+            🧠 สำคัญมาก: อาการแพนิคไม่เป็นอันตราย ร่างกายของคุณจะไม่เป็นอะไร แม้จะรู้สึกน่ากลัวมากแค่ไหน
+          </div>
+          <p>ปัจจัยที่อาจกระตุ้น: ความเครียด การนอนไม่หอ คาเฟอีน พันธุกรรม และประสบการณ์ในอดีต</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="acc-item" onclick="toggle(this)">
+      <div class="acc-header">
+        <div class="acc-header-left">
+          <div class="acc-num">4</div>
+          <div class="acc-title">ทำอย่างไรเมื่อเกิดอาการแพนิค?</div>
+        </div>
+        <svg class="acc-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="acc-body">
+        <div class="acc-body-inner">
+          <p>เมื่อเกิดอาการ ให้ทำตามขั้นตอนเหล่านี้:</p>
+          <div class="step-card">
+            <div class="step-num">1</div>
+            <div><strong>บอกตัวเองว่า "นี่คืออาการแพนิค มันจะผ่านไป"</strong> — อาการจะถึงจุดสูงสุดแล้วลดลงเองภายใน 10–20 นาที</div>
+          </div>
+          <div class="step-card">
+            <div class="step-num">2</div>
+            <div><strong>ฝึกหายใจช้า ๆ</strong> — หายใจเข้าช้า ๆ 4 วินาที กลั้น 1 วินาที แล้วหายใจออกช้า ๆ 6 วินาที ทำซ้ำ 5–10 รอบ</div>
+          </div>
+          <div class="step-card">
+            <div class="step-num">3</div>
+            <div><strong>จับสิ่งรอบตัว</strong> — สัมผัสพื้น เก้าอี้ หรือสิ่งใกล้มือ เพื่อดึงสติกลับสู่ปัจจุบัน</div>
+          </div>
+          <div class="step-card">
+            <div class="step-num">4</div>
+            <div><strong>อย่าหนีจากที่นั้น</strong> ถ้าเป็นไปได้ การอยู่และผ่านมันไปช่วยให้สมองเรียนรู้ว่าสถานที่นั้นไม่อันตราย</div>
+          </div>
+          <div class="step-card">
+            <div class="step-num">5</div>
+            <div><strong>อย่าต่อสู้กับอาการ</strong> ยิ่งต่อต้าน อาการยิ่งรุนแรง ให้ยอมรับและปล่อยให้มันผ่านไป</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="acc-item" onclick="toggle(this)">
+      <div class="acc-header">
+        <div class="acc-header-left">
+          <div class="acc-num">5</div>
+          <div class="acc-title">การรักษาโรคแพนิค</div>
+        </div>
+        <svg class="acc-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="acc-body">
+        <div class="acc-body-inner">
+          <p>โรคแพนิครักษาได้ผลดีมาก การรักษาหลักมีสองแนวทาง:</p>
+          <ul class="tips-list">
+            <li><div class="tip-dot" style="background:var(--primary)"></div><span><strong>การบำบัดทางความคิดและพฤติกรรม (CBT)</strong> — ช่วยให้เข้าใจและเปลี่ยนรูปแบบความคิดที่ทำให้เกิดความกลัว เป็นวิธีที่ได้ผลดีที่สุด</span></li>
+            <li><div class="tip-dot" style="background:var(--primary)"></div><span><strong>ยาต้านเศร้ากลุ่ม SSRI</strong> — ช่วยลดความถี่และความรุนแรงของอาการ ปลอดภัยและไม่ติด ต้องกินสม่ำเสมอ</span></li>
+            <li><div class="tip-dot" style="background:var(--primary)"></div><span><strong>การ Exposure Therapy</strong> — ค่อย ๆ เผชิญกับสิ่งที่กลัว ภายใต้การดูแลของนักบำบัด</span></li>
+          </ul>
+          <div class="highlight" style="margin-top:14px">
+            💚 ผู้ป่วยส่วนใหญ่อาการดีขึ้นมากหลังการรักษา 3–6 เดือน อย่าท้อถอย
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="acc-item" onclick="toggle(this)">
+      <div class="acc-header">
+        <div class="acc-header-left">
+          <div class="acc-num">6</div>
+          <div class="acc-title">ความเข้าใจผิดที่พบบ่อย</div>
+        </div>
+        <svg class="acc-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="acc-body">
+        <div class="acc-body-inner">
+          <div class="myth-grid">
+            <div class="myth-card">
+              <div class="myth-header">❌ "แพนิคทำให้หัวใจวายได้"</div>
+              <div class="myth-body">✅ ไม่จริง แม้อาการจะรู้สึกเหมือนหัวใจวาย แต่อาการแพนิคไม่ทำอันตรายต่อหัวใจ</div>
+            </div>
+            <div class="myth-card">
+              <div class="myth-header">❌ "ฉันกำลังจะบ้า"</div>
+              <div class="myth-body">✅ ไม่จริง ความรู้สึกไม่จริงในอาการแพนิคเป็นผลจากสารเคมีในร่างกาย ไม่ใช่อาการทางจิต</div>
+            </div>
+            <div class="myth-card">
+              <div class="myth-header">❌ "ต้องหลีกเลี่ยงทุกอย่างที่กระตุ้น"</div>
+              <div class="myth-body">✅ ไม่จริง การหลีกเลี่ยงทำให้โรคแย่ลงในระยะยาว การเผชิญอย่างมีระบบช่วยรักษาได้</div>
+            </div>
+            <div class="myth-card">
+              <div class="myth-header">❌ "กินยาแล้วติดตลอดชีวิต"</div>
+              <div class="myth-body">✅ ไม่จริง ยา SSRI ไม่ทำให้ติด และส่วนใหญ่ใช้ระยะสั้นถึงกลาง แล้วค่อย ๆ ลดได้</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<script>
+function toggle(item) {
+  const body = item.querySelector('.acc-body');
+  const inner = item.querySelector('.acc-body-inner');
+  const isOpen = item.classList.contains('open');
+  document.querySelectorAll('.acc-item.open').forEach(el => {
+    el.classList.remove('open');
+    el.querySelector('.acc-body').style.maxHeight = '0';
+  });
+  if (!isOpen) {
+    item.classList.add('open');
+    body.style.maxHeight = inner.scrollHeight + 32 + 'px';
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Live In Peace — ความสงบในใจ</title>
+<style>
+:root {
+  --bg: #f5fbf9;
+  --surface: #ffffff;
+  --primary: #3a9b8a;
+  --primary-dark: #2d7a6a;
+  --primary-light: #e8f7f4;
+  --blue: #5b8fd9;
+  --blue-light: #edf3fc;
+  --text: #1e3240;
+  --text-muted: #6b849a;
+  --border: #cde8e2;
+  --radius: 20px;
+  --radius-sm: 10px;
+  --shadow: 0 4px 20px rgba(58,155,138,0.12);
+  --shadow-hover: 0 8px 30px rgba(58,155,138,0.22);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Leelawadee UI', 'Leelawadee', Tahoma, 'Lucida Sans Unicode', Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 17px;
+  line-height: 1.8;
+  min-height: 100vh;
+}
+header {
+  background: linear-gradient(135deg, #3a9b8a 0%, #5b8fd9 100%);
+  color: white;
+  padding: 48px 24px 56px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+header::before {
+  content: '';
+  position: absolute;
+  top: -60px; right: -60px;
+  width: 220px; height: 220px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 50%;
+}
+header::after {
+  content: '';
+  position: absolute;
+  bottom: -80px; left: -40px;
+  width: 200px; height: 200px;
+  background: rgba(255,255,255,0.06);
+  border-radius: 50%;
+}
+.header-icon {
+  font-size: 52px;
+  margin-bottom: 12px;
+  display: block;
+  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.15));
+}
+header h1 {
+  font-size: 32px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+header p {
+  font-size: 17px;
+  opacity: 0.9;
+  max-width: 380px;
+  margin: 0 auto;
+}
+main {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 32px 20px 48px;
+}
+.section-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 19px;
+  font-weight: 700;
+  color: var(--primary-dark);
+  margin: 36px 0 16px;
+}
+.section-label::after {
+  content: '';
+  flex: 1;
+  height: 2px;
+  background: var(--border);
+  border-radius: 1px;
+}
+.section-label:first-child { margin-top: 0; }
+.card-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+.card-grid.single-col { grid-template-columns: 1fr; }
+.card {
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: 24px 20px;
+  text-decoration: none;
+  color: var(--text);
+  box-shadow: var(--shadow);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  border: 1.5px solid transparent;
+}
+.card:hover, .card:active {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-hover);
+  border-color: var(--border);
+}
+.card-icon {
+  font-size: 36px;
+  margin-bottom: 4px;
+}
+.card-title {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.4;
+}
+.card-desc {
+  font-size: 14px;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+.card.edu { border-top: 4px solid var(--primary); }
+.card.practice { border-top: 4px solid var(--blue); }
+.card.practice .card-icon { }
+footer {
+  text-align: center;
+  padding: 24px;
+  color: var(--text-muted);
+  font-size: 14px;
+  border-top: 1px solid var(--border);
+}
+@media (max-width: 400px) {
+  .card-grid { grid-template-columns: 1fr; }
+  header h1 { font-size: 26px; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <span class="header-icon">🌿</span>
+  <h1>Live In Peace</h1>
+  <p>ความสงบในใจ — แหล่งข้อมูลและการฝึกปฏิบัติเพื่อสุขภาพจิตที่ดี</p>
+</header>
+
+<main>
+  <div class="section-label">📖 ความรู้เรื่องโรค</div>
+  <div class="card-grid">
+    <a href="sleep.html" class="card edu">
+      <span class="card-icon">🌙</span>
+      <div class="card-title">สุขอนามัยการนอนหลับ</div>
+      <div class="card-desc">เคล็ดลับการนอนหลับ ที่ดีต่อสุขภาพจิต</div>
+    </a>
+    <a href="panic.html" class="card edu">
+      <span class="card-icon">💗</span>
+      <div class="card-title">โรคแพนิค</div>
+      <div class="card-desc">เข้าใจอาการและ วิธีรับมือกับโรคแพนิค</div>
+    </a>
+    <a href="mdd.html" class="card edu">
+      <span class="card-icon">🌱</span>
+      <div class="card-title">โรคซึมเศร้า</div>
+      <div class="card-desc">รู้จักโรคซึมเศร้าและ แนวทางการฟื้นตัว</div>
+    </a>
+  </div>
+
+  <div class="section-label">🧘 ฝึกปฏิบัติ</div>
+  <div class="card-grid">
+    <a href="mindfulness.html" class="card practice">
+      <span class="card-icon">🔔</span>
+      <div class="card-title">สมาธิ & ไมนด์ฟูลเนส</div>
+      <div class="card-desc">ตั้งเวลานั่งสมาธิ พร้อมเสียงระฆัง</div>
+    </a>
+    <a href="relaxation.html" class="card practice">
+      <span class="card-icon">🌬️</span>
+      <div class="card-title">การหายใจผ่อนคลาย</div>
+      <div class="card-desc">ฝึกหายใจเพื่อลดความเครียดและความวิตกกังวล</div>
+    </a>
+    <a href="grounding.html" class="card practice">
+      <span class="card-icon">🌿</span>
+      <div class="card-title">เทคนิค 5-4-3-2-1</div>
+      <div class="card-desc">การ Grounding เมื่อรู้สึกไม่ปลอดภัยหรือวิตกกังวล</div>
+    </a>
+  </div>
+</main>
+
+<footer>
+  Live In Peace &nbsp;·&nbsp; เพื่อสุขภาพจิตที่ดีกว่า
+</footer>
+
+</body>
+</html>

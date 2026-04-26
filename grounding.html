@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>เทคนิค 5-4-3-2-1 — Live In Peace</title>
+<style>
+:root {
+  --bg: #f5fbf9;
+  --surface: #ffffff;
+  --primary: #3a9b8a;
+  --primary-dark: #2d7a6a;
+  --primary-light: #e8f7f4;
+  --text: #1e3240;
+  --text-muted: #6b849a;
+  --border: #cde8e2;
+  --radius: 16px;
+  --shadow: 0 2px 16px rgba(58,155,138,0.10);
+
+  --c1: #3a9b8a; /* see - teal */
+  --c2: #5b8fd9; /* touch - blue */
+  --c3: #9b6fc7; /* hear - purple */
+  --c4: #e07b8a; /* smell - rose */
+  --c5: #e09b3a; /* taste - amber */
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Leelawadee UI', 'Leelawadee', Tahoma, 'Lucida Sans Unicode', Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 17px;
+  line-height: 1.8;
+  min-height: 100vh;
+}
+.topbar {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 14px 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+.back-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--primary);
+  text-decoration: none;
+  font-size: 16px;
+  font-weight: 700;
+  padding: 6px 12px;
+  border-radius: 20px;
+  background: var(--primary-light);
+  transition: background 0.2s;
+}
+.back-btn:hover { background: #d4f0ea; }
+.topbar-title { font-size: 17px; font-weight: 700; }
+.hero {
+  background: linear-gradient(135deg, #2d7a6a 0%, #3a9b8a 60%, #5baa9a 100%);
+  color: white;
+  padding: 32px 24px 40px;
+  text-align: center;
+}
+.hero-icon { font-size: 48px; margin-bottom: 10px; }
+.hero h1 { font-size: 24px; font-weight: 700; margin-bottom: 6px; }
+.hero p { font-size: 15px; opacity: 0.9; max-width: 360px; margin: 0 auto; }
+main { max-width: 500px; margin: 0 auto; padding: 28px 20px 60px; }
+
+/* Intro screen */
+#introScreen { }
+.intro-card {
+  background: var(--surface);
+  border-radius: 24px;
+  box-shadow: var(--shadow);
+  padding: 32px 24px;
+  border: 1.5px solid var(--border);
+  margin-bottom: 20px;
+}
+.intro-card h2 { font-size: 20px; font-weight: 700; color: var(--primary-dark); margin-bottom: 12px; }
+.intro-card p { color: var(--text); font-size: 16px; margin-bottom: 14px; }
+.steps-preview {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 16px;
+}
+.step-preview {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 16px;
+  border-radius: 12px;
+  background: var(--bg);
+}
+.step-preview-num {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; font-weight: 800;
+  color: white;
+  flex-shrink: 0;
+}
+.step-preview-text { font-size: 16px; font-weight: 600; }
+.step-preview-sub { font-size: 13px; color: var(--text-muted); }
+
+/* Practice screen */
+#practiceScreen { display: none; }
+
+/* Progress bar */
+.progress-wrap {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+.progress-bar {
+  flex: 1;
+  height: 8px;
+  background: var(--border);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  border-radius: 4px;
+  background: var(--primary);
+  transition: width 0.5s ease;
+  width: 0%;
+}
+.progress-label { font-size: 14px; font-weight: 700; color: var(--text-muted); white-space: nowrap; }
+
+/* Step card */
+.step-card {
+  background: var(--surface);
+  border-radius: 24px;
+  box-shadow: var(--shadow);
+  padding: 32px 24px;
+  border: 1.5px solid var(--border);
+  margin-bottom: 20px;
+  border-top: 6px solid var(--primary);
+  animation: slideIn 0.35s ease;
+}
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.step-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 14px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 700;
+  color: white;
+  margin-bottom: 16px;
+}
+.step-number { font-size: 36px; font-weight: 800; margin-bottom: 4px; }
+.step-sense { font-size: 22px; font-weight: 700; margin-bottom: 8px; }
+.step-instruction {
+  font-size: 16px;
+  color: var(--text-muted);
+  margin-bottom: 24px;
+  line-height: 1.7;
+}
+.step-instruction strong { color: var(--text); }
+
+/* Item inputs */
+.items-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 24px;
+}
+.item-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.item-check {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  border: 2.5px solid var(--border);
+  background: var(--surface);
+  cursor: pointer;
+  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.2s;
+  color: white;
+  font-size: 14px;
+}
+.item-check.checked { background: var(--primary); border-color: var(--primary); }
+.item-input {
+  flex: 1;
+  background: var(--bg);
+  border: 2px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-size: 16px;
+  font-family: inherit;
+  color: var(--text);
+  outline: none;
+  transition: border-color 0.2s;
+}
+.item-input:focus { border-color: var(--primary); background: white; }
+.item-input::placeholder { color: var(--text-muted); }
+.item-input.filled { border-color: var(--primary); }
+
+/* Navigation buttons */
+.nav-btns {
+  display: flex;
+  gap: 12px;
+  justify-content: space-between;
+}
+.btn {
+  border: none;
+  border-radius: 50px;
+  padding: 14px 28px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.btn-primary {
+  background: var(--primary);
+  color: white;
+  box-shadow: 0 4px 14px rgba(58,155,138,0.35);
+  flex: 1;
+  justify-content: center;
+}
+.btn-primary:hover { background: var(--primary-dark); transform: translateY(-1px); }
+.btn-ghost {
+  background: var(--primary-light);
+  color: var(--primary-dark);
+}
+.btn-ghost:hover { background: #d4f0ea; }
+
+/* Encouragement */
+.encourage {
+  background: var(--primary-light);
+  border-radius: 12px;
+  padding: 14px 18px;
+  font-size: 15px;
+  color: var(--primary-dark);
+  margin-bottom: 20px;
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+/* Completion screen */
+#completionScreen {
+  display: none;
+  text-align: center;
+  animation: slideIn 0.4s ease;
+}
+.completion-card {
+  background: var(--surface);
+  border-radius: 24px;
+  box-shadow: var(--shadow);
+  padding: 48px 28px;
+  border: 1.5px solid var(--border);
+  margin-bottom: 20px;
+}
+.completion-icon { font-size: 72px; margin-bottom: 20px; }
+.completion-card h2 { font-size: 26px; font-weight: 700; color: var(--primary-dark); margin-bottom: 12px; }
+.completion-card p { color: var(--text-muted); font-size: 16px; line-height: 1.8; margin-bottom: 8px; }
+.body-check {
+  background: var(--primary-light);
+  border-radius: 14px;
+  padding: 18px 20px;
+  margin: 20px 0;
+  text-align: left;
+}
+.body-check h4 { font-size: 16px; font-weight: 700; color: var(--primary-dark); margin-bottom: 10px; }
+.body-check-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+.body-check-list li { display: flex; gap: 10px; font-size: 15px; color: var(--primary-dark); }
+
+/* Start button */
+.start-btn {
+  background: var(--primary);
+  color: white;
+  border: none;
+  border-radius: 50px;
+  padding: 18px 48px;
+  font-size: 19px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  box-shadow: 0 4px 20px rgba(58,155,138,0.4);
+  transition: all 0.2s;
+  width: 100%;
+}
+.start-btn:hover { background: var(--primary-dark); transform: translateY(-2px); }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a href="index.html" class="back-btn">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+    กลับ
+  </a>
+  <span class="topbar-title">เทคนิค 5-4-3-2-1</span>
+</div>
+
+<div class="hero">
+  <div class="hero-icon">🌿</div>
+  <h1>เทคนิค 5-4-3-2-1</h1>
+  <p>ดึงตัวเองกลับสู่ปัจจุบัน เมื่อรู้สึกวิตกกังวลหรือไม่ปลอดภัย</p>
+</div>
+
+<main>
+
+  <!-- Intro Screen -->
+  <div id="introScreen">
+    <div class="intro-card">
+      <h2>เทคนิคนี้คืออะไร?</h2>
+      <p>เทคนิค 5-4-3-2-1 เป็นการ <strong>Grounding</strong> — การดึงสติกลับสู่ปัจจุบันผ่านประสาทสัมผัสทั้ง 5 ช่วยหยุดวังวนความคิดและลดความวิตกกังวลได้อย่างรวดเร็ว</p>
+      <p>ใช้เมื่อรู้สึกวิตกกังวล ตื่นตระหนก หรือความคิดวนเวียน ใช้เวลาเพียง 5–10 นาที</p>
+      <div class="steps-preview">
+        <div class="step-preview">
+          <div class="step-preview-num" style="background:var(--c1)">5</div>
+          <div>
+            <div class="step-preview-text">👀 มองเห็น 5 สิ่ง</div>
+            <div class="step-preview-sub">สิ่งที่เห็นอยู่รอบตัวคุณตอนนี้</div>
+          </div>
+        </div>
+        <div class="step-preview">
+          <div class="step-preview-num" style="background:var(--c2)">4</div>
+          <div>
+            <div class="step-preview-text">✋ สัมผัส 4 สิ่ง</div>
+            <div class="step-preview-sub">สิ่งที่คุณสัมผัสได้ตอนนี้</div>
+          </div>
+        </div>
+        <div class="step-preview">
+          <div class="step-preview-num" style="background:var(--c3)">3</div>
+          <div>
+            <div class="step-preview-text">👂 ได้ยิน 3 เสียง</div>
+            <div class="step-preview-sub">เสียงที่ได้ยินในขณะนี้</div>
+          </div>
+        </div>
+        <div class="step-preview">
+          <div class="step-preview-num" style="background:var(--c4)">2</div>
+          <div>
+            <div class="step-preview-text">👃 ดมกลิ่น 2 อย่าง</div>
+            <div class="step-preview-sub">กลิ่นที่รับรู้ได้ตอนนี้</div>
+          </div>
+        </div>
+        <div class="step-preview">
+          <div class="step-preview-num" style="background:var(--c5)">1</div>
+          <div>
+            <div class="step-preview-text">👅 ลิ้มรส 1 อย่าง</div>
+            <div class="step-preview-sub">รสชาติที่รับรู้ได้ในปากตอนนี้</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <button class="start-btn" onclick="startPractice()">
+      เริ่มฝึก →
+    </button>
+  </div>
+
+  <!-- Practice Screen -->
+  <div id="practiceScreen">
+    <div class="progress-wrap">
+      <div class="progress-bar">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+      <div class="progress-label" id="progressLabel">1 / 5</div>
+    </div>
+
+    <div class="step-card" id="stepCard">
+      <!-- filled by JS -->
+    </div>
+
+    <div class="encourage" id="encourageBox"></div>
+
+    <div class="nav-btns">
+      <button class="btn btn-ghost" id="backStepBtn" onclick="prevStep()" style="display:none">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+        ย้อนกลับ
+      </button>
+      <button class="btn btn-primary" id="nextStepBtn" onclick="nextStep()">
+        ถัดไป
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Completion Screen -->
+  <div id="completionScreen">
+    <div class="completion-card">
+      <div class="completion-icon">🌿</div>
+      <h2>ทำได้ดีมาก!</h2>
+      <p>คุณผ่านเทคนิค 5-4-3-2-1 ครบแล้ว</p>
+      <p>ตอนนี้คุณอยู่กับปัจจุบัน — ร่างกายของคุณปลอดภัย</p>
+      <div class="body-check">
+        <h4>สังเกตร่างกายของคุณตอนนี้:</h4>
+        <ul class="body-check-list">
+          <li>🫁 <span>หายใจเข้า-ออกช้า ๆ ลึก ๆ สัก 3 ครั้ง</span></li>
+          <li>💆 <span>ผ่อนคลายไหล่ และกล้ามเนื้อที่ตึง</span></li>
+          <li>🦶 <span>รู้สึกถึงพื้นใต้เท้าของคุณ</span></li>
+          <li>❤️ <span>คุณปลอดภัย คุณยังอยู่ที่นี่</span></li>
+        </ul>
+      </div>
+    </div>
+    <button class="start-btn" onclick="restartPractice()" style="background:#5b8fd9; box-shadow: 0 4px 20px rgba(91,143,217,0.35)">
+      ทำอีกครั้ง
+    </button>
+  </div>
+
+</main>
+
+<script>
+const STEPS = [
+  {
+    num: 5,
+    sense: '👀 มองเห็น',
+    color: 'var(--c1)',
+    instruction: 'มองรอบตัวคุณ แล้วสังเกต <strong>5 สิ่ง</strong> ที่มองเห็นอยู่ตอนนี้<br>อาจเป็นสิ่งเล็ก ๆ ก็ได้ เช่น รอยแตกบนผนัง หรือแสงที่ส่องผ่านหน้าต่าง',
+    count: 5,
+    placeholders: ['เช่น โต๊ะสีน้ำตาล', 'เช่น ขวดน้ำ', 'เช่น แสงไฟ', 'เช่น มือของฉัน', 'เช่น ประตูสีขาว'],
+    encourage: '✨ ดีมาก! การสังเกตสิ่งรอบตัวช่วยดึงสมองออกจากความคิดวนเวียน'
+  },
+  {
+    num: 4,
+    sense: '✋ สัมผัส',
+    color: 'var(--c2)',
+    instruction: 'ลองสัมผัสสิ่งต่าง ๆ รอบตัว สังเกต <strong>4 สิ่ง</strong> ที่คุณรู้สึกได้ตอนนี้<br>เช่น ความเย็นของอากาศ ความหยาบของผ้า หรือน้ำหนักของร่างกายบนพื้น',
+    count: 4,
+    placeholders: ['เช่น ความเย็นของอากาศ', 'เช่น ผิวเก้าอี้', 'เช่น น้ำหนักของเท้าบนพื้น', 'เช่น เสื้อผ้าที่สวมอยู่'],
+    encourage: '💙 ประสาทสัมผัสทางกายช่วยให้สมองรับรู้ว่าร่างกายอยู่ที่นี่ ปลอดภัย'
+  },
+  {
+    num: 3,
+    sense: '👂 ได้ยิน',
+    color: 'var(--c3)',
+    instruction: 'หยุดฟัง และสังเกต <strong>3 เสียง</strong> ที่ได้ยินในขณะนี้<br>ฟังให้ลึกขึ้น อาจมีเสียงเงียบ ๆ ที่ไม่เคยสังเกตมาก่อน',
+    count: 3,
+    placeholders: ['เช่น เสียงพัดลม', 'เช่น เสียงรถด้านนอก', 'เช่น เสียงลมหายใจของฉัน'],
+    encourage: '💜 การตั้งใจฟังช่วยให้จิตใจสงบลงและอยู่กับปัจจุบัน'
+  },
+  {
+    num: 2,
+    sense: '👃 ดมกลิ่น',
+    color: 'var(--c4)',
+    instruction: 'สูดหายใจเข้าลึก ๆ แล้วสังเกต <strong>2 กลิ่น</strong> ที่รับรู้ได้<br>ถ้าไม่มีกลิ่นชัดเจน ลองนึกถึงกลิ่นที่ชอบ หรือกลิ่นของเสื้อผ้าที่ใส่อยู่',
+    count: 2,
+    placeholders: ['เช่น กลิ่นอากาศในห้อง', 'เช่น กลิ่นผ้าของฉัน'],
+    encourage: '🌸 กลิ่นเชื่อมโยงกับความทรงจำและอารมณ์ได้โดยตรง'
+  },
+  {
+    num: 1,
+    sense: '👅 ลิ้มรส',
+    color: 'var(--c5)',
+    instruction: 'สังเกต <strong>1 รสชาติ</strong> ที่รับรู้ได้ในปากตอนนี้<br>อาจเป็นรสชาติของน้ำลาย อาหารที่เพิ่งทาน หรือรสที่คงอยู่',
+    count: 1,
+    placeholders: ['เช่น รสน้ำลาย หรือรสจากอาหารที่เพิ่งทาน'],
+    encourage: '🌿 เยี่ยมมาก! คุณเกือบครบแล้ว'
+  }
+];
+
+let currentStep = 0;
+const inputValues = Array.from({length: 5}, () => []);
+
+function startPractice() {
+  document.getElementById('introScreen').style.display = 'none';
+  document.getElementById('practiceScreen').style.display = 'block';
+  currentStep = 0;
+  renderStep();
+}
+
+function renderStep() {
+  const step = STEPS[currentStep];
+  const total = STEPS.length;
+
+  document.getElementById('progressFill').style.width = ((currentStep) / total * 100) + '%';
+  document.getElementById('progressLabel').textContent = (currentStep + 1) + ' / ' + total;
+
+  const card = document.getElementById('stepCard');
+  card.style.borderTopColor = step.color;
+
+  const savedValues = inputValues[currentStep];
+
+  const itemsHtml = Array.from({length: step.count}, (_, i) => `
+    <div class="item-row">
+      <div class="item-check ${savedValues[i] ? 'checked' : ''}" id="check-${i}" onclick="toggleCheck(${i})">
+        ${savedValues[i] ? '✓' : ''}
+      </div>
+      <input
+        class="item-input ${savedValues[i] ? 'filled' : ''}"
+        type="text"
+        id="inp-${i}"
+        placeholder="${step.placeholders[i] || ''}"
+        value="${savedValues[i] || ''}"
+        oninput="onInput(${i}, this.value)"
+        autocomplete="off"
+      />
+    </div>
+  `).join('');
+
+  card.innerHTML = `
+    <div class="step-badge" style="background:${step.color}">${step.num} สิ่ง</div>
+    <div class="step-number" style="color:${step.color}">${step.num}</div>
+    <div class="step-sense">${step.sense}</div>
+    <div class="step-instruction">${step.instruction}</div>
+    <div class="items-list">${itemsHtml}</div>
+  `;
+
+  document.getElementById('encourageBox').innerHTML = '💚 ' + (currentStep === 0
+    ? 'ไม่ต้องรีบ ค่อย ๆ สังเกต ไม่มีคำตอบผิดหรือถูก'
+    : STEPS[currentStep - 1].encourage);
+
+  document.getElementById('backStepBtn').style.display = currentStep > 0 ? '' : 'none';
+  document.getElementById('nextStepBtn').textContent = currentStep === STEPS.length - 1 ? 'เสร็จสิ้น ✓' : 'ถัดไป →';
+}
+
+function onInput(i, val) {
+  inputValues[currentStep][i] = val;
+  const inp = document.getElementById('inp-' + i);
+  const chk = document.getElementById('check-' + i);
+  if (val.trim()) {
+    inp.classList.add('filled');
+    chk.classList.add('checked');
+    chk.textContent = '✓';
+  } else {
+    inp.classList.remove('filled');
+    chk.classList.remove('checked');
+    chk.textContent = '';
+  }
+}
+
+function toggleCheck(i) {
+  const chk = document.getElementById('check-' + i);
+  const inp = document.getElementById('inp-' + i);
+  if (chk.classList.contains('checked')) {
+    chk.classList.remove('checked');
+    chk.textContent = '';
+    inp.classList.remove('filled');
+    inputValues[currentStep][i] = '';
+    inp.value = '';
+  } else {
+    chk.classList.add('checked');
+    chk.textContent = '✓';
+    inp.classList.add('filled');
+    if (!inputValues[currentStep][i]) {
+      inputValues[currentStep][i] = '✓';
+      inp.value = '';
+    }
+  }
+}
+
+function nextStep() {
+  if (currentStep < STEPS.length - 1) {
+    currentStep++;
+    renderStep();
+    window.scrollTo({top: 0, behavior: 'smooth'});
+  } else {
+    showCompletion();
+  }
+}
+
+function prevStep() {
+  if (currentStep > 0) {
+    currentStep--;
+    renderStep();
+    window.scrollTo({top: 0, behavior: 'smooth'});
+  }
+}
+
+function showCompletion() {
+  document.getElementById('practiceScreen').style.display = 'none';
+  document.getElementById('completionScreen').style.display = 'block';
+  document.getElementById('progressFill').style.width = '100%';
+  window.scrollTo({top: 0, behavior: 'smooth'});
+}
+
+function restartPractice() {
+  for (let i = 0; i < 5; i++) inputValues[i] = [];
+  currentStep = 0;
+  document.getElementById('completionScreen').style.display = 'none';
+  document.getElementById('practiceScreen').style.display = 'block';
+  renderStep();
+  window.scrollTo({top: 0, behavior: 'smooth'});
+}
+</script>
+</body>
+</html>

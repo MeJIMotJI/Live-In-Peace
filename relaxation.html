@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>การหายใจผ่อนคลาย — Live In Peace</title>
+<style>
+:root {
+  --bg: #f5fbf9;
+  --surface: #ffffff;
+  --primary: #3a9b8a;
+  --primary-dark: #2d7a6a;
+  --primary-light: #e8f7f4;
+  --blue: #5b8fd9;
+  --blue-light: #edf3fc;
+  --text: #1e3240;
+  --text-muted: #6b849a;
+  --border: #cde8e2;
+  --radius: 16px;
+  --shadow: 0 2px 16px rgba(58,155,138,0.10);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Leelawadee UI', 'Leelawadee', Tahoma, 'Lucida Sans Unicode', Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 17px;
+  line-height: 1.8;
+  min-height: 100vh;
+}
+.topbar {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 14px 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+.back-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--primary);
+  text-decoration: none;
+  font-size: 16px;
+  font-weight: 700;
+  padding: 6px 12px;
+  border-radius: 20px;
+  background: var(--primary-light);
+  transition: background 0.2s;
+}
+.back-btn:hover { background: #d4f0ea; }
+.topbar-title { font-size: 17px; font-weight: 700; }
+.hero {
+  background: linear-gradient(135deg, #3a6fbf 0%, #5b8fd9 100%);
+  color: white;
+  padding: 32px 24px 40px;
+  text-align: center;
+}
+.hero-icon { font-size: 48px; margin-bottom: 10px; }
+.hero h1 { font-size: 24px; font-weight: 700; margin-bottom: 6px; }
+.hero p { font-size: 15px; opacity: 0.9; }
+main { max-width: 480px; margin: 0 auto; padding: 28px 20px 60px; }
+
+/* Pattern picker */
+.section-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-muted);
+  letter-spacing: 0.5px;
+  margin-bottom: 12px;
+}
+.pattern-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 28px;
+}
+.pat-btn {
+  background: var(--surface);
+  border: 2px solid var(--border);
+  border-radius: 14px;
+  padding: 14px 12px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.2s;
+  text-align: left;
+}
+.pat-btn:hover { border-color: var(--blue); }
+.pat-btn.active { background: var(--blue-light); border-color: var(--blue); }
+.pat-name { font-size: 15px; font-weight: 700; color: var(--text); }
+.pat-desc { font-size: 12px; color: var(--text-muted); margin-top: 3px; }
+.pat-ratio { font-size: 12px; color: var(--blue); font-weight: 600; margin-top: 4px; }
+
+/* Breathing animation area */
+.breath-card {
+  background: var(--surface);
+  border-radius: 24px;
+  box-shadow: var(--shadow);
+  padding: 36px 24px 40px;
+  text-align: center;
+  margin-bottom: 24px;
+  border: 1.5px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+.breath-phase {
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--blue);
+  margin-bottom: 6px;
+  min-height: 38px;
+  transition: opacity 0.4s;
+}
+.breath-phase-th { font-size: 15px; color: var(--text-muted); margin-bottom: 28px; min-height: 24px; }
+.circle-wrap {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  margin: 0 auto 28px;
+}
+.breath-circle {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 40% 35%, #a8e6dc, #3a9b8a);
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%) scale(1);
+  box-shadow: 0 0 0 0 rgba(58,155,138,0.3);
+  transition: transform 0s, box-shadow 0s;
+}
+.breath-circle.inhale {
+  animation: inhaleAnim var(--inhale-dur, 4s) ease-in forwards;
+}
+.breath-circle.hold-in {
+  transform: translate(-50%, -50%) scale(1.35);
+  box-shadow: 0 0 0 20px rgba(58,155,138,0.1);
+}
+.breath-circle.exhale {
+  animation: exhaleAnim var(--exhale-dur, 6s) ease-out forwards;
+}
+.breath-circle.hold-out {
+  transform: translate(-50%, -50%) scale(0.75);
+  box-shadow: 0 0 0 0px rgba(58,155,138,0.0);
+}
+@keyframes inhaleAnim {
+  from { transform: translate(-50%, -50%) scale(0.75); box-shadow: 0 0 0 0px rgba(58,155,138,0.1); }
+  to   { transform: translate(-50%, -50%) scale(1.35); box-shadow: 0 0 0 20px rgba(58,155,138,0.1); }
+}
+@keyframes exhaleAnim {
+  from { transform: translate(-50%, -50%) scale(1.35); box-shadow: 0 0 0 20px rgba(58,155,138,0.1); }
+  to   { transform: translate(-50%, -50%) scale(0.75); box-shadow: 0 0 0 0px rgba(58,155,138,0.0); }
+}
+.breath-countdown {
+  font-size: 42px;
+  font-weight: 700;
+  color: white;
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  text-shadow: 0 2px 6px rgba(0,0,0,0.25);
+  pointer-events: none;
+}
+.rounds-info {
+  font-size: 15px;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+}
+.round-dots {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 6px;
+}
+.round-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  background: var(--border);
+  transition: background 0.3s;
+}
+.round-dot.done { background: var(--primary); }
+.round-dot.current { background: var(--blue); }
+
+/* Controls */
+.controls {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-bottom: 24px;
+}
+.btn {
+  border: none;
+  border-radius: 50px;
+  padding: 14px 32px;
+  font-size: 17px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.btn-primary { background: var(--blue); color: white; box-shadow: 0 4px 14px rgba(91,143,217,0.35); }
+.btn-primary:hover { background: #4a7ec8; transform: translateY(-1px); }
+.btn-ghost { background: var(--blue-light); color: #3a6fbf; }
+.btn-ghost:hover { background: #ddeaf9; }
+.btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none !important; }
+
+/* Round selector */
+.rounds-row {
+  background: var(--surface);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 16px 20px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border: 1.5px solid var(--border);
+}
+.rounds-label { font-weight: 600; font-size: 15px; }
+.rounds-stepper { display: flex; align-items: center; gap: 14px; }
+.step-btn {
+  width: 34px; height: 34px;
+  border-radius: 50%;
+  border: 2px solid var(--border);
+  background: var(--surface);
+  cursor: pointer;
+  font-size: 20px;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--primary);
+  font-weight: 700;
+  font-family: inherit;
+  transition: all 0.15s;
+}
+.step-btn:hover { background: var(--primary-light); border-color: var(--primary); }
+.step-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+.rounds-val { font-size: 20px; font-weight: 700; width: 32px; text-align: center; }
+
+/* Info */
+.info-box {
+  background: var(--blue-light);
+  border-radius: var(--radius);
+  padding: 18px 20px;
+  font-size: 14px;
+  color: #3a5fa0;
+}
+.info-box h4 { font-size: 15px; margin-bottom: 8px; }
+.phase-table { width: 100%; border-collapse: collapse; margin-top: 6px; }
+.phase-table td { padding: 5px 0; font-size: 14px; }
+.phase-table td:last-child { text-align: right; font-weight: 700; }
+
+/* Completion */
+.completion {
+  display: none;
+  background: var(--surface);
+  border-radius: 24px;
+  box-shadow: var(--shadow);
+  padding: 40px 24px;
+  text-align: center;
+  border: 1.5px solid var(--border);
+  margin-bottom: 24px;
+}
+.completion-icon { font-size: 64px; margin-bottom: 16px; }
+.completion h2 { font-size: 24px; font-weight: 700; color: var(--primary-dark); margin-bottom: 8px; }
+.completion p { color: var(--text-muted); font-size: 16px; }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a href="index.html" class="back-btn">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+    กลับ
+  </a>
+  <span class="topbar-title">การหายใจผ่อนคลาย</span>
+</div>
+
+<div class="hero">
+  <div class="hero-icon">🌬️</div>
+  <h1>การหายใจผ่อนคลาย</h1>
+  <p>ลดความเครียดและวิตกกังวลด้วยการหายใจ</p>
+</div>
+
+<main>
+  <div class="section-title">เลือกรูปแบบการหายใจ</div>
+  <div class="pattern-grid">
+    <button class="pat-btn active" onclick="setPattern('box')">
+      <div class="pat-name">Box Breathing</div>
+      <div class="pat-desc">ลดความเครียด เพิ่มสมาธิ</div>
+      <div class="pat-ratio">4 – 4 – 4 – 4</div>
+    </button>
+    <button class="pat-btn" onclick="setPattern('478')">
+      <div class="pat-name">4-7-8</div>
+      <div class="pat-desc">ช่วยให้หลับง่าย ผ่อนคลายลึก</div>
+      <div class="pat-ratio">4 – 7 – 8</div>
+    </button>
+    <button class="pat-btn" onclick="setPattern('calm')">
+      <div class="pat-name">Calm Breath</div>
+      <div class="pat-desc">เหมาะสำหรับผู้เริ่มต้น</div>
+      <div class="pat-ratio">4 – 0 – 6</div>
+    </button>
+    <button class="pat-btn" onclick="setPattern('deep')">
+      <div class="pat-name">Deep & Slow</div>
+      <div class="pat-desc">หายใจลึก ๆ ช้า ๆ</div>
+      <div class="pat-ratio">5 – 2 – 7</div>
+    </button>
+  </div>
+
+  <div class="breath-card" id="breathCard">
+    <div class="breath-phase" id="phaseLabel">พร้อมเริ่ม</div>
+    <div class="breath-phase-th" id="phaseTh">กดเริ่มเพื่อฝึกหายใจ</div>
+    <div class="circle-wrap">
+      <div class="breath-circle" id="breathCircle">
+        <span class="breath-countdown" id="countdown"></span>
+      </div>
+    </div>
+    <div class="rounds-info" id="roundsInfo">รอบที่ <span id="currentRound">0</span> / <span id="totalRoundDisp">5</span></div>
+    <div class="round-dots" id="roundDots"></div>
+  </div>
+
+  <div class="completion" id="completionBox">
+    <div class="completion-icon">✨</div>
+    <h2>เยี่ยมมาก!</h2>
+    <p>คุณฝึกหายใจครบ <span id="completedRounds"></span> รอบแล้ว<br>สังเกตว่าร่างกายรู้สึกผ่อนคลายขึ้นไหม?</p>
+  </div>
+
+  <div class="controls">
+    <button class="btn btn-primary" id="playBtn" onclick="toggleSession()">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+      เริ่ม
+    </button>
+    <button class="btn btn-ghost" id="resetBtn" onclick="resetSession()" disabled>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4"/></svg>
+      รีเซ็ต
+    </button>
+  </div>
+
+  <div class="rounds-row">
+    <div class="rounds-label">🔄 จำนวนรอบ</div>
+    <div class="rounds-stepper">
+      <button class="step-btn" id="minusBtn" onclick="changeRounds(-1)">−</button>
+      <span class="rounds-val" id="roundsVal">5</span>
+      <button class="step-btn" onclick="changeRounds(1)">+</button>
+    </div>
+  </div>
+
+  <div class="info-box" id="infoBox">
+    <h4>📋 รูปแบบนี้: Box Breathing</h4>
+    <table class="phase-table" id="phaseTable">
+      <tr><td>🫁 หายใจเข้า</td><td>4 วินาที</td></tr>
+      <tr><td>⏸️ กลั้นหายใจ</td><td>4 วินาที</td></tr>
+      <tr><td>💨 หายใจออก</td><td>4 วินาที</td></tr>
+      <tr><td>⏸️ กลั้น (ปอดว่าง)</td><td>4 วินาที</td></tr>
+    </table>
+  </div>
+</main>
+
+<script>
+const PATTERNS = {
+  box:  { name: 'Box Breathing',  phases: [{l:'หายใจเข้า',e:'Inhale',d:4},{l:'กลั้นหายใจ',e:'Hold',d:4},{l:'หายใจออก',e:'Exhale',d:4},{l:'กลั้น',e:'Hold',d:4}] },
+  '478':{ name: '4-7-8',          phases: [{l:'หายใจเข้า',e:'Inhale',d:4},{l:'กลั้นหายใจ',e:'Hold',d:7},{l:'หายใจออก',e:'Exhale',d:8}] },
+  calm: { name: 'Calm Breath',    phases: [{l:'หายใจเข้า',e:'Inhale',d:4},{l:'หายใจออก',e:'Exhale',d:6}] },
+  deep: { name: 'Deep & Slow',    phases: [{l:'หายใจเข้า',e:'Inhale',d:5},{l:'กลั้นหายใจ',e:'Hold',d:2},{l:'หายใจออก',e:'Exhale',d:7}] }
+};
+
+let currentPattern = 'box';
+let totalRounds = 5;
+let currentRound = 0;
+let running = false;
+let phaseIndex = 0;
+let countdown = 0;
+let tickInterval = null;
+let stopped = false;
+
+function setPattern(key) {
+  if (running) return;
+  currentPattern = key;
+  document.querySelectorAll('.pat-btn').forEach(b => b.classList.remove('active'));
+  event.currentTarget.classList.add('active');
+  updateInfoBox();
+}
+
+function changeRounds(delta) {
+  if (running) return;
+  totalRounds = Math.max(1, Math.min(20, totalRounds + delta));
+  document.getElementById('roundsVal').textContent = totalRounds;
+  document.getElementById('totalRoundDisp').textContent = totalRounds;
+  document.getElementById('minusBtn').disabled = totalRounds <= 1;
+  buildDots();
+}
+
+function buildDots() {
+  const wrap = document.getElementById('roundDots');
+  wrap.innerHTML = '';
+  for (let i = 0; i < totalRounds; i++) {
+    const d = document.createElement('div');
+    d.className = 'round-dot' + (i < currentRound ? ' done' : i === currentRound && running ? ' current' : '');
+    wrap.appendChild(d);
+  }
+}
+
+function updateDots() {
+  const dots = document.querySelectorAll('.round-dot');
+  dots.forEach((d, i) => {
+    d.className = 'round-dot' + (i < currentRound ? ' done' : i === currentRound && running ? ' current' : '');
+  });
+}
+
+function updateInfoBox() {
+  const p = PATTERNS[currentPattern];
+  document.querySelector('#infoBox h4').textContent = '📋 รูปแบบนี้: ' + p.name;
+  const icons = {inhale:'🫁',hold:'⏸️',exhale:'💨'};
+  const rows = p.phases.map(ph => {
+    const icon = ph.e === 'Inhale' ? '🫁' : ph.e === 'Exhale' ? '💨' : '⏸️';
+    return `<tr><td>${icon} ${ph.l}</td><td>${ph.d} วินาที</td></tr>`;
+  }).join('');
+  document.getElementById('phaseTable').innerHTML = rows;
+}
+
+function toggleSession() {
+  if (running) {
+    pauseSession();
+  } else {
+    startSession();
+  }
+}
+
+function startSession() {
+  running = true;
+  stopped = false;
+  document.getElementById('completionBox').style.display = 'none';
+  document.getElementById('breathCard').style.display = '';
+  document.getElementById('playBtn').innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg> หยุดชั่วคราว';
+  document.getElementById('resetBtn').disabled = false;
+  document.querySelectorAll('.pat-btn').forEach(b => b.disabled = true);
+  document.getElementById('totalRoundDisp').textContent = totalRounds;
+  buildDots();
+  runPhase();
+}
+
+function pauseSession() {
+  running = false;
+  clearTimeout(tickInterval);
+  document.getElementById('phaseLabel').textContent = 'หยุดชั่วคราว';
+  document.getElementById('phaseTh').textContent = 'กดดำเนินต่อ';
+  document.getElementById('playBtn').innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg> ดำเนินต่อ';
+  const circle = document.getElementById('breathCircle');
+  circle.className = 'breath-circle';
+}
+
+function resetSession() {
+  running = false;
+  stopped = true;
+  clearTimeout(tickInterval);
+  currentRound = 0;
+  phaseIndex = 0;
+  document.getElementById('phaseLabel').textContent = 'พร้อมเริ่ม';
+  document.getElementById('phaseTh').textContent = 'กดเริ่มเพื่อฝึกหายใจ';
+  document.getElementById('countdown').textContent = '';
+  document.getElementById('currentRound').textContent = '0';
+  document.getElementById('playBtn').innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg> เริ่ม';
+  document.getElementById('playBtn').onclick = toggleSession;
+  document.getElementById('resetBtn').disabled = true;
+  document.getElementById('completionBox').style.display = 'none';
+  document.getElementById('breathCard').style.display = '';
+  document.querySelectorAll('.pat-btn').forEach(b => b.disabled = false);
+  const circle = document.getElementById('breathCircle');
+  circle.className = 'breath-circle';
+  buildDots();
+}
+
+function runPhase() {
+  if (!running || stopped) return;
+  const phases = PATTERNS[currentPattern].phases;
+  if (phaseIndex >= phases.length) {
+    phaseIndex = 0;
+    currentRound++;
+    document.getElementById('currentRound').textContent = currentRound;
+    updateDots();
+    if (currentRound >= totalRounds) {
+      finishSession();
+      return;
+    }
+  }
+  const phase = phases[phaseIndex];
+  countdown = phase.d;
+  document.getElementById('phaseLabel').textContent = phase.e;
+  document.getElementById('phaseTh').textContent = phase.l;
+  document.getElementById('countdown').textContent = countdown;
+
+  const circle = document.getElementById('breathCircle');
+  circle.className = 'breath-circle';
+  void circle.offsetWidth;
+
+  if (phase.e === 'Inhale') {
+    circle.style.setProperty('--inhale-dur', phase.d + 's');
+    circle.classList.add('inhale');
+    circle.style.background = 'radial-gradient(circle at 40% 35%, #a8e6dc, #3a9b8a)';
+  } else if (phase.e === 'Exhale') {
+    circle.style.setProperty('--exhale-dur', phase.d + 's');
+    circle.classList.add('exhale');
+    circle.style.background = 'radial-gradient(circle at 40% 35%, #9dd4e8, #5b8fd9)';
+  } else {
+    const prevPhase = phases[phaseIndex - 1];
+    if (prevPhase && prevPhase.e === 'Inhale') {
+      circle.classList.add('hold-in');
+    } else {
+      circle.classList.add('hold-out');
+    }
+    circle.style.background = 'radial-gradient(circle at 40% 35%, #d4c8f0, #8b78c8)';
+  }
+
+  tickPhase(phase.d);
+}
+
+function tickPhase(total) {
+  let remaining = total;
+  function tick() {
+    if (!running || stopped) return;
+    document.getElementById('countdown').textContent = remaining;
+    if (remaining <= 0) {
+      phaseIndex++;
+      runPhase();
+      return;
+    }
+    remaining--;
+    tickInterval = setTimeout(tick, 1000);
+  }
+  tick();
+}
+
+function finishSession() {
+  running = false;
+  stopped = true;
+  document.getElementById('completedRounds').textContent = totalRounds;
+  document.getElementById('breathCard').style.display = 'none';
+  document.getElementById('completionBox').style.display = 'block';
+  document.getElementById('playBtn').innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg> เริ่มใหม่';
+  document.getElementById('playBtn').onclick = resetSession;
+  document.getElementById('resetBtn').disabled = true;
+  document.querySelectorAll('.pat-btn').forEach(b => b.disabled = false);
+}
+
+// Init
+document.getElementById('totalRoundDisp').textContent = totalRounds;
+document.getElementById('roundsVal').textContent = totalRounds;
+buildDots();
+updateInfoBox();
+</script>
+</body>
+</html>

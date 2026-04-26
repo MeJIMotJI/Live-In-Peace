@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>สุขอนามัยการนอนหลับ — Live In Peace</title>
+<style>
+:root {
+  --bg: #f5fbf9;
+  --surface: #ffffff;
+  --primary: #3a9b8a;
+  --primary-dark: #2d7a6a;
+  --primary-light: #e8f7f4;
+  --text: #1e3240;
+  --text-muted: #6b849a;
+  --border: #cde8e2;
+  --radius: 16px;
+  --shadow: 0 2px 16px rgba(58,155,138,0.10);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Leelawadee UI', 'Leelawadee', Tahoma, 'Lucida Sans Unicode', Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 17px;
+  line-height: 1.9;
+  min-height: 100vh;
+}
+.topbar {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 14px 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+.back-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--primary);
+  text-decoration: none;
+  font-size: 16px;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: 20px;
+  background: var(--primary-light);
+  transition: background 0.2s;
+}
+.back-btn:hover { background: #d4f0ea; }
+.topbar-title {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text);
+}
+.hero {
+  background: linear-gradient(135deg, #2d7a6a 0%, #3a9b8a 100%);
+  color: white;
+  padding: 40px 24px 48px;
+  text-align: center;
+}
+.hero-icon { font-size: 56px; margin-bottom: 12px; }
+.hero h1 { font-size: 26px; font-weight: 700; margin-bottom: 10px; }
+.hero p { font-size: 16px; opacity: 0.9; max-width: 380px; margin: 0 auto; }
+main {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 28px 20px 60px;
+}
+.tip-box {
+  background: var(--primary-light);
+  border-left: 4px solid var(--primary);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 16px 20px;
+  margin-bottom: 24px;
+  font-size: 15px;
+  color: var(--primary-dark);
+}
+.accordion {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.acc-item {
+  background: var(--surface);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  border: 1.5px solid transparent;
+  transition: border-color 0.2s;
+}
+.acc-item.open { border-color: var(--border); }
+.acc-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 22px;
+  cursor: pointer;
+  user-select: none;
+  gap: 12px;
+}
+.acc-header:hover { background: #fafffe; }
+.acc-header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.acc-num {
+  width: 32px; height: 32px;
+  background: var(--primary-light);
+  color: var(--primary-dark);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+.acc-item.open .acc-num { background: var(--primary); color: white; }
+.acc-title {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.4;
+}
+.acc-arrow {
+  width: 24px; height: 24px;
+  color: var(--text-muted);
+  transition: transform 0.3s ease;
+  flex-shrink: 0;
+}
+.acc-item.open .acc-arrow { transform: rotate(180deg); color: var(--primary); }
+.acc-body {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.35s ease;
+}
+.acc-body-inner {
+  padding: 4px 22px 24px;
+  border-top: 1px solid var(--border);
+}
+.acc-body-inner p { margin-bottom: 12px; color: var(--text); }
+.acc-body-inner p:last-child { margin-bottom: 0; }
+.tips-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 8px;
+}
+.tips-list li {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+.tip-dot {
+  width: 8px; height: 8px;
+  background: var(--primary);
+  border-radius: 50%;
+  margin-top: 8px;
+  flex-shrink: 0;
+}
+.warn-list li .tip-dot { background: #e57373; }
+.highlight {
+  background: var(--primary-light);
+  border-radius: 8px;
+  padding: 14px 16px;
+  margin: 12px 0;
+  font-size: 15px;
+}
+.tag {
+  display: inline-block;
+  background: var(--primary);
+  color: white;
+  border-radius: 20px;
+  padding: 2px 12px;
+  font-size: 13px;
+  margin-bottom: 10px;
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a href="index.html" class="back-btn">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+    กลับ
+  </a>
+  <span class="topbar-title">สุขอนามัยการนอนหลับ</span>
+</div>
+
+<div class="hero">
+  <div class="hero-icon">🌙</div>
+  <h1>สุขอนามัยการนอนหลับ</h1>
+  <p>การนอนหลับที่ดีเป็นรากฐานสำคัญของสุขภาพจิตและร่างกาย</p>
+</div>
+
+<main>
+  <div class="tip-box">
+    💡 ผู้ใหญ่ควรนอนหลับ <strong>7–9 ชั่วโมง</strong>ต่อคืน เพื่อให้ร่างกายและจิตใจได้พักผ่อนอย่างเต็มที่
+  </div>
+
+  <div class="accordion">
+
+    <div class="acc-item" onclick="toggle(this)">
+      <div class="acc-header">
+        <div class="acc-header-left">
+          <div class="acc-num">1</div>
+          <div class="acc-title">การนอนหลับที่ดีคืออะไร?</div>
+        </div>
+        <svg class="acc-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="acc-body">
+        <div class="acc-body-inner">
+          <p>การนอนหลับที่ดีไม่ได้วัดแค่ "จำนวนชั่วโมง" เท่านั้น แต่ยังรวมถึง <strong>คุณภาพของการนอน</strong> ด้วย</p>
+          <p>การนอนหลับแบ่งออกเป็นหลายรอบ แต่ละรอบประกอบด้วยระยะหลับตื้น หลับลึก และ REM (ฝัน) ร่างกายต้องการทั้งหมดนี้เพื่อฟื้นฟูตัวเอง</p>
+          <div class="highlight">
+            ✅ การนอนหลับที่ดี คือ นอนหลับง่าย ไม่ตื่นกลางดึกบ่อย และตื่นเช้ารู้สึกสดชื่น
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="acc-item" onclick="toggle(this)">
+      <div class="acc-header">
+        <div class="acc-header-left">
+          <div class="acc-num">2</div>
+          <div class="acc-title">การนอนหลับสำคัญต่อสุขภาพจิตอย่างไร?</div>
+        </div>
+        <svg class="acc-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="acc-body">
+        <div class="acc-body-inner">
+          <p>การนอนหลับและสุขภาพจิตมีความสัมพันธ์ใกล้ชิดกันมาก เมื่อนอนไม่พอ ร่างกายผลิตสารเคมีในสมองที่ควบคุมอารมณ์ได้น้อยลง</p>
+          <ul class="tips-list">
+            <li><div class="tip-dot"></div><span>อารมณ์หงุดหงิด ฉุนเฉียว ง่ายขึ้น</span></li>
+            <li><div class="tip-dot"></div><span>วิตกกังวลและเครียดมากขึ้น</span></li>
+            <li><div class="tip-dot"></div><span>สมองทำงานช้า ความจำและสมาธิแย่ลง</span></li>
+            <li><div class="tip-dot"></div><span>ระบบภูมิคุ้มกันอ่อนแอลง</span></li>
+            <li><div class="tip-dot"></div><span>เพิ่มความเสี่ยงของโรคซึมเศร้าและโรคแพนิค</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="acc-item" onclick="toggle(this)">
+      <div class="acc-header">
+        <div class="acc-header-left">
+          <div class="acc-num">3</div>
+          <div class="acc-title">เคล็ดลับการนอนหลับที่ดี</div>
+        </div>
+        <svg class="acc-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="acc-body">
+        <div class="acc-body-inner">
+          <span class="tag">ทำได้ทันที</span>
+          <ul class="tips-list">
+            <li><div class="tip-dot"></div><span><strong>นอนและตื่นเวลาเดิมทุกวัน</strong> แม้วันหยุดก็ตาม เพื่อให้นาฬิกาชีวิตทำงานได้ดี</span></li>
+            <li><div class="tip-dot"></div><span><strong>สร้างบรรยากาศห้องนอน</strong> ให้มืด เย็น และเงียบ อุณหภูมิที่เหมาะสมคือ 18–22 องศาเซลเซียส</span></li>
+            <li><div class="tip-dot"></div><span><strong>ทำกิจวัตรก่อนนอน</strong> เช่น อาบน้ำอุ่น อ่านหนังสือ หรือฝึกหายใจลึก ๆ 15–30 นาที</span></li>
+            <li><div class="tip-dot"></div><span><strong>ออกกำลังกายสม่ำเสมอ</strong> แต่หลีกเลี่ยงการออกกำลังกายหนักก่อนนอน 3 ชั่วโมง</span></li>
+            <li><div class="tip-dot"></div><span><strong>รับแสงแดดตอนเช้า</strong> ช่วยรีเซ็ตนาฬิกาชีวิตและเพิ่มการผลิตเมลาโทนินตอนกลางคืน</span></li>
+            <li><div class="tip-dot"></div><span><strong>ถ้านอนไม่หลับ</strong> ให้ลุกออกจากเตียงไปทำกิจกรรมเบา ๆ ในที่แสงน้อย แล้วกลับมานอนเมื่อรู้สึกง่วง</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="acc-item" onclick="toggle(this)">
+      <div class="acc-header">
+        <div class="acc-header-left">
+          <div class="acc-num">4</div>
+          <div class="acc-title">สิ่งที่ควรหลีกเลี่ยงก่อนนอน</div>
+        </div>
+        <svg class="acc-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="acc-body">
+        <div class="acc-body-inner">
+          <ul class="tips-list warn-list">
+            <li><div class="tip-dot" style="background:#e57373"></div><span><strong>คาเฟอีน</strong> (กาแฟ ชา น้ำอัดลม) ควรหยุดดื่มอย่างน้อย 6 ชั่วโมงก่อนนอน</span></li>
+            <li><div class="tip-dot" style="background:#e57373"></div><span><strong>หน้าจอ</strong> (มือถือ แท็บเล็ต คอมพิวเตอร์) แสง blue light กระตุ้นสมองและลดเมลาโทนิน ควรวางอย่างน้อย 1 ชั่วโมงก่อนนอน</span></li>
+            <li><div class="tip-dot" style="background:#e57373"></div><span><strong>อาหารหนัก</strong> ไม่ควรทานมื้อใหญ่ก่อนนอน 2–3 ชั่วโมง</span></li>
+            <li><div class="tip-dot" style="background:#e57373"></div><span><strong>แอลกอฮอล์</strong> แม้ทำให้ง่วงแต่ทำลายคุณภาพการนอนในช่วงดึก</span></li>
+            <li><div class="tip-dot" style="background:#e57373"></div><span><strong>นอนกลางวันนานเกินไป</strong> ไม่ควรงีบนานเกิน 20–30 นาที และไม่ควรงีบหลังบ่าย 3 โมง</span></li>
+            <li><div class="tip-dot" style="background:#e57373"></div><span><strong>นำปัญหามาคิดบนเตียง</strong> ให้จดสิ่งที่กังวลไว้ในสมุด แล้ว "วางไว้" จนกว่าจะถึงเวลาแก้ไข</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="acc-item" onclick="toggle(this)">
+      <div class="acc-header">
+        <div class="acc-header-left">
+          <div class="acc-num">5</div>
+          <div class="acc-title">เมื่อไหร่ควรพบแพทย์?</div>
+        </div>
+        <svg class="acc-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="acc-body">
+        <div class="acc-body-inner">
+          <p>ควรปรึกษาแพทย์หรือจิตแพทย์หากมีอาการต่อไปนี้นานกว่า 1 เดือน:</p>
+          <ul class="tips-list">
+            <li><div class="tip-dot"></div><span>นอนไม่หลับหรือหลับยากทุกคืน แม้จะเหนื่อยมาก</span></li>
+            <li><div class="tip-dot"></div><span>ตื่นกลางดึกซ้ำ ๆ และนอนต่อไม่ได้</span></li>
+            <li><div class="tip-dot"></div><span>รู้สึกเหนื่อยล้ามากแม้นอนพอ</span></li>
+            <li><div class="tip-dot"></div><span>นอนกรนเสียงดัง หรือหยุดหายใจขณะนอน</span></li>
+            <li><div class="tip-dot"></div><span>อาการนอนไม่หลับส่งผลต่อการทำงานหรือชีวิตประจำวัน</span></li>
+          </ul>
+          <div class="highlight" style="margin-top:14px">
+            🏥 โรคนอนไม่หลับ (Insomnia) รักษาได้ด้วยการบำบัดพฤติกรรม (CBT-I) และยา ไม่ต้องทนอยู่คนเดียว
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<script>
+function toggle(item) {
+  const body = item.querySelector('.acc-body');
+  const inner = item.querySelector('.acc-body-inner');
+  const isOpen = item.classList.contains('open');
+  document.querySelectorAll('.acc-item.open').forEach(el => {
+    el.classList.remove('open');
+    el.querySelector('.acc-body').style.maxHeight = '0';
+  });
+  if (!isOpen) {
+    item.classList.add('open');
+    body.style.maxHeight = inner.scrollHeight + 32 + 'px';
+  }
+}
+</script>
+</body>
+</html>

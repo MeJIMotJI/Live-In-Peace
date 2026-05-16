@@ -52,25 +52,27 @@ body {
   transition: background 0.2s;
 }
 .back-btn:hover { background: #d4f0ea; }
-.topbar-title {
-  font-size: 17px;
-  font-weight: 700;
-  color: var(--text);
-}
+.topbar-title { font-size: 17px; font-weight: 700; color: var(--text); }
 .hero {
   background: linear-gradient(135deg, #2d7a6a 0%, #3a9b8a 100%);
   color: white;
   padding: 40px 24px 48px;
   text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50px; right: -50px;
+  width: 180px; height: 180px;
+  background: rgba(255,255,255,0.07);
+  border-radius: 50%;
 }
 .hero-icon { font-size: 56px; margin-bottom: 12px; }
 .hero h1 { font-size: 26px; font-weight: 700; margin-bottom: 10px; }
 .hero p { font-size: 16px; opacity: 0.9; max-width: 380px; margin: 0 auto; }
-main {
-  max-width: 640px;
-  margin: 0 auto;
-  padding: 28px 20px 60px;
-}
+main { max-width: 640px; margin: 0 auto; padding: 28px 20px 60px; }
 .tip-box {
   background: var(--primary-light);
   border-left: 4px solid var(--primary);
@@ -79,12 +81,9 @@ main {
   margin-bottom: 24px;
   font-size: 15px;
   color: var(--primary-dark);
+  line-height: 1.7;
 }
-.accordion {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
+.accordion { display: flex; flex-direction: column; gap: 12px; }
 .acc-item {
   background: var(--surface);
   border-radius: var(--radius);
@@ -104,30 +103,18 @@ main {
   gap: 12px;
 }
 .acc-header:hover { background: #fafffe; }
-.acc-header-left {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
+.acc-header-left { display: flex; align-items: center; gap: 12px; }
 .acc-num {
   width: 32px; height: 32px;
   background: var(--primary-light);
   color: var(--primary-dark);
   border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 700;
-  font-size: 14px;
-  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 14px; flex-shrink: 0;
+  transition: background 0.2s, color 0.2s;
 }
 .acc-item.open .acc-num { background: var(--primary); color: white; }
-.acc-title {
-  font-size: 17px;
-  font-weight: 700;
-  color: var(--text);
-  line-height: 1.4;
-}
+.acc-title { font-size: 17px; font-weight: 700; color: var(--text); line-height: 1.4; }
 .acc-arrow {
   width: 24px; height: 24px;
   color: var(--text-muted);
@@ -135,52 +122,87 @@ main {
   flex-shrink: 0;
 }
 .acc-item.open .acc-arrow { transform: rotate(180deg); color: var(--primary); }
-.acc-body {
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.35s ease;
-}
-.acc-body-inner {
-  padding: 4px 22px 24px;
-  border-top: 1px solid var(--border);
-}
+.acc-body { max-height: 0; overflow: hidden; transition: max-height 0.38s ease; }
+.acc-body-inner { padding: 4px 22px 26px; border-top: 1px solid var(--border); }
 .acc-body-inner p { margin-bottom: 12px; color: var(--text); }
 .acc-body-inner p:last-child { margin-bottom: 0; }
 .tips-list {
   list-style: none;
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  margin-top: 8px;
+  gap: 12px;
+  margin-top: 10px;
 }
-.tips-list li {
-  display: flex;
-  gap: 10px;
-  align-items: flex-start;
-}
+.tips-list li { display: flex; gap: 10px; align-items: flex-start; }
 .tip-dot {
   width: 8px; height: 8px;
-  background: var(--primary);
   border-radius: 50%;
-  margin-top: 8px;
+  margin-top: 9px;
   flex-shrink: 0;
 }
-.warn-list li .tip-dot { background: #e57373; }
 .highlight {
   background: var(--primary-light);
-  border-radius: 8px;
-  padding: 14px 16px;
-  margin: 12px 0;
+  border-radius: 10px;
+  padding: 14px 18px;
+  margin: 14px 0;
   font-size: 15px;
+  line-height: 1.7;
+  color: var(--primary-dark);
+}
+.highlight-warn {
+  background: #fff8f0;
+  border-left: 4px solid #f0a44a;
+  border-radius: 0 10px 10px 0;
+  padding: 14px 18px;
+  margin: 14px 0;
+  font-size: 15px;
+  line-height: 1.7;
+  color: #7a4a10;
 }
 .tag {
   display: inline-block;
-  background: var(--primary);
-  color: white;
   border-radius: 20px;
-  padding: 2px 12px;
+  padding: 3px 14px;
   font-size: 13px;
-  margin-bottom: 10px;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+.tag-green { background: var(--primary); color: white; }
+.tag-orange { background: #f0a44a; color: white; }
+.tag-red { background: #e07b8a; color: white; }
+.checklist {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 10px;
+}
+.check-row {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: var(--bg);
+  font-size: 15px;
+  line-height: 1.7;
+}
+.check-row.do { background: #f0faf7; }
+.check-row.dont { background: #fff5f6; }
+.check-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+.insight-box {
+  background: linear-gradient(135deg, #e8f7f4, #f0f8ff);
+  border-radius: 12px;
+  padding: 18px 20px;
+  margin: 14px 0;
+  font-size: 15px;
+  line-height: 1.8;
+  border: 1px solid var(--border);
+}
+.insight-box .insight-title {
+  font-weight: 700;
+  color: var(--primary-dark);
+  margin-bottom: 6px;
+  font-size: 16px;
 }
 </style>
 </head>
@@ -197,16 +219,18 @@ main {
 <div class="hero">
   <div class="hero-icon">🌙</div>
   <h1>สุขอนามัยการนอนหลับ</h1>
-  <p>การนอนหลับที่ดีเป็นรากฐานสำคัญของสุขภาพจิตและร่างกาย</p>
+  <p>การนอนหลับที่ดีเริ่มต้นจากสิ่งที่ทำในระหว่างวัน ไม่ใช่แค่ตอนเข้านอน</p>
 </div>
 
 <main>
   <div class="tip-box">
-    💡 ผู้ใหญ่ควรนอนหลับ <strong>7–9 ชั่วโมง</strong>ต่อคืน เพื่อให้ร่างกายและจิตใจได้พักผ่อนอย่างเต็มที่
+    💡 สิ่งสำคัญที่สุดคือ <strong>เลือกเวลาตื่น</strong> — ไม่ใช่เวลานอน<br>
+    ถ้าร่างกายตื่นตรงเวลาสม่ำเสมอ นาฬิกาชีวิตจะปรับตัวเองให้ง่วงในเวลาที่ถูกต้องเอง
   </div>
 
   <div class="accordion">
 
+    <!-- 1 -->
     <div class="acc-item" onclick="toggle(this)">
       <div class="acc-header">
         <div class="acc-header-left">
@@ -217,15 +241,21 @@ main {
       </div>
       <div class="acc-body">
         <div class="acc-body-inner">
-          <p>การนอนหลับที่ดีไม่ได้วัดแค่ "จำนวนชั่วโมง" เท่านั้น แต่ยังรวมถึง <strong>คุณภาพของการนอน</strong> ด้วย</p>
-          <p>การนอนหลับแบ่งออกเป็นหลายรอบ แต่ละรอบประกอบด้วยระยะหลับตื้น หลับลึก และ REM (ฝัน) ร่างกายต้องการทั้งหมดนี้เพื่อฟื้นฟูตัวเอง</p>
+          <p>การนอนหลับที่ดีไม่ได้วัดแค่จำนวนชั่วโมง แต่วัดที่ <strong>คุณภาพของการนอน</strong> และ <strong>คุณภาพชีวิตตอนกลางวัน</strong></p>
+          <div class="insight-box">
+            <div class="insight-title">💡 เปลี่ยนมุมมองนี้</div>
+            ถ้านอนน้อย แต่ตื่นมาแล้วใช้ชีวิตกลางวันได้ตามปกติ — <strong>ไม่ใช่เรื่องที่ต้องกังวล</strong><br>
+            จำนวนชั่วโมงการนอนไม่ได้สำคัญเท่ากับการที่คุณใช้ชีวิตได้ดีตอนกลางวัน
+          </div>
+          <p>การนอนหลับแบ่งเป็นหลายรอบ แต่ละรอบมีระยะหลับตื้น หลับลึก และ REM (ฝัน) ร่างกายต้องการทั้งหมดนี้เพื่อฟื้นฟูตัวเอง</p>
           <div class="highlight">
-            ✅ การนอนหลับที่ดี คือ นอนหลับง่าย ไม่ตื่นกลางดึกบ่อย และตื่นเช้ารู้สึกสดชื่น
+            ✅ การนอนที่ดี คือ นอนหลับได้ไม่ยากเกินไป และตื่นเช้ารู้สึกพอจะใช้ชีวิตได้ตามปกติ
           </div>
         </div>
       </div>
     </div>
 
+    <!-- 2 -->
     <div class="acc-item" onclick="toggle(this)">
       <div class="acc-header">
         <div class="acc-header-left">
@@ -236,83 +266,182 @@ main {
       </div>
       <div class="acc-body">
         <div class="acc-body-inner">
-          <p>การนอนหลับและสุขภาพจิตมีความสัมพันธ์ใกล้ชิดกันมาก เมื่อนอนไม่พอ ร่างกายผลิตสารเคมีในสมองที่ควบคุมอารมณ์ได้น้อยลง</p>
+          <p>การนอนหลับและสุขภาพจิตมีความสัมพันธ์กันใกล้ชิดมาก เมื่อนอนไม่พอ ร่างกายผลิตสารเคมีในสมองที่ควบคุมอารมณ์ได้น้อยลง ส่งผลให้:</p>
           <ul class="tips-list">
-            <li><div class="tip-dot"></div><span>อารมณ์หงุดหงิด ฉุนเฉียว ง่ายขึ้น</span></li>
-            <li><div class="tip-dot"></div><span>วิตกกังวลและเครียดมากขึ้น</span></li>
-            <li><div class="tip-dot"></div><span>สมองทำงานช้า ความจำและสมาธิแย่ลง</span></li>
-            <li><div class="tip-dot"></div><span>ระบบภูมิคุ้มกันอ่อนแอลง</span></li>
-            <li><div class="tip-dot"></div><span>เพิ่มความเสี่ยงของโรคซึมเศร้าและโรคแพนิค</span></li>
+            <li><div class="tip-dot" style="background:var(--primary)"></div><span>อารมณ์หงุดหงิด ฉุนเฉียวง่ายขึ้น</span></li>
+            <li><div class="tip-dot" style="background:var(--primary)"></div><span>วิตกกังวลและเครียดมากขึ้น</span></li>
+            <li><div class="tip-dot" style="background:var(--primary)"></div><span>สมองทำงานช้า ความจำและสมาธิแย่ลง</span></li>
+            <li><div class="tip-dot" style="background:var(--primary)"></div><span>ระบบภูมิคุ้มกันอ่อนแอลง</span></li>
+            <li><div class="tip-dot" style="background:var(--primary)"></div><span>เพิ่มความเสี่ยงของโรคซึมเศร้าและโรควิตกกังวล</span></li>
           </ul>
+          <p style="margin-top:12px">ในทางกลับกัน การนอนหลับดีขึ้นก็ช่วยให้อาการทางจิตใจดีขึ้นตามด้วยเช่นกัน</p>
         </div>
       </div>
     </div>
 
+    <!-- 3 -->
     <div class="acc-item" onclick="toggle(this)">
       <div class="acc-header">
         <div class="acc-header-left">
           <div class="acc-num">3</div>
-          <div class="acc-title">เคล็ดลับการนอนหลับที่ดี</div>
+          <div class="acc-title">เคล็ดลับระหว่างวัน</div>
         </div>
         <svg class="acc-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
       </div>
       <div class="acc-body">
         <div class="acc-body-inner">
-          <span class="tag">ทำได้ทันที</span>
-          <ul class="tips-list">
-            <li><div class="tip-dot"></div><span><strong>นอนและตื่นเวลาเดิมทุกวัน</strong> แม้วันหยุดก็ตาม เพื่อให้นาฬิกาชีวิตทำงานได้ดี</span></li>
-            <li><div class="tip-dot"></div><span><strong>สร้างบรรยากาศห้องนอน</strong> ให้มืด เย็น และเงียบ อุณหภูมิที่เหมาะสมคือ 18–22 องศาเซลเซียส</span></li>
-            <li><div class="tip-dot"></div><span><strong>ทำกิจวัตรก่อนนอน</strong> เช่น อาบน้ำอุ่น อ่านหนังสือ หรือฝึกหายใจลึก ๆ 15–30 นาที</span></li>
-            <li><div class="tip-dot"></div><span><strong>ออกกำลังกายสม่ำเสมอ</strong> แต่หลีกเลี่ยงการออกกำลังกายหนักก่อนนอน 3 ชั่วโมง</span></li>
-            <li><div class="tip-dot"></div><span><strong>รับแสงแดดตอนเช้า</strong> ช่วยรีเซ็ตนาฬิกาชีวิตและเพิ่มการผลิตเมลาโทนินตอนกลางคืน</span></li>
-            <li><div class="tip-dot"></div><span><strong>ถ้านอนไม่หลับ</strong> ให้ลุกออกจากเตียงไปทำกิจกรรมเบา ๆ ในที่แสงน้อย แล้วกลับมานอนเมื่อรู้สึกง่วง</span></li>
-          </ul>
+          <p>การนอนหลับที่ดีเริ่มต้นตั้งแต่เช้า ไม่ใช่แค่ตอนเข้านอน</p>
+
+          <div class="checklist">
+            <div class="check-row do">
+              <span class="check-icon">⏰</span>
+              <span><strong>ตื่นให้ตรงเวลาทุกวัน</strong> — แม้วันหยุด แม้นอนดึก<br>
+              <span style="color:var(--text-muted);font-size:14px">เราเลือกเวลาตื่นได้ แต่เลือกเวลาที่จะง่วงไม่ได้ ตื่นตรงเวลาสม่ำเสมอคือวิธีเดียวที่ปรับนาฬิกาชีวิตได้จริง</span></span>
+            </div>
+            <div class="check-row do">
+              <span class="check-icon">🦵</span>
+              <span><strong>ลุกจากที่นอนทันทีที่ตื่น</strong><br>
+              <span style="color:var(--text-muted);font-size:14px">อย่าล้มตัวนอนต่อหรือนอนเล่นมือถือบนเตียง เพราะจะทำให้สมองสับสนว่าเตียงคือที่สำหรับตื่น</span></span>
+            </div>
+            <div class="check-row do">
+              <span class="check-icon">☀️</span>
+              <span><strong>รับแสงแดดช่วงกลางวันให้มากที่สุด</strong><br>
+              <span style="color:var(--text-muted);font-size:14px">แสงแดดช่วยปรับฮอร์โมนในร่างกาย โดยเฉพาะเมลาโทนิน ทำให้ง่วงถูกเวลาตอนกลางคืน</span></span>
+            </div>
+            <div class="check-row do">
+              <span class="check-icon">🏃</span>
+              <span><strong>หาอะไรทำระหว่างวัน</strong><br>
+              <span style="color:var(--text-muted);font-size:14px">งานบ้าน ออกกำลังกาย เดินเล่น — ร่างกายที่ได้ใช้พลังงานระหว่างวันจะง่วงตรงเวลามากขึ้น</span></span>
+            </div>
+            <div class="check-row dont">
+              <span class="check-icon">🚫</span>
+              <span><strong>ไม่งีบหลับกลางวัน</strong><br>
+              <span style="color:var(--text-muted);font-size:14px">การงีบลดความง่วงตอนกลางคืน ทำให้นอนหลับยากขึ้น ถ้าง่วงมาก ให้ทนแล้วไปนอนตอนกลางคืนแทน</span></span>
+            </div>
+            <div class="check-row do">
+              <span class="check-icon">☕</span>
+              <span><strong>ดื่มคาเฟอีนได้ แต่ก่อนเที่ยงเท่านั้น</strong><br>
+              <span style="color:var(--text-muted);font-size:14px">กาแฟ ชา น้ำอัดลม — คาเฟอีนอยู่ในร่างกายได้นาน 6–8 ชั่วโมง ดื่มหลังเที่ยงจะกระทบการนอนตอนกลางคืน</span></span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
 
+    <!-- 4 -->
     <div class="acc-item" onclick="toggle(this)">
       <div class="acc-header">
         <div class="acc-header-left">
           <div class="acc-num">4</div>
-          <div class="acc-title">สิ่งที่ควรหลีกเลี่ยงก่อนนอน</div>
+          <div class="acc-title">เตรียมตัวก่อนนอน</div>
         </div>
         <svg class="acc-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
       </div>
       <div class="acc-body">
         <div class="acc-body-inner">
-          <ul class="tips-list warn-list">
-            <li><div class="tip-dot" style="background:#e57373"></div><span><strong>คาเฟอีน</strong> (กาแฟ ชา น้ำอัดลม) ควรหยุดดื่มอย่างน้อย 6 ชั่วโมงก่อนนอน</span></li>
-            <li><div class="tip-dot" style="background:#e57373"></div><span><strong>หน้าจอ</strong> (มือถือ แท็บเล็ต คอมพิวเตอร์) แสง blue light กระตุ้นสมองและลดเมลาโทนิน ควรวางอย่างน้อย 1 ชั่วโมงก่อนนอน</span></li>
-            <li><div class="tip-dot" style="background:#e57373"></div><span><strong>อาหารหนัก</strong> ไม่ควรทานมื้อใหญ่ก่อนนอน 2–3 ชั่วโมง</span></li>
-            <li><div class="tip-dot" style="background:#e57373"></div><span><strong>แอลกอฮอล์</strong> แม้ทำให้ง่วงแต่ทำลายคุณภาพการนอนในช่วงดึก</span></li>
-            <li><div class="tip-dot" style="background:#e57373"></div><span><strong>นอนกลางวันนานเกินไป</strong> ไม่ควรงีบนานเกิน 20–30 นาที และไม่ควรงีบหลังบ่าย 3 โมง</span></li>
-            <li><div class="tip-dot" style="background:#e57373"></div><span><strong>นำปัญหามาคิดบนเตียง</strong> ให้จดสิ่งที่กังวลไว้ในสมุด แล้ว "วางไว้" จนกว่าจะถึงเวลาแก้ไข</span></li>
-          </ul>
+          <p>ช่วง 2–3 ชั่วโมงก่อนนอนสำคัญมาก ร่างกายต้องการเวลาค่อยๆ ผ่อนคลายก่อนเข้านอน</p>
+
+          <div class="checklist">
+            <div class="check-row dont">
+              <span class="check-icon">🍽️</span>
+              <span><strong>ไม่กินมื้อเย็นใกล้เวลานอนเกินไป</strong><br>
+              <span style="color:var(--text-muted);font-size:14px">ควรทานอาหารมื้อสุดท้ายก่อนนอนอย่างน้อย 3 ชั่วโมง เพราะร่างกายยังย่อยอาหารอยู่ ทำให้นอนไม่สบาย</span></span>
+            </div>
+            <div class="check-row dont">
+              <span class="check-icon">💧</span>
+              <span><strong>ไม่ดื่มน้ำมากก่อนนอน และเข้าห้องน้ำให้เรียบร้อยก่อนเข้าเตียง</strong><br>
+              <span style="color:var(--text-muted);font-size:14px">เพื่อลดโอกาสตื่นกลางดึกเพราะปวดปัสสาวะ</span></span>
+            </div>
+            <div class="check-row dont">
+              <span class="check-icon">📱</span>
+              <span><strong>งดหน้าจออย่างน้อย 1 ชั่วโมงก่อนนอน</strong><br>
+              <span style="color:var(--text-muted);font-size:14px">แสง blue light จากมือถือ ทีวี แท็บเล็ต กระตุ้นสมองและยับยั้งการผลิตเมลาโทนิน ทำให้ง่วงช้าลง</span></span>
+            </div>
+            <div class="check-row dont">
+              <span class="check-icon">🛏️</span>
+              <span><strong>ไม่ขึ้นเตียงถ้ายังไม่ง่วง</strong><br>
+              <span style="color:var(--text-muted);font-size:14px">การนอนอยู่บนเตียงทั้งที่นอนไม่หลับจะทำให้สมองเชื่อมโยงเตียงกับความกังวล — เตียงควรเป็นที่สำหรับนอนเท่านั้น</span></span>
+            </div>
+            <div class="check-row do">
+              <span class="check-icon">🎵</span>
+              <span><strong>ทำกิจกรรมผ่อนคลายข้างเตียงแทน</strong><br>
+              <span style="color:var(--text-muted);font-size:14px">ฟังเพลงเบาๆ อ่านหนังสือ สวดมนต์ ทำสมาธิ หรือยืดเหยียดเบาๆ รอจนรู้สึกง่วงจริงๆ แล้วค่อยเข้าเตียง</span></span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
 
+    <!-- 5 (NEW) -->
     <div class="acc-item" onclick="toggle(this)">
       <div class="acc-header">
         <div class="acc-header-left">
           <div class="acc-num">5</div>
+          <div class="acc-title">เมื่อนอนไม่หลับ</div>
+        </div>
+        <svg class="acc-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="acc-body">
+        <div class="acc-body-inner">
+          <p>นอนไม่หลับแล้วยิ่งพยายามนอน ยิ่งนอนไม่ได้ — ลองปรับความคิดและวิธีรับมือดูครับ</p>
+
+          <div class="insight-box">
+            <div class="insight-title">🔄 เปลี่ยนวิธีคิด</div>
+            <strong>อย่าตั้งใจนอน — ตั้งใจตื่นแทน</strong><br>
+            ยิ่งพยายามฝืนนอน สมองยิ่งตื่นตัว เปลี่ยนเป็นนอนพักเฉยๆ โดยไม่คาดหวังว่าจะหลับ ความง่วงจะมาเองตามธรรมชาติ
+          </div>
+
+          <div class="checklist">
+            <div class="check-row do">
+              <span class="check-icon">😴</span>
+              <span><strong>รู้สึกง่วงจริงๆ แล้วค่อยเข้าเตียง</strong><br>
+              <span style="color:var(--text-muted);font-size:14px">ถ้ายังไม่ง่วง ให้ทำกิจกรรมผ่อนคลายรอก่อน อย่าเข้าเตียงแต่หัวค่ำโดยหวังว่าจะง่วงเอง</span></span>
+            </div>
+            <div class="check-row do">
+              <span class="check-icon">🚶</span>
+              <span><strong>ถ้านอนไม่หลับ ให้ลุกออกจากเตียง</strong><br>
+              <span style="color:var(--text-muted);font-size:14px">ถ้านอนแล้วตาไม่หลับนานกว่า 20 นาที ให้ลุกออกมาทำกิจกรรมผ่อนคลายในที่แสงน้อย รอจนง่วงจริงๆ แล้วกลับเข้าเตียง การนอนค้างบนเตียงไม่มีประโยชน์</span></span>
+            </div>
+            <div class="check-row dont">
+              <span class="check-icon">🕐</span>
+              <span><strong>ไม่ดูนาฬิกากลางดึก</strong><br>
+              <span style="color:var(--text-muted);font-size:14px">การดูนาฬิกาตอนกลางคืนจะยิ่งทำให้กังวล ตั้งแค่นาฬิกาปลุกแล้ววางมือถือหงายลงหรือไว้ไกลมือ</span></span>
+            </div>
+            <div class="check-row do">
+              <span class="check-icon">🌅</span>
+              <span><strong>ตื่นตรงเวลาทุกเช้า ไม่ว่าเมื่อคืนจะนอนมากน้อยแค่ไหน</strong><br>
+              <span style="color:var(--text-muted);font-size:14px">นี่คือขั้นตอนที่สำคัญที่สุด แม้จะเพิ่งนอนหลับได้ไม่กี่ชั่วโมง ให้ตื่นตามเวลาเสมอ ร่างกายจะค่อยๆ ปรับตัวเองให้ง่วงถูกเวลาในคืนถัดไป</span></span>
+            </div>
+          </div>
+
+          <div class="highlight-warn" style="margin-top:16px">
+            ⚠️ การอดนอนสะสมระยะสั้นๆ ไม่ได้อันตราย แต่การนอนไม่หลับที่ฝังใจว่า "ฉันนอนไม่ได้" ต่างหากที่ทำให้ปัญหาเรื้อรัง ค่อยๆ ฝึกทำซ้ำๆ ร่างกายจะปรับได้เองครับ
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 6 -->
+    <div class="acc-item" onclick="toggle(this)">
+      <div class="acc-header">
+        <div class="acc-header-left">
+          <div class="acc-num">6</div>
           <div class="acc-title">เมื่อไหร่ควรพบแพทย์?</div>
         </div>
         <svg class="acc-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
       </div>
       <div class="acc-body">
         <div class="acc-body-inner">
-          <p>ควรปรึกษาแพทย์หรือจิตแพทย์หากมีอาการต่อไปนี้นานกว่า 1 เดือน:</p>
+          <p>ถ้าลองทำตามคำแนะนำข้างต้นอย่างสม่ำเสมอนาน 2–4 สัปดาห์แล้วยังไม่ดีขึ้น หรือมีอาการต่อไปนี้ ควรปรึกษาแพทย์ครับ:</p>
           <ul class="tips-list">
-            <li><div class="tip-dot"></div><span>นอนไม่หลับหรือหลับยากทุกคืน แม้จะเหนื่อยมาก</span></li>
-            <li><div class="tip-dot"></div><span>ตื่นกลางดึกซ้ำ ๆ และนอนต่อไม่ได้</span></li>
-            <li><div class="tip-dot"></div><span>รู้สึกเหนื่อยล้ามากแม้นอนพอ</span></li>
-            <li><div class="tip-dot"></div><span>นอนกรนเสียงดัง หรือหยุดหายใจขณะนอน</span></li>
-            <li><div class="tip-dot"></div><span>อาการนอนไม่หลับส่งผลต่อการทำงานหรือชีวิตประจำวัน</span></li>
+            <li><div class="tip-dot" style="background:var(--primary)"></div><span>นอนไม่หลับหรือหลับยากเกือบทุกคืน ติดต่อกันนานกว่า 1 เดือน</span></li>
+            <li><div class="tip-dot" style="background:var(--primary)"></div><span>ตื่นกลางดึกซ้ำๆ และนอนต่อไม่ได้</span></li>
+            <li><div class="tip-dot" style="background:var(--primary)"></div><span>รู้สึกเหนื่อยล้ามากแม้นอนพอแล้ว</span></li>
+            <li><div class="tip-dot" style="background:var(--primary)"></div><span>นอนกรนเสียงดัง หรือรู้สึกหยุดหายใจขณะนอน</span></li>
+            <li><div class="tip-dot" style="background:var(--primary)"></div><span>ปัญหาการนอนส่งผลต่อการทำงาน ความสัมพันธ์ หรือชีวิตประจำวันชัดเจน</span></li>
           </ul>
           <div class="highlight" style="margin-top:14px">
-            🏥 โรคนอนไม่หลับ (Insomnia) รักษาได้ด้วยการบำบัดพฤติกรรม (CBT-I) และยา ไม่ต้องทนอยู่คนเดียว
+            🏥 โรคนอนไม่หลับ (Insomnia) รักษาได้ดีมากด้วยการบำบัดพฤติกรรม (CBT-I) ซึ่งได้ผลดีกว่ายานอนหลับในระยะยาว ไม่ต้องทนอยู่คนเดียวครับ
           </div>
         </div>
       </div>
@@ -323,16 +452,20 @@ main {
 
 <script>
 function toggle(item) {
-  const body = item.querySelector('.acc-body');
+  const body  = item.querySelector('.acc-body');
   const inner = item.querySelector('.acc-body-inner');
   const isOpen = item.classList.contains('open');
+
+  // ปิดทุกอันก่อน
   document.querySelectorAll('.acc-item.open').forEach(el => {
     el.classList.remove('open');
     el.querySelector('.acc-body').style.maxHeight = '0';
   });
+
+  // เปิดอันที่กด (ถ้ายังไม่ได้เปิด)
   if (!isOpen) {
     item.classList.add('open');
-    body.style.maxHeight = inner.scrollHeight + 32 + 'px';
+    body.style.maxHeight = inner.scrollHeight + 40 + 'px';
   }
 }
 </script>

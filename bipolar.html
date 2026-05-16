@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>โรคอารมณ์ 2 ขั้ว — Live In Peace</title>
+<style>
+:root {
+  --bg: #f5fbf9;
+  --surface: #ffffff;
+  --primary: #3a9b8a;
+  --primary-dark: #2d7a6a;
+  --primary-light: #e8f7f4;
+  --accent: #6b4fa8;
+  --accent-dark: #4e3880;
+  --accent-light: #f0ebfa;
+  --text: #1e3240;
+  --text-muted: #6b849a;
+  --border: #cde8e2;
+  --radius: 16px;
+  --shadow: 0 2px 16px rgba(107,79,168,0.10);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Leelawadee UI', 'Leelawadee', Tahoma, 'Lucida Sans Unicode', Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 17px;
+  line-height: 1.9;
+  min-height: 100vh;
+}
+.topbar {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 14px 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+.back-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--primary);
+  text-decoration: none;
+  font-size: 16px;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: 20px;
+  background: var(--primary-light);
+  transition: background 0.2s;
+}
+.back-btn:hover { background: #d4f0ea; }
+.topbar-title { font-size: 17px; font-weight: 700; color: var(--text); }
+.hero {
+  background: linear-gradient(135deg, #4e3880 0%, #8b6fd4 100%);
+  color: white;
+  padding: 40px 24px 48px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50px; right: -50px;
+  width: 180px; height: 180px;
+  background: rgba(255,255,255,0.07);
+  border-radius: 50%;
+}
+.hero-icon { font-size: 56px; margin-bottom: 12px; }
+.hero h1 { font-size: 26px; font-weight: 700; margin-bottom: 10px; }
+.hero p { font-size: 16px; opacity: 0.9; max-width: 380px; margin: 0 auto; }
+main { max-width: 640px; margin: 0 auto; padding: 28px 20px 60px; }
+.tip-box {
+  background: var(--accent-light);
+  border-left: 4px solid var(--accent);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 16px 20px;
+  margin-bottom: 24px;
+  font-size: 15px;
+  color: var(--accent-dark);
+  line-height: 1.7;
+}
+.accordion { display: flex; flex-direction: column; gap: 12px; }
+.acc-item {
+  background: var(--surface);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  border: 1.5px solid transparent;
+  transition: border-color 0.2s;
+}
+.acc-item.open { border-color: #ddd4f0; }
+.acc-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 22px;
+  cursor: pointer;
+  user-select: none;
+  gap: 12px;
+}
+.acc-header:hover { background: #fafffe; }
+.acc-header-left { display: flex; align-items: center; gap: 12px; }
+.acc-num {
+  width: 32px; height: 32px;
+  background: var(--accent-light);
+  color: var(--accent);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 14px; flex-shrink: 0;
+  transition: background 0.2s, color 0.2s;
+}
+.acc-item.open .acc-num { background: var(--accent); color: white; }
+.acc-title { font-size: 17px; font-weight: 700; color: var(--text); line-height: 1.4; }
+.acc-arrow {
+  width: 24px; height: 24px;
+  color: var(--text-muted);
+  transition: transform 0.3s ease;
+  flex-shrink: 0;
+}
+.acc-item.open .acc-arrow { transform: rotate(180deg); color: var(--accent); }
+.acc-body { max-height: 0; overflow: hidden; transition: max-height 0.38s ease; }
+.acc-body-inner { padding: 4px 22px 26px; border-top: 1px solid var(--border); }
+.acc-body-inner p { margin-bottom: 12px; }
+.acc-body-inner p:last-child { margin-bottom: 0; }
+.tips-list {
+  list-style: none;
+  display: flex; flex-direction: column; gap: 10px;
+  margin-top: 8px;
+}
+.tips-list li { display: flex; gap: 10px; align-items: flex-start; }
+.tip-dot { width: 8px; height: 8px; border-radius: 50%; margin-top: 9px; flex-shrink: 0; }
+.highlight {
+  background: var(--primary-light);
+  border-radius: 10px;
+  padding: 14px 18px;
+  margin: 14px 0;
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--primary-dark);
+}
+.highlight-purple {
+  background: var(--accent-light);
+  border-radius: 10px;
+  padding: 14px 18px;
+  margin: 14px 0;
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--accent-dark);
+}
+.highlight-warn {
+  background: #fff8f0;
+  border-left: 4px solid #f0a44a;
+  border-radius: 0 10px 10px 0;
+  padding: 14px 18px;
+  margin: 14px 0;
+  font-size: 15px;
+  line-height: 1.7;
+  color: #7a4a10;
+}
+.mood-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin: 12px 0;
+}
+.mood-card {
+  border-radius: 12px;
+  padding: 14px 16px;
+  font-size: 15px;
+  line-height: 1.7;
+}
+.mood-card.up {
+  background: #fff8e6;
+  border: 1px solid #f0c878;
+}
+.mood-card.down {
+  background: #eef2f8;
+  border: 1px solid #b0c0dc;
+}
+.mood-card .mood-label {
+  font-weight: 700;
+  font-size: 14px;
+  margin-bottom: 8px;
+  display: flex; align-items: center; gap: 6px;
+}
+.myth-grid { display: flex; flex-direction: column; gap: 12px; margin-top: 8px; }
+.myth-card { border-radius: 10px; overflow: hidden; }
+.myth-header {
+  background: #f0ebfa;
+  color: var(--accent-dark);
+  padding: 10px 16px;
+  font-weight: 700; font-size: 15px;
+}
+.myth-body {
+  background: #f9fffe;
+  border: 1px solid var(--border);
+  border-top: none;
+  padding: 12px 16px;
+  font-size: 15px;
+  border-radius: 0 0 10px 10px;
+}
+.checklist { display: flex; flex-direction: column; gap: 10px; margin-top: 10px; }
+.check-row {
+  display: flex; gap: 12px; align-items: flex-start;
+  padding: 10px 14px; border-radius: 10px;
+  background: var(--bg); font-size: 15px; line-height: 1.7;
+}
+.check-row.do { background: #f0faf7; }
+.check-row.warn { background: #fff8f0; }
+.check-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a href="index.html" class="back-btn">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+    กลับ
+  </a>
+  <span class="topbar-title">โรคอารมณ์ 2 ขั้ว</span>
+</div>
+
+<div class="hero">
+  <div class="hero-icon">🌊</div>
+  <h1>โรคอารมณ์ 2 ขั้ว</h1>
+  <p>เข้าใจวงจรอารมณ์ รักษาได้ และใช้ชีวิตได้ดีด้วยการดูแลที่ถูกต้อง</p>
+</div>
+
+<main>
+  <div class="tip-box">
+    💜 โรคอารมณ์ 2 ขั้วเป็นโรคที่<strong>รักษาได้</strong> ผู้ป่วยหลายคนมีชีวิตที่ดี มีงานทำ และมีความสัมพันธ์ที่ดีได้ ด้วยการรักษาที่เหมาะสม
+  </div>
+
+  <div class="accordion">
+
+    <!-- 1 -->
+    <div class="acc-item" onclick="toggle(this)">
+      <div class="acc-header">
+        <div class="acc-header-left">
+          <div class="acc-num">1</div>
+          <div class="acc-title">โรคอารมณ์ 2 ขั้วคืออะไร?</div>
+        </div>
+        <svg class="acc-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="acc-body">
+        <div class="acc-body-inner">
+          <p>โรคอารมณ์ 2 ขั้ว (Bipolar Disorder) คือโรคที่ทำให้อารมณ์เปลี่ยนแปลงอย่างรุนแรงเป็นช่วงๆ สลับระหว่าง <strong>ช่วงอารมณ์ดีหรือพลังงานสูงผิดปกติ</strong> (แมเนีย) และ <strong>ช่วงซึมเศร้า</strong> โดยแต่ละช่วงอาจกินเวลาหลายวันถึงหลายเดือน</p>
+          <div class="highlight-purple">
+            📊 พบในประชากรประมาณ 1–2% ทั้งชายและหญิง มักเริ่มในวัยรุ่นถึงอายุ 30 ต้นๆ
+          </div>
+          <p>แบ่งได้เป็น 2 ประเภทหลัก:</p>
+          <ul class="tips-list">
+            <li><div class="tip-dot" style="background:var(--accent)"></div><span><strong>Bipolar I</strong> — มีช่วงแมเนียเต็มรูปแบบ อาจรุนแรงจนต้องนอนโรงพยาบาล</span></li>
+            <li><div class="tip-dot" style="background:var(--accent)"></div><span><strong>Bipolar II</strong> — มีช่วง hypomania (แมเนียเบา) และช่วงซึมเศร้า ซึ่งมักเป็นปัญหาหลัก</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2 -->
+    <div class="acc-item" onclick="toggle(this)">
+      <div class="acc-header">
+        <div class="acc-header-left">
+          <div class="acc-num">2</div>
+          <div class="acc-title">อาการช่วงแมเนีย — อารมณ์ขึ้นสูง</div>
+        </div>
+        <svg class="acc-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="acc-body">
+        <div class="acc-body-inner">
+          <p>ช่วงแมเนียไม่ได้รู้สึก "ดี" เสมอไป — อาจเริ่มจากความรู้สึกมีพลังงานมาก แต่อาจนำไปสู่การตัดสินใจที่เสียหายได้</p>
+          <ul class="tips-list">
+            <li><div class="tip-dot" style="background:#d4a820"></div><span>นอนน้อยมาก (1–3 ชั่วโมง) แต่ไม่รู้สึกเหนื่อย</span></li>
+            <li><div class="tip-dot" style="background:#d4a820"></div><span>พลังงานสูงมาก ทำหลายอย่างพร้อมกัน</span></li>
+            <li><div class="tip-dot" style="background:#d4a820"></div><span>พูดมาก เร็ว ความคิดแล่น กระโดดจากเรื่องหนึ่งไปอีกเรื่อง</span></li>
+            <li><div class="tip-dot" style="background:#d4a820"></div><span>มั่นใจในตัวเองสูงผิดปกติ รู้สึกว่าตัวเองพิเศษหรือมีพลังพิเศษ</span></li>
+            <li><div class="tip-dot" style="background:#d4a820"></div><span>ใช้จ่ายฟุ่มเฟือย ตัดสินใจหุนหันพลันแล่น</span></li>
+            <li><div class="tip-dot" style="background:#d4a820"></div><span>พฤติกรรมเสี่ยงที่ผิดปกติจากตัวเอง</span></li>
+          </ul>
+          <div class="highlight-warn" style="margin-top:12px">
+            ⚠️ ในช่วงแมเนีย ผู้ป่วยมักไม่รู้สึกว่าตัวเองป่วย และอาจปฏิเสธการรักษา — คนใกล้ชิดมีบทบาทสำคัญในการช่วยพาพบแพทย์
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3 -->
+    <div class="acc-item" onclick="toggle(this)">
+      <div class="acc-header">
+        <div class="acc-header-left">
+          <div class="acc-num">3</div>
+          <div class="acc-title">อาการช่วงซึมเศร้า — อารมณ์ลงต่ำ</div>
+        </div>
+        <svg class="acc-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="acc-body">
+        <div class="acc-body-inner">
+          <p>ช่วงซึมเศร้าในโรคอารมณ์ 2 ขั้วมักรุนแรงและกินเวลานาน และเป็นช่วงที่ทำให้ชีวิตประจำวันยากที่สุด</p>
+          <ul class="tips-list">
+            <li><div class="tip-dot" style="background:#5a7aaa"></div><span>อารมณ์เศร้า หมดหวัง รู้สึกว่าชีวิตไม่มีคุณค่า</span></li>
+            <li><div class="tip-dot" style="background:#5a7aaa"></div><span>เหนื่อยล้า ไม่มีแรง ทำอะไรก็ยาก</span></li>
+            <li><div class="tip-dot" style="background:#5a7aaa"></div><span>นอนมากเกินไปหรือนอนไม่หลับ</span></li>
+            <li><div class="tip-dot" style="background:#5a7aaa"></div><span>ไม่สนใจสิ่งที่เคยชอบ</span></li>
+            <li><div class="tip-dot" style="background:#5a7aaa"></div><span>สมาธิแย่ ตัดสินใจไม่ได้</span></li>
+            <li><div class="tip-dot" style="background:#5a7aaa"></div><span>อาจมีความคิดอยากทำร้ายตัวเอง</span></li>
+          </ul>
+          <div class="highlight" style="margin-top:12px">
+            💡 สำคัญมาก — ถ้ามีประวัติแมเนียด้วย <strong>ห้ามใช้ยาต้านเศร้า (SSRI) เดี่ยวๆ</strong> โดยไม่มียา mood stabilizer เพราะอาจกระตุ้นให้เกิดแมเนียได้
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4 -->
+    <div class="acc-item" onclick="toggle(this)">
+      <div class="acc-header">
+        <div class="acc-header-left">
+          <div class="acc-num">4</div>
+          <div class="acc-title">การรักษา</div>
+        </div>
+        <svg class="acc-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="acc-body">
+        <div class="acc-body-inner">
+          <p>โรคอารมณ์ 2 ขั้วต้องรักษาต่อเนื่องระยะยาว แต่อาการควบคุมได้ดีด้วยการรักษาที่เหมาะสม</p>
+          <ul class="tips-list">
+            <li><div class="tip-dot" style="background:var(--accent)"></div><span><strong>ยา Mood Stabilizer</strong> — เช่น lithium, valproate, lamotrigine ช่วยป้องกันไม่ให้อารมณ์ขึ้นหรือลงรุนแรง เป็นยาหลักที่ขาดไม่ได้</span></li>
+            <li><div class="tip-dot" style="background:var(--accent)"></div><span><strong>ยา Atypical Antipsychotic</strong> — ใช้ในช่วงแมเนียหรือซึมเศร้ารุนแรง ช่วยควบคุมอาการเฉียบพลัน</span></li>
+            <li><div class="tip-dot" style="background:var(--accent)"></div><span><strong>จิตบำบัด (CBT, Family Therapy)</strong> — ช่วยเข้าใจโรค จัดการความเครียด และวางแผนรับมือกับอาการ</span></li>
+          </ul>
+          <div class="highlight-warn" style="margin-top:14px">
+            ⚠️ <strong>ห้ามหยุดยาเอง</strong> — การหยุดยากะทันหันเป็นสาเหตุหลักของการกำเริบ ถ้าอยากปรับยาให้ปรึกษาแพทย์เสมอ
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5 -->
+    <div class="acc-item" onclick="toggle(this)">
+      <div class="acc-header">
+        <div class="acc-header-left">
+          <div class="acc-num">5</div>
+          <div class="acc-title">การดูแลตัวเองในชีวิตประจำวัน</div>
+        </div>
+        <svg class="acc-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="acc-body">
+        <div class="acc-body-inner">
+          <p>วิถีชีวิตสม่ำเสมอมีผลต่อความถี่และความรุนแรงของอาการโดยตรง</p>
+          <div class="checklist">
+            <div class="check-row do">
+              <span class="check-icon">😴</span>
+              <span><strong>นอนให้ตรงเวลาสม่ำเสมอทุกวัน</strong><br>
+              <span style="color:var(--text-muted);font-size:14px">การนอนน้อยหรือผิดเวลาเป็นตัวกระตุ้นแมเนียที่พบบ่อยที่สุด — นี่คือสิ่งที่สำคัญที่สุด</span></span>
+            </div>
+            <div class="check-row do">
+              <span class="check-icon">📓</span>
+              <span><strong>บันทึกอารมณ์ประจำวัน (Mood Diary)</strong><br>
+              <span style="color:var(--text-muted);font-size:14px">สังเกตว่าอารมณ์เปลี่ยนอย่างไร นอนหลับกี่ชั่วโมง มีปัจจัยอะไรที่กระตุ้น จะช่วยให้พบแพทย์ได้ตรงจุดมากขึ้น</span></span>
+            </div>
+            <div class="check-row do">
+              <span class="check-icon">🏃</span>
+              <span><strong>ออกกำลังกายสม่ำเสมอ</strong><br>
+              <span style="color:var(--text-muted);font-size:14px">ช่วยรักษาเสถียรภาพอารมณ์และลดความเสี่ยงช่วงซึมเศร้า</span></span>
+            </div>
+            <div class="check-row warn">
+              <span class="check-icon">🚫</span>
+              <span><strong>หลีกเลี่ยงแอลกอฮอล์และสารเสพติดทุกชนิด</strong><br>
+              <span style="color:var(--text-muted);font-size:14px">กระตุ้นทั้งแมเนียและซึมเศร้า รบกวนยา และทำให้อาการควบคุมได้ยากขึ้นมาก</span></span>
+            </div>
+            <div class="check-row do">
+              <span class="check-icon">👥</span>
+              <span><strong>แจ้งคนใกล้ชิดให้ช่วยสังเกต</strong><br>
+              <span style="color:var(--text-muted);font-size:14px">ตกลงกันล่วงหน้าว่าถ้าเห็นสัญญาณเตือน เช่น นอนน้อยลงผิดปกติ ให้แจ้งหรือพาพบแพทย์</span></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 6 -->
+    <div class="acc-item" onclick="toggle(this)">
+      <div class="acc-header">
+        <div class="acc-header-left">
+          <div class="acc-num">6</div>
+          <div class="acc-title">เมื่อไหร่ต้องพบแพทย์ด่วน?</div>
+        </div>
+        <svg class="acc-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="acc-body">
+        <div class="acc-body-inner">
+          <p>สัญญาณเตือนที่ต้องพบแพทย์โดยเร็ว หรือพาไปห้องฉุกเฉิน:</p>
+          <ul class="tips-list">
+            <li><div class="tip-dot" style="background:#e07b8a"></div><span>ไม่ได้นอนหลายคืนติดต่อกัน และยังมีพลังงานสูง</span></li>
+            <li><div class="tip-dot" style="background:#e07b8a"></div><span>ใช้จ่ายเงินจำนวนมากผิดปกติ หรือตัดสินใจครั้งใหญ่กะทันหัน</span></li>
+            <li><div class="tip-dot" style="background:#e07b8a"></div><span>พฤติกรรมก้าวร้าวหรือเสี่ยงอันตรายผิดจากปกติ</span></li>
+            <li><div class="tip-dot" style="background:#e07b8a"></div><span>มีความคิดอยากทำร้ายตัวเองหรือผู้อื่น</span></li>
+            <li><div class="tip-dot" style="background:#e07b8a"></div><span>ปฏิเสธการกินยาและไม่ยอมพบแพทย์</span></li>
+          </ul>
+          <div class="highlight" style="margin-top:14px">
+            📞 สายด่วนสุขภาพจิต <strong>1323</strong> พร้อมรับสาย 24 ชั่วโมง
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<script>
+function toggle(item) {
+  const body  = item.querySelector('.acc-body');
+  const inner = item.querySelector('.acc-body-inner');
+  const isOpen = item.classList.contains('open');
+  document.querySelectorAll('.acc-item.open').forEach(el => {
+    el.classList.remove('open');
+    el.querySelector('.acc-body').style.maxHeight = '0';
+  });
+  if (!isOpen) {
+    item.classList.add('open');
+    body.style.maxHeight = inner.scrollHeight + 40 + 'px';
+  }
+}
+</script>
+</body>
+</html>

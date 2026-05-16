@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>โรคย้ำคิดย้ำทำ — Live In Peace</title>
+<style>
+:root {
+  --bg: #f5fbf9;
+  --surface: #ffffff;
+  --primary: #3a9b8a;
+  --primary-dark: #2d7a6a;
+  --primary-light: #e8f7f4;
+  --accent: #b06820;
+  --accent-dark: #7a4810;
+  --accent-light: #fdf3e8;
+  --text: #1e3240;
+  --text-muted: #6b849a;
+  --border: #cde8e2;
+  --radius: 16px;
+  --shadow: 0 2px 16px rgba(176,104,32,0.10);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Leelawadee UI', 'Leelawadee', Tahoma, 'Lucida Sans Unicode', Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 17px;
+  line-height: 1.9;
+  min-height: 100vh;
+}
+.topbar {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 14px 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+.back-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--primary);
+  text-decoration: none;
+  font-size: 16px;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: 20px;
+  background: var(--primary-light);
+  transition: background 0.2s;
+}
+.back-btn:hover { background: #d4f0ea; }
+.topbar-title { font-size: 17px; font-weight: 700; color: var(--text); }
+.hero {
+  background: linear-gradient(135deg, #7a4810 0%, #d48a40 100%);
+  color: white;
+  padding: 40px 24px 48px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50px; right: -50px;
+  width: 180px; height: 180px;
+  background: rgba(255,255,255,0.07);
+  border-radius: 50%;
+}
+.hero-icon { font-size: 56px; margin-bottom: 12px; }
+.hero h1 { font-size: 26px; font-weight: 700; margin-bottom: 10px; }
+.hero p { font-size: 16px; opacity: 0.9; max-width: 380px; margin: 0 auto; }
+main { max-width: 640px; margin: 0 auto; padding: 28px 20px 60px; }
+.tip-box {
+  background: var(--accent-light);
+  border-left: 4px solid var(--accent);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 16px 20px;
+  margin-bottom: 24px;
+  font-size: 15px;
+  color: var(--accent-dark);
+  line-height: 1.7;
+}
+.accordion { display: flex; flex-direction: column; gap: 12px; }
+.acc-item {
+  background: var(--surface);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  border: 1.5px solid transparent;
+  transition: border-color 0.2s;
+}
+.acc-item.open { border-color: #f0d8b8; }
+.acc-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 22px;
+  cursor: pointer;
+  user-select: none;
+  gap: 12px;
+}
+.acc-header:hover { background: #fafffe; }
+.acc-header-left { display: flex; align-items: center; gap: 12px; }
+.acc-num {
+  width: 32px; height: 32px;
+  background: var(--accent-light);
+  color: var(--accent);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 14px; flex-shrink: 0;
+  transition: background 0.2s, color 0.2s;
+}
+.acc-item.open .acc-num { background: var(--accent); color: white; }
+.acc-title { font-size: 17px; font-weight: 700; color: var(--text); line-height: 1.4; }
+.acc-arrow {
+  width: 24px; height: 24px;
+  color: var(--text-muted);
+  transition: transform 0.3s ease;
+  flex-shrink: 0;
+}
+.acc-item.open .acc-arrow { transform: rotate(180deg); color: var(--accent); }
+.acc-body { max-height: 0; overflow: hidden; transition: max-height 0.38s ease; }
+.acc-body-inner { padding: 4px 22px 26px; border-top: 1px solid var(--border); }
+.acc-body-inner p { margin-bottom: 12px; }
+.acc-body-inner p:last-child { margin-bottom: 0; }
+.tips-list {
+  list-style: none;
+  display: flex; flex-direction: column; gap: 10px;
+  margin-top: 8px;
+}
+.tips-list li { display: flex; gap: 10px; align-items: flex-start; }
+.tip-dot { width: 8px; height: 8px; border-radius: 50%; margin-top: 9px; flex-shrink: 0; }
+.highlight {
+  background: var(--primary-light);
+  border-radius: 10px;
+  padding: 14px 18px;
+  margin: 14px 0;
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--primary-dark);
+}
+.highlight-amber {
+  background: var(--accent-light);
+  border-radius: 10px;
+  padding: 14px 18px;
+  margin: 14px 0;
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--accent-dark);
+}
+.highlight-warn {
+  background: #fff8f0;
+  border-left: 4px solid #f0a44a;
+  border-radius: 0 10px 10px 0;
+  padding: 14px 18px;
+  margin: 14px 0;
+  font-size: 15px;
+  line-height: 1.7;
+  color: #7a4a10;
+}
+.cycle-diagram {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 14px 0;
+}
+.cycle-step {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-size: 15px;
+  line-height: 1.6;
+}
+.cycle-step.thought { background: #fdf0e8; color: #7a4810; }
+.cycle-step.anxiety { background: #fdf5f0; color: #8a4020; }
+.cycle-step.action  { background: #fff0f5; color: #8a2040; }
+.cycle-step.relief  { background: #f0faf7; color: #2d7a6a; }
+.cycle-step.repeat  { background: #f5f0fd; color: #4e3880; }
+.cycle-arrow {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 18px;
+  line-height: 1;
+}
+.ocd-type-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 10px;
+}
+.ocd-type {
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+.ocd-type-header {
+  background: var(--accent-light);
+  padding: 10px 14px;
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--accent-dark);
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.ocd-type-body {
+  padding: 10px 14px;
+  font-size: 14px;
+  color: var(--text-muted);
+  line-height: 1.7;
+  background: #fdfdfb;
+}
+.myth-grid { display: flex; flex-direction: column; gap: 12px; margin-top: 8px; }
+.myth-card { border-radius: 10px; overflow: hidden; }
+.myth-header {
+  background: var(--accent-light);
+  color: var(--accent-dark);
+  padding: 10px 16px;
+  font-weight: 700; font-size: 15px;
+}
+.myth-body {
+  background: #f9fffe;
+  border: 1px solid var(--border);
+  border-top: none;
+  padding: 12px 16px;
+  font-size: 15px;
+  border-radius: 0 0 10px 10px;
+}
+.step-card {
+  background: var(--primary-light);
+  border-radius: 10px;
+  padding: 14px 16px;
+  margin-bottom: 10px;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+.step-num {
+  background: var(--primary);
+  color: white;
+  border-radius: 50%;
+  width: 28px; height: 28px;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 13px; flex-shrink: 0; margin-top: 2px;
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a href="index.html" class="back-btn">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+    กลับ
+  </a>
+  <span class="topbar-title">โรคย้ำคิดย้ำทำ (OCD)</span>
+</div>
+
+<div class="hero">
+  <div class="hero-icon">🔄</div>
+  <h1>โรคย้ำคิดย้ำทำ (OCD)</h1>
+  <p>ความคิดซ้ำๆ ที่ไม่ต้องการ ไม่ได้สะท้อนตัวตนของคุณ — รักษาได้และหยุดวงจรได้</p>
+</div>
+
+<main>
+  <div class="tip-box">
+    🧡 OCD ไม่ใช่ความอ่อนแอหรือนิสัย แต่เป็นโรคที่<strong>รักษาได้</strong> ความคิดที่แทรกเข้ามาไม่ได้หมายความว่าคุณอยากทำหรือเป็นคนแบบนั้น
+  </div>
+
+  <div class="accordion">
+
+    <!-- 1 -->
+    <div class="acc-item" onclick="toggle(this)">
+      <div class="acc-header">
+        <div class="acc-header-left">
+          <div class="acc-num">1</div>
+          <div class="acc-title">โรค OCD คืออะไร?</div>
+        </div>
+        <svg class="acc-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="acc-body">
+        <div class="acc-body-inner">
+          <p>OCD (Obsessive-Compulsive Disorder) หรือโรคย้ำคิดย้ำทำ มีองค์ประกอบสำคัญสองส่วน:</p>
+          <ul class="tips-list">
+            <li><div class="tip-dot" style="background:var(--accent)"></div><span><strong>Obsession (ความคิดย้ำ)</strong> — ความคิด ภาพ หรือแรงกระตุ้นที่แทรกเข้ามาซ้ำๆ โดยไม่ต้องการ สร้างความวิตกกังวลหรือรู้สึกไม่สบายใจอย่างรุนแรง</span></li>
+            <li><div class="tip-dot" style="background:var(--accent)"></div><span><strong>Compulsion (พฤติกรรมย้ำ)</strong> — การกระทำซ้ำๆ เพื่อลดความวิตกจากความคิดนั้น เช่น ล้างมือ ตรวจสอบ นับ หรือสวดมนต์</span></li>
+          </ul>
+          <div class="highlight-amber" style="margin-top:12px">
+            📊 พบในประชากรประมาณ 2–3% พบทั้งเด็กและผู้ใหญ่ อาการรุนแรงพอที่กระทบชีวิตประจำวัน ไม่ใช่แค่ "ชอบความสะอาด" หรือ "ชอบระเบียบ"
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2 -->
+    <div class="acc-item" onclick="toggle(this)">
+      <div class="acc-header">
+        <div class="acc-header-left">
+          <div class="acc-num">2</div>
+          <div class="acc-title">รูปแบบ OCD ที่พบบ่อย</div>
+        </div>
+        <svg class="acc-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="acc-body">
+        <div class="acc-body-inner">
+          <p>OCD มีหลายรูปแบบ — ไม่ใช่ทุกคนที่กลัวเชื้อโรค บางรูปแบบไม่มีพฤติกรรมซ้ำที่มองเห็นได้ชัดเจน</p>
+          <div class="ocd-type-grid">
+            <div class="ocd-type">
+              <div class="ocd-type-header">🦠 กลัวการปนเปื้อน</div>
+              <div class="ocd-type-body">กลัวเชื้อโรค สารพิษ หรือความสกปรก → ล้างมือซ้ำๆ หลีกเลี่ยงการสัมผัสสิ่งของ ทำความสะอาดนาน</div>
+            </div>
+            <div class="ocd-type">
+              <div class="ocd-type-header">🔒 ตรวจสอบซ้ำ</div>
+              <div class="ocd-type-body">กลัวว่าตัวเองลืมทำบางอย่าง เช่น ปิดแก๊ส ล็อคประตู → ตรวจซ้ำหลายรอบ อาจใช้เวลานานมาก</div>
+            </div>
+            <div class="ocd-type">
+              <div class="ocd-type-header">⚖️ ความสมมาตรและความสมบูรณ์</div>
+              <div class="ocd-type-body">รู้สึกว่าต้องจัดให้ "ถูกต้อง" หรือสมบูรณ์ ถ้ายังไม่ได้จะรู้สึกไม่สบายใจมาก</div>
+            </div>
+            <div class="ocd-type">
+              <div class="ocd-type-header">💭 ความคิดต้องห้าม (Pure-O)</div>
+              <div class="ocd-type-body">ความคิดที่แทรกเข้ามาเกี่ยวกับการทำร้าย ความคิดทางเพศที่ไม่ต้องการ หรือความคิดผิดศีลธรรม → วิตกกังวล สวดมนต์ หรือพยายามไล่ความคิดออก</div>
+            </div>
+          </div>
+          <div class="highlight" style="margin-top:14px">
+            💡 ความคิดต้องห้ามเหล่านี้ <strong>ไม่ได้สะท้อนตัวตนหรือความต้องการที่แท้จริง</strong> — ผู้ป่วยมักรู้สึกขยะแขยงความคิดตัวเองและไม่อยากให้เกิดขึ้น
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3 -->
+    <div class="acc-item" onclick="toggle(this)">
+      <div class="acc-header">
+        <div class="acc-header-left">
+          <div class="acc-num">3</div>
+          <div class="acc-title">วงจร OCD — ทำไมยิ่งทำยิ่งติด</div>
+        </div>
+        <svg class="acc-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="acc-body">
+        <div class="acc-body-inner">
+          <p>OCD ทำงานเป็นวงจรที่ยิ่งทำ compulsion ก็ยิ่งแน่น ไม่ใช่แก้ปัญหา แต่ทำให้ปัญหาใหญ่ขึ้น</p>
+          <div class="cycle-diagram">
+            <div class="cycle-step thought">💭 <strong>ความคิดแทรก</strong> — "ฉันอาจลืมปิดแก๊ส"</div>
+            <div class="cycle-arrow">↓</div>
+            <div class="cycle-step anxiety">😰 <strong>ความวิตกพุ่งสูง</strong> — รู้สึกไม่สบายใจ กระสับกระส่าย</div>
+            <div class="cycle-arrow">↓</div>
+            <div class="cycle-step action">🔁 <strong>ทำ compulsion</strong> — กลับไปตรวจแก๊สซ้ำอีกครั้ง</div>
+            <div class="cycle-arrow">↓</div>
+            <div class="cycle-step relief">😮‍💨 <strong>โล่งชั่วคราว</strong> — ความวิตกลดลงชั่วขณะ</div>
+            <div class="cycle-arrow">↓</div>
+            <div class="cycle-step repeat">🔄 <strong>ความคิดกลับมาอีก</strong> — วงจรแน่นขึ้น ทำ compulsion บ่อยขึ้น</div>
+          </div>
+          <div class="highlight-warn" style="margin-top:14px">
+            ⚠️ การทำ compulsion ให้ความโล่งใจแค่ชั่วคราว แต่สอนให้สมองเชื่อว่า "ต้องทำถึงจะปลอดภัย" ทำให้วงจรแน่นขึ้นทุกครั้ง
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4 -->
+    <div class="acc-item" onclick="toggle(this)">
+      <div class="acc-header">
+        <div class="acc-header-left">
+          <div class="acc-num">4</div>
+          <div class="acc-title">ทำอย่างไรเมื่อมีอาการ</div>
+        </div>
+        <svg class="acc-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="acc-body">
+        <div class="acc-body-inner">
+          <div class="step-card">
+            <div class="step-num">1</div>
+            <div><strong>รู้ทัน — บอกว่า "นี่คือ OCD"</strong><br>
+            เมื่อความคิดแทรกเข้ามา ให้ตั้งชื่อมันว่า "นี่คือความคิด OCD" ไม่ใช่ความจริง ไม่ใช่ตัวตนของฉัน</div>
+          </div>
+          <div class="step-card">
+            <div class="step-num">2</div>
+            <div><strong>อย่าทำ compulsion ทันที — รอดู</strong><br>
+            ความวิตกจะขึ้นถึงจุดสูงสุดแล้ว<strong>ลดลงเองตามธรรมชาติ</strong> แม้ไม่ได้ทำอะไร เหมือนคลื่นที่ขึ้นและลง</div>
+          </div>
+          <div class="step-card">
+            <div class="step-num">3</div>
+            <div><strong>ไม่พยายามไล่ความคิดออก</strong><br>
+            ยิ่งพยายามไม่คิด ยิ่งคิดมากขึ้น — ให้ยอมรับว่าความคิดนั้นมีอยู่ โดยไม่ตอบสนองต่อมัน</div>
+          </div>
+          <div class="step-card">
+            <div class="step-num">4</div>
+            <div><strong>ทำสิ่งที่มีความหมายต่อไป</strong><br>
+            ไม่ต้องรอให้วิตกหายก่อน — ทำกิจกรรมปกติต่อไปพร้อมกับความวิตกนั้น ความวิตกจะค่อยๆ ลดเอง</div>
+          </div>
+          <div class="highlight" style="margin-top:8px">
+            💚 ทักษะเหล่านี้ฝึกได้และต้องใช้เวลา — แต่ละครั้งที่ต้านได้ สมองจะค่อยๆ เรียนรู้ว่าความคิดนั้นไม่อันตราย
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5 -->
+    <div class="acc-item" onclick="toggle(this)">
+      <div class="acc-header">
+        <div class="acc-header-left">
+          <div class="acc-num">5</div>
+          <div class="acc-title">การรักษา</div>
+        </div>
+        <svg class="acc-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="acc-body">
+        <div class="acc-body-inner">
+          <p>OCD รักษาได้ผลดีมากด้วยสองแนวทางหลัก:</p>
+          <ul class="tips-list">
+            <li><div class="tip-dot" style="background:var(--accent)"></div>
+              <span><strong>ERP — Exposure and Response Prevention</strong><br>
+              การบำบัดที่ได้ผลดีที่สุดสำหรับ OCD — ค่อยๆ เผชิญกับสถานการณ์ที่กระตุ้นความวิตก โดยไม่ทำ compulsion ฝึกให้สมองเรียนรู้ว่าความวิตกจะลดลงเองโดยไม่ต้องทำอะไร</span>
+            </li>
+            <li><div class="tip-dot" style="background:var(--accent)"></div>
+              <span><strong>ยา SSRI</strong><br>
+              ในโรค OCD มักใช้ขนาดสูงกว่าโรคซึมเศร้า ช่วยลดความถี่และความรุนแรงของความคิดย้ำ ทำให้ทำ ERP ได้ง่ายขึ้น</span>
+            </li>
+          </ul>
+          <div class="highlight-amber" style="margin-top:14px">
+            💡 ERP ต้องทำกับนักจิตวิทยาหรือจิตแพทย์ที่เชี่ยวชาญ OCD โดยเฉพาะ — การทำคนเดียวอาจไม่ถูกวิธีและไม่ได้ผล
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 6 -->
+    <div class="acc-item" onclick="toggle(this)">
+      <div class="acc-header">
+        <div class="acc-header-left">
+          <div class="acc-num">6</div>
+          <div class="acc-title">ความเข้าใจผิดที่พบบ่อย</div>
+        </div>
+        <svg class="acc-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="acc-body">
+        <div class="acc-body-inner">
+          <div class="myth-grid">
+            <div class="myth-card">
+              <div class="myth-header">❌ "OCD คือชอบความสะอาดและระเบียบ"</div>
+              <div class="myth-body">✅ ไม่จริง OCD สร้างความทุกข์ทรมานอย่างมาก ไม่ใช่นิสัยที่ทำแล้วรู้สึกดี — คนที่มี OCD มักอยากหยุดพฤติกรรมซ้ำเหล่านั้นแต่ทำไม่ได้</div>
+            </div>
+            <div class="myth-card">
+              <div class="myth-header">❌ "คิดจะทำร้าย = อยากทำจริงๆ"</div>
+              <div class="myth-body">✅ ไม่จริง ความคิดต้องห้ามใน OCD ตรงกันข้ามกับตัวตนที่แท้จริง ผู้ป่วยรู้สึกขยะแขยงความคิดตัวเอง ไม่ได้ต้องการทำ</div>
+            </div>
+            <div class="myth-card">
+              <div class="myth-header">❌ "แค่หยุดคิดให้ได้ก็หาย"</div>
+              <div class="myth-body">✅ ไม่จริง การพยายามไม่คิดทำให้ความคิดนั้นกลับมาแรงขึ้น วิธีรักษาที่ถูกคือการเรียนรู้ที่จะอยู่กับความคิดโดยไม่ตอบสนอง</div>
+            </div>
+            <div class="myth-card">
+              <div class="myth-header">❌ "OCD รักษาไม่ได้"</div>
+              <div class="myth-body">✅ ไม่จริง ERP มีประสิทธิภาพสูงมาก ผู้ป่วยส่วนใหญ่อาการดีขึ้นอย่างมีนัยสำคัญและใช้ชีวิตได้ตามปกติ</div>
+            </div>
+          </div>
+          <div class="highlight" style="margin-top:16px">
+            📞 สายด่วนสุขภาพจิต <strong>1323</strong> พร้อมรับสาย 24 ชั่วโมง
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<script>
+function toggle(item) {
+  const body  = item.querySelector('.acc-body');
+  const inner = item.querySelector('.acc-body-inner');
+  const isOpen = item.classList.contains('open');
+  document.querySelectorAll('.acc-item.open').forEach(el => {
+    el.classList.remove('open');
+    el.querySelector('.acc-body').style.maxHeight = '0';
+  });
+  if (!isOpen) {
+    item.classList.add('open');
+    body.style.maxHeight = inner.scrollHeight + 40 + 'px';
+  }
+}
+</script>
+</body>
+</html>

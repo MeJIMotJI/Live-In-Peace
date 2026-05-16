@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>โรคจิตเภท — Live In Peace</title>
+<style>
+:root {
+  --bg: #f5fbf9;
+  --surface: #ffffff;
+  --primary: #3a9b8a;
+  --primary-dark: #2d7a6a;
+  --primary-light: #e8f7f4;
+  --accent: #3d6090;
+  --accent-dark: #2a4568;
+  --accent-light: #e8eef8;
+  --text: #1e3240;
+  --text-muted: #6b849a;
+  --border: #cde8e2;
+  --radius: 16px;
+  --shadow: 0 2px 16px rgba(61,96,144,0.10);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Leelawadee UI', 'Leelawadee', Tahoma, 'Lucida Sans Unicode', Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 17px;
+  line-height: 1.9;
+  min-height: 100vh;
+}
+.topbar {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 14px 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+.back-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--primary);
+  text-decoration: none;
+  font-size: 16px;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: 20px;
+  background: var(--primary-light);
+  transition: background 0.2s;
+}
+.back-btn:hover { background: #d4f0ea; }
+.topbar-title { font-size: 17px; font-weight: 700; color: var(--text); }
+.hero {
+  background: linear-gradient(135deg, #2a4568 0%, #5a87ab 100%);
+  color: white;
+  padding: 40px 24px 48px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50px; right: -50px;
+  width: 180px; height: 180px;
+  background: rgba(255,255,255,0.07);
+  border-radius: 50%;
+}
+.hero-icon { font-size: 56px; margin-bottom: 12px; }
+.hero h1 { font-size: 26px; font-weight: 700; margin-bottom: 10px; }
+.hero p { font-size: 16px; opacity: 0.9; max-width: 380px; margin: 0 auto; }
+main { max-width: 640px; margin: 0 auto; padding: 28px 20px 60px; }
+.tip-box {
+  background: var(--accent-light);
+  border-left: 4px solid var(--accent);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 16px 20px;
+  margin-bottom: 24px;
+  font-size: 15px;
+  color: var(--accent-dark);
+  line-height: 1.7;
+}
+.accordion { display: flex; flex-direction: column; gap: 12px; }
+.acc-item {
+  background: var(--surface);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  border: 1.5px solid transparent;
+  transition: border-color 0.2s;
+}
+.acc-item.open { border-color: #c0cfe8; }
+.acc-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 22px;
+  cursor: pointer;
+  user-select: none;
+  gap: 12px;
+}
+.acc-header:hover { background: #fafffe; }
+.acc-header-left { display: flex; align-items: center; gap: 12px; }
+.acc-num {
+  width: 32px; height: 32px;
+  background: var(--accent-light);
+  color: var(--accent);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 14px; flex-shrink: 0;
+  transition: background 0.2s, color 0.2s;
+}
+.acc-item.open .acc-num { background: var(--accent); color: white; }
+.acc-title { font-size: 17px; font-weight: 700; color: var(--text); line-height: 1.4; }
+.acc-arrow {
+  width: 24px; height: 24px;
+  color: var(--text-muted);
+  transition: transform 0.3s ease;
+  flex-shrink: 0;
+}
+.acc-item.open .acc-arrow { transform: rotate(180deg); color: var(--accent); }
+.acc-body { max-height: 0; overflow: hidden; transition: max-height 0.38s ease; }
+.acc-body-inner { padding: 4px 22px 26px; border-top: 1px solid var(--border); }
+.acc-body-inner p { margin-bottom: 12px; }
+.acc-body-inner p:last-child { margin-bottom: 0; }
+.tips-list {
+  list-style: none;
+  display: flex; flex-direction: column; gap: 10px;
+  margin-top: 8px;
+}
+.tips-list li { display: flex; gap: 10px; align-items: flex-start; }
+.tip-dot { width: 8px; height: 8px; border-radius: 50%; margin-top: 9px; flex-shrink: 0; }
+.highlight {
+  background: var(--primary-light);
+  border-radius: 10px;
+  padding: 14px 18px;
+  margin: 14px 0;
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--primary-dark);
+}
+.highlight-blue {
+  background: var(--accent-light);
+  border-radius: 10px;
+  padding: 14px 18px;
+  margin: 14px 0;
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--accent-dark);
+}
+.highlight-warn {
+  background: #fff8f0;
+  border-left: 4px solid #f0a44a;
+  border-radius: 0 10px 10px 0;
+  padding: 14px 18px;
+  margin: 14px 0;
+  font-size: 15px;
+  line-height: 1.7;
+  color: #7a4a10;
+}
+.sym-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin: 12px 0;
+}
+.sym-card {
+  border-radius: 12px;
+  padding: 14px 16px;
+  font-size: 15px;
+}
+.sym-card.positive {
+  background: #fff3f5;
+  border: 1px solid #f0c0c8;
+}
+.sym-card.negative {
+  background: var(--accent-light);
+  border: 1px solid #c0cfe8;
+}
+.sym-label {
+  font-weight: 700;
+  font-size: 13px;
+  margin-bottom: 8px;
+}
+.sym-card.positive .sym-label { color: #8b3a4a; }
+.sym-card.negative .sym-label { color: var(--accent-dark); }
+.myth-grid { display: flex; flex-direction: column; gap: 12px; margin-top: 8px; }
+.myth-card { border-radius: 10px; overflow: hidden; }
+.myth-header {
+  background: var(--accent-light);
+  color: var(--accent-dark);
+  padding: 10px 16px;
+  font-weight: 700; font-size: 15px;
+}
+.myth-body {
+  background: #f9fffe;
+  border: 1px solid var(--border);
+  border-top: none;
+  padding: 12px 16px;
+  font-size: 15px;
+  border-radius: 0 0 10px 10px;
+}
+.family-card {
+  background: var(--primary-light);
+  border-radius: 12px;
+  padding: 14px 18px;
+  margin-bottom: 10px;
+  font-size: 15px;
+  line-height: 1.7;
+  border-left: 4px solid var(--primary);
+}
+.family-card strong { color: var(--primary-dark); }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a href="index.html" class="back-btn">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+    กลับ
+  </a>
+  <span class="topbar-title">โรคจิตเภท</span>
+</div>
+
+<div class="hero">
+  <div class="hero-icon">🧠</div>
+  <h1>โรคจิตเภท (Schizophrenia)</h1>
+  <p>เข้าใจโรค ดูแลได้ถูกวิธี และใช้ชีวิตได้ดีด้วยการรักษาต่อเนื่อง</p>
+</div>
+
+<main>
+  <div class="tip-box">
+    💙 โรคจิตเภทเป็นโรคสมองที่<strong>รักษาได้</strong> ผู้ป่วยส่วนใหญ่อาการดีขึ้นมากด้วยยา และหลายคนใช้ชีวิตได้ตามปกติ ครอบครัวมีบทบาทสำคัญมากในการฟื้นฟู
+  </div>
+
+  <div class="accordion">
+
+    <!-- 1 -->
+    <div class="acc-item" onclick="toggle(this)">
+      <div class="acc-header">
+        <div class="acc-header-left">
+          <div class="acc-num">1</div>
+          <div class="acc-title">โรคจิตเภทคืออะไร?</div>
+        </div>
+        <svg class="acc-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="acc-body">
+        <div class="acc-body-inner">
+          <p>โรคจิตเภทคือโรคสมองที่ส่งผลต่อการรับรู้ความเป็นจริง ความคิด และพฤติกรรม เกิดจากความไม่สมดุลของสารเคมีในสมอง ไม่ใช่ความอ่อนแอหรือความผิดของผู้ป่วยหรือครอบครัว</p>
+          <div class="highlight-blue">
+            📊 พบในประชากรประมาณ 1% ทั่วโลก พบทั้งชายและหญิง มักเริ่มในช่วงอายุ 15–35 ปี
+          </div>
+          <p>สาเหตุเกิดจากหลายปัจจัยร่วมกัน ทั้งพันธุกรรม การพัฒนาของสมองในช่วงแรกของชีวิต และปัจจัยสิ่งแวดล้อม เช่น ความเครียดรุนแรง</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2 -->
+    <div class="acc-item" onclick="toggle(this)">
+      <div class="acc-header">
+        <div class="acc-header-left">
+          <div class="acc-num">2</div>
+          <div class="acc-title">อาการที่เพิ่มขึ้นมา (Positive Symptoms)</div>
+        </div>
+        <svg class="acc-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="acc-body">
+        <div class="acc-body-inner">
+          <p>"Positive" ในที่นี้หมายถึงอาการที่ <strong>เพิ่มขึ้นมาจากปกติ</strong> ไม่ได้หมายความว่าดี — เป็นอาการที่ตอบสนองต่อยาได้ดีที่สุด</p>
+          <ul class="tips-list">
+            <li><div class="tip-dot" style="background:var(--accent)"></div><span><strong>ประสาทหลอน (Hallucination)</strong> — ได้ยินเสียงที่คนอื่นไม่ได้ยิน เห็นภาพ หรือรู้สึกสัมผัสสิ่งที่ไม่มีอยู่จริง โดยเสียงที่ได้ยินพบบ่อยที่สุด</span></li>
+            <li><div class="tip-dot" style="background:var(--accent)"></div><span><strong>ความคิดหลงผิด (Delusion)</strong> — เชื่อสิ่งที่ไม่จริงอย่างแน่วแน่ เช่น เชื่อว่าถูกตามสะกด ถูกวางยา หรือมีภารกิจพิเศษ</span></li>
+            <li><div class="tip-dot" style="background:var(--accent)"></div><span><strong>ความคิดและการพูดไม่ปะติดปะต่อ</strong> — กระโดดเรื่อง ตามไม่ทัน ยากต่อการสนทนา</span></li>
+          </ul>
+          <div class="highlight" style="margin-top:12px">
+            💡 สิ่งที่ผู้ป่วยเห็นหรือได้ยินนั้น <strong>จริงสำหรับเขา</strong> — ไม่ได้แกล้งทำ และไม่ควรโต้เถียงว่าไม่จริง
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3 -->
+    <div class="acc-item" onclick="toggle(this)">
+      <div class="acc-header">
+        <div class="acc-header-left">
+          <div class="acc-num">3</div>
+          <div class="acc-title">อาการที่หายไป (Negative Symptoms)</div>
+        </div>
+        <svg class="acc-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="acc-body">
+        <div class="acc-body-inner">
+          <p>"Negative" หมายถึงความสามารถหรืออารมณ์ที่ <strong>ลดลงหรือหายไป</strong> จากที่เคยมี — อาการกลุ่มนี้มักรักษาได้ยากกว่า และส่งผลต่อชีวิตประจำวันมาก</p>
+          <ul class="tips-list">
+            <li><div class="tip-dot" style="background:#5a7aaa"></div><span><strong>อารมณ์แบน</strong> — ไม่แสดงสีหน้า ไม่มีความสุขหรือเศร้า น้ำเสียงราบเรียบ</span></li>
+            <li><div class="tip-dot" style="background:#5a7aaa"></div><span><strong>พูดน้อยมาก</strong> — ตอบสั้น ไม่เริ่มบทสนทนาเอง</span></li>
+            <li><div class="tip-dot" style="background:#5a7aaa"></div><span><strong>ไม่มีแรงจูงใจ</strong> — ทำอะไรลำบาก แม้แต่กิจวัตรพื้นฐาน</span></li>
+            <li><div class="tip-dot" style="background:#5a7aaa"></div><span><strong>ถอนตัวจากสังคม</strong> — ไม่อยากพบปะผู้คน อยู่คนเดียวเป็นส่วนใหญ่</span></li>
+          </ul>
+          <div class="highlight-warn" style="margin-top:12px">
+            ⚠️ อาการ negative มักถูกเข้าใจผิดว่าเป็นความขี้เกียจหรือไม่ใส่ใจ — แต่เป็นอาการของโรค ไม่ใช่นิสัย
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4 -->
+    <div class="acc-item" onclick="toggle(this)">
+      <div class="acc-header">
+        <div class="acc-header-left">
+          <div class="acc-num">4</div>
+          <div class="acc-title">การรักษา</div>
+        </div>
+        <svg class="acc-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="acc-body">
+        <div class="acc-body-inner">
+          <p>การรักษาโรคจิตเภทต้องต่อเนื่องระยะยาว ประกอบด้วย:</p>
+          <ul class="tips-list">
+            <li><div class="tip-dot" style="background:var(--accent)"></div><span><strong>ยา Antipsychotic</strong> — ยาหลักที่ลดอาการ positive ได้ดี ต้องกินสม่ำเสมอทุกวัน ไม่ขาดยา</span></li>
+            <li><div class="tip-dot" style="background:var(--accent)"></div><span><strong>การฟื้นฟูสมรรถภาพ (Rehabilitation)</strong> — ฝึกทักษะชีวิต ทักษะสังคม และการทำงาน เพื่อให้กลับมาใช้ชีวิตได้ตามปกติ</span></li>
+            <li><div class="tip-dot" style="background:var(--accent)"></div><span><strong>จิตบำบัดสำหรับครอบครัว (Family Therapy)</strong> — ช่วยให้ครอบครัวเข้าใจโรคและดูแลได้อย่างถูกวิธี</span></li>
+          </ul>
+          <div class="highlight-warn" style="margin-top:14px">
+            ⚠️ <strong>การหยุดยาเองคือสาเหตุหลักของการกำเริบ</strong> — เมื่ออาการดีขึ้น ผู้ป่วยมักรู้สึกว่าหายแล้วและหยุดยา แต่ยาต้องกินต่อเนื่องตามแพทย์สั่ง
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5 -->
+    <div class="acc-item" onclick="toggle(this)">
+      <div class="acc-header">
+        <div class="acc-header-left">
+          <div class="acc-num">5</div>
+          <div class="acc-title">บทบาทครอบครัวและคนใกล้ชิด</div>
+        </div>
+        <svg class="acc-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="acc-body">
+        <div class="acc-body-inner">
+          <p>ครอบครัวและคนใกล้ชิดมีผลต่อการฟื้นตัวอย่างมาก นี่คือสิ่งที่ช่วยได้จริง:</p>
+          <div class="family-card">
+            <strong>🚫 ไม่โต้เถียงเรื่องอาการหลงผิด</strong><br>
+            ไม่ต้องพิสูจน์ว่าจริงหรือไม่จริง — รับรู้ว่าเขารู้สึกกลัวหรือวิตก แล้วโฟกัสที่ความรู้สึก ไม่ใช่เนื้อหา
+          </div>
+          <div class="family-card">
+            <strong>💊 ช่วยดูแลการกินยา</strong><br>
+            เตือนอย่างอ่อนโยน ไม่บังคับหรือซักถามซ้ำๆ ถ้าผู้ป่วยไม่ยอมกินยา ให้ปรึกษาแพทย์
+          </div>
+          <div class="family-card">
+            <strong>👁 สังเกตสัญญาณก่อนกำเริบ</strong><br>
+            นอนน้อยลง พูดมากขึ้น กระสับกระส่าย หรือถอนตัวจากสังคมมากขึ้นผิดปกติ — พบแพทย์ก่อนที่อาการจะรุนแรง
+          </div>
+          <div class="family-card">
+            <strong>🤍 ดูแลตัวเองด้วย</strong><br>
+            การดูแลผู้ป่วยระยะยาวเป็นเรื่องเหนื่อย ขอความช่วยเหลือได้ ไม่ต้องแบกรับคนเดียว
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 6 -->
+    <div class="acc-item" onclick="toggle(this)">
+      <div class="acc-header">
+        <div class="acc-header-left">
+          <div class="acc-num">6</div>
+          <div class="acc-title">ความเข้าใจผิดที่พบบ่อย</div>
+        </div>
+        <svg class="acc-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="acc-body">
+        <div class="acc-body-inner">
+          <div class="myth-grid">
+            <div class="myth-card">
+              <div class="myth-header">❌ "คนโรคจิตเภทอันตราย"</div>
+              <div class="myth-body">✅ ไม่จริง ผู้ป่วยส่วนใหญ่ไม่มีพฤติกรรมก้าวร้าว และมีแนวโน้มตกเป็นเหยื่อมากกว่าเป็นผู้กระทำ ความรุนแรงมักสัมพันธ์กับการไม่ได้รับการรักษาหรือใช้สารเสพติดร่วม</div>
+            </div>
+            <div class="myth-card">
+              <div class="myth-header">❌ "รักษาไม่หาย ต้องป่วยตลอดชีวิต"</div>
+              <div class="myth-body">✅ ไม่จริง ผู้ป่วยจำนวนมากอาการดีขึ้นมากและใช้ชีวิตได้ตามปกติ มีงานทำ มีครอบครัว การรักษาต่อเนื่องคือกุญแจสำคัญ</div>
+            </div>
+            <div class="myth-card">
+              <div class="myth-header">❌ "เป็นเพราะการเลี้ยงดูที่ผิดพลาด"</div>
+              <div class="myth-body">✅ ไม่จริง โรคจิตเภทเป็นโรคสมองที่มีพื้นฐานทางชีววิทยา ครอบครัวไม่ใช่ต้นเหตุ</div>
+            </div>
+            <div class="myth-card">
+              <div class="myth-header">❌ "มีบุคลิกหลายอย่าง"</div>
+              <div class="myth-body">✅ ไม่จริง โรคบุคลิกภาพแตกแยก (DID) เป็นคนละโรคกับจิตเภทโดยสิ้นเชิง</div>
+            </div>
+          </div>
+          <div class="highlight" style="margin-top:16px">
+            📞 สายด่วนสุขภาพจิต <strong>1323</strong> พร้อมรับสาย 24 ชั่วโมง
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<script>
+function toggle(item) {
+  const body  = item.querySelector('.acc-body');
+  const inner = item.querySelector('.acc-body-inner');
+  const isOpen = item.classList.contains('open');
+  document.querySelectorAll('.acc-item.open').forEach(el => {
+    el.classList.remove('open');
+    el.querySelector('.acc-body').style.maxHeight = '0';
+  });
+  if (!isOpen) {
+    item.classList.add('open');
+    body.style.maxHeight = inner.scrollHeight + 40 + 'px';
+  }
+}
+</script>
+</body>
+</html>

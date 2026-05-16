@@ -174,6 +174,33 @@ main { max-width: 640px; margin: 0 auto; padding: 28px 20px 60px; }
   display: flex; align-items: center; justify-content: center;
   font-weight: 700; font-size: 13px; flex-shrink: 0; margin-top: 2px;
 }
+.insight-box {
+  background: linear-gradient(135deg, #e8f7f4, #f0f8ff);
+  border-radius: 12px;
+  padding: 18px 20px;
+  margin: 14px 0;
+  font-size: 15px;
+  line-height: 1.8;
+  border: 1px solid var(--border);
+}
+.insight-box .insight-title {
+  font-weight: 700;
+  color: var(--primary-dark);
+  margin-bottom: 6px;
+  font-size: 16px;
+}
+.ex-link {
+  display: inline-block;
+  background: var(--primary-light);
+  color: var(--primary-dark);
+  font-size: 13px;
+  font-weight: 700;
+  padding: 5px 14px;
+  border-radius: 20px;
+  text-decoration: none;
+  transition: background 0.2s;
+}
+.ex-link:hover { background: #d4f0ea; }
 </style>
 </head>
 <body>
@@ -194,7 +221,7 @@ main { max-width: 640px; margin: 0 auto; padding: 28px 20px 60px; }
 
 <main>
   <div class="tip-box">
-    🤍 โรคแพนิคพบบ่อยมากและ<strong>รักษาได้</strong> คุณไม่ได้บ้า และไม่ได้กำลังจะตาย แม้อาการจะรู้สึกน่ากลัวมาก
+    🤍 โรคแพนิคพบบ่อยมากและ<strong>รักษาได้</strong> ไม่มีอะไรผิดปกติกับตัวคุณ และคุณไม่ได้กำลังจะตาย แม้อาการจะรู้สึกน่ากลัวมาก
   </div>
 
   <div class="accordion">
@@ -259,7 +286,8 @@ main { max-width: 640px; margin: 0 auto; padding: 28px 20px 60px; }
           <div class="highlight">
             🧠 สำคัญมาก: อาการแพนิคไม่เป็นอันตราย ร่างกายของคุณจะไม่เป็นอะไร แม้จะรู้สึกน่ากลัวมากแค่ไหน
           </div>
-          <p>ปัจจัยที่อาจกระตุ้น: ความเครียด การนอนไม่หอ คาเฟอีน พันธุกรรม และประสบการณ์ในอดีต</p>
+          <p>ปัจจัยที่อาจกระตุ้น: ความเครียด การนอนไม่หลับ คาเฟอีน พันธุกรรม และประสบการณ์ในอดีต</p>
+          <a href="sleep.html" class="ex-link">🌙 อ่านเรื่องสุขอนามัยการนอนหลับ →</a>
         </div>
       </div>
     </div>
@@ -274,6 +302,10 @@ main { max-width: 640px; margin: 0 auto; padding: 28px 20px 60px; }
       </div>
       <div class="acc-body">
         <div class="acc-body-inner">
+          <div class="insight-box">
+            <div class="insight-title">💪 ระลึกไว้เสมอ</div>
+            ทุกครั้งที่เคยเกิดอาการ คุณผ่านมาได้ทุกครั้ง — ร่างกายมีระบบดูแลตัวเองอยู่เสมอ อาการแพนิคไม่เคยเป็นอันตราย แม้จะรู้สึกน่ากลัวแค่ไหนก็ตาม
+          </div>
           <p>เมื่อเกิดอาการ ให้ทำตามขั้นตอนเหล่านี้:</p>
           <div class="step-card">
             <div class="step-num">1</div>
@@ -281,11 +313,15 @@ main { max-width: 640px; margin: 0 auto; padding: 28px 20px 60px; }
           </div>
           <div class="step-card">
             <div class="step-num">2</div>
-            <div><strong>ฝึกหายใจช้า ๆ</strong> — หายใจเข้าช้า ๆ 4 วินาที กลั้น 1 วินาที แล้วหายใจออกช้า ๆ 6 วินาที ทำซ้ำ 5–10 รอบ</div>
+            <div><strong>ฝึกหายใจช้า ๆ</strong> — หายใจเข้าช้า ๆ 4 วินาที กลั้น 1 วินาที แล้วหายใจออกช้า ๆ 6 วินาที ทำซ้ำ 5–10 รอบ
+              <a href="relaxation.html" class="ex-link" style="margin-top:8px">🫁 ฝึกหายใจคลายเครียด →</a>
+            </div>
           </div>
           <div class="step-card">
             <div class="step-num">3</div>
-            <div><strong>จับสิ่งรอบตัว</strong> — สัมผัสพื้น เก้าอี้ หรือสิ่งใกล้มือ เพื่อดึงสติกลับสู่ปัจจุบัน</div>
+            <div><strong>ดึงสติกลับสู่ปัจจุบัน</strong> — สัมผัสพื้น เก้าอี้ หรือสิ่งใกล้มือ มองหาสิ่งรอบตัว 5 อย่าง ได้ยินเสียงอะไร 4 อย่าง
+              <a href="grounding.html" class="ex-link" style="margin-top:8px">🌿 ฝึก Grounding 5-4-3-2-1 →</a>
+            </div>
           </div>
           <div class="step-card">
             <div class="step-num">4</div>
@@ -294,6 +330,9 @@ main { max-width: 640px; margin: 0 auto; padding: 28px 20px 60px; }
           <div class="step-card">
             <div class="step-num">5</div>
             <div><strong>อย่าต่อสู้กับอาการ</strong> ยิ่งต่อต้าน อาการยิ่งรุนแรง ให้ยอมรับและปล่อยให้มันผ่านไป</div>
+          </div>
+          <div class="highlight" style="margin-top:16px">
+            🏋️ <strong>ฝึกก่อนที่จะเกิดอาการ</strong> — การฝึกหายใจและ grounding เป็นประจำในชีวิตประจำวันช่วยให้ใช้ได้จริงตอนอาการมา รวมถึงการนอนหลับสม่ำเสมอช่วยลดความถี่ของอาการแพนิคได้
           </div>
         </div>
       </div>

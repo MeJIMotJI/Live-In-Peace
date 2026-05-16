@@ -159,6 +159,18 @@ main { max-width: 640px; margin: 0 auto; padding: 28px 20px 60px; }
 }
 .support-icon { font-size: 22px; flex-shrink: 0; margin-top: 2px; }
 @media (max-width: 400px) { .symptom-grid { grid-template-columns: 1fr; } }
+.ex-link {
+  display: inline-block;
+  background: var(--primary-light);
+  color: var(--primary-dark);
+  font-size: 13px;
+  font-weight: 700;
+  padding: 5px 14px;
+  border-radius: 20px;
+  text-decoration: none;
+  transition: background 0.2s;
+}
+.ex-link:hover { background: #d4f0ea; }
 </style>
 </head>
 <body>
@@ -259,7 +271,7 @@ main { max-width: 640px; margin: 0 auto; padding: 28px 20px 60px; }
         <div class="acc-body-inner">
           <p>โรคซึมเศร้าเกิดจากหลายปัจจัยร่วมกัน ไม่มีสาเหตุเดียว:</p>
           <ul class="tips-list">
-            <li><div class="tip-dot" style="background:var(--indigo)"></div><span><strong>ชีววิทยา</strong> — ความไม่สมดุลของสารสื่อประสาทในสมอง เช่น Serotonin, Dopamine, Norepinephrine</span></li>
+            <li><div class="tip-dot" style="background:var(--indigo)"></div><span><strong>ชีววิทยา</strong> — ความไม่สมดุลของสารสื่อประสาทในสมอง ส่งผลต่ออารมณ์ พลังงาน และการนอนหลับ</span></li>
             <li><div class="tip-dot" style="background:var(--indigo)"></div><span><strong>พันธุกรรม</strong> — มีประวัติคนในครอบครัวเป็นโรคซึมเศร้าเพิ่มความเสี่ยง แต่ไม่ได้หมายความว่าต้องเป็นเสมอไป</span></li>
             <li><div class="tip-dot" style="background:var(--indigo)"></div><span><strong>เหตุการณ์ชีวิต</strong> — การสูญเสีย ความเครียดสะสม การถูกทำร้าย หรือการเปลี่ยนแปลงครั้งใหญ่</span></li>
             <li><div class="tip-dot" style="background:var(--indigo)"></div><span><strong>รูปแบบความคิด</strong> — ความคิดเชิงลบซ้ำ ๆ การตำหนิตัวเองมาก การมองโลกในแง่ร้าย</span></li>
@@ -281,8 +293,8 @@ main { max-width: 640px; margin: 0 auto; padding: 28px 20px 60px; }
         <div class="acc-body-inner">
           <p>การรักษาที่มีประสิทธิภาพสูงสุดมักใช้ทั้งสองวิธีร่วมกัน:</p>
           <ul class="tips-list">
-            <li><div class="tip-dot" style="background:var(--primary)"></div><span><strong>ยาต้านเศร้า (Antidepressants)</strong> — ยากลุ่ม SSRI ปลอดภัย ไม่ติด ต้องกินอย่างน้อย 2–4 สัปดาห์จึงเห็นผล ห้ามหยุดเองโดยไม่ปรึกษาแพทย์</span></li>
-            <li><div class="tip-dot" style="background:var(--primary)"></div><span><strong>จิตบำบัด (CBT)</strong> — ช่วยเปลี่ยนรูปแบบความคิดและพฤติกรรมที่ทำให้เศร้า ได้ผลดีทั้งระยะสั้นและยาว</span></li>
+            <li><div class="tip-dot" style="background:var(--primary)"></div><span><strong>ยา</strong> — ปลอดภัย ไม่ติด ต้องกินสม่ำเสมอตามที่แพทย์สั่ง และต้องใช้เวลาระยะหนึ่งจึงเห็นผล ห้ามหยุดเองโดยไม่ปรึกษาแพทย์</span></li>
+            <li><div class="tip-dot" style="background:var(--primary)"></div><span><strong>จิตบำบัด</strong> — ช่วยเปลี่ยนรูปแบบความคิดและพฤติกรรมที่ทำให้เศร้า ได้ผลดีทั้งระยะสั้นและยาว</span></li>
             <li><div class="tip-dot" style="background:var(--primary)"></div><span><strong>การปรับวิถีชีวิต</strong> — ออกกำลังกายสม่ำเสมอ นอนหลับพอ ทานอาหารมีประโยชน์ ลดแอลกอฮอล์</span></li>
             <li><div class="tip-dot" style="background:var(--primary)"></div><span><strong>การสนับสนุนทางสังคม</strong> — ไม่อยู่คนเดียว พูดคุยกับคนที่ไว้ใจ เข้ากลุ่มสนับสนุน</span></li>
           </ul>
@@ -342,6 +354,17 @@ main { max-width: 640px; margin: 0 auto; padding: 28px 20px 60px; }
           </ul>
           <div class="highlight" style="margin-top:14px">
             🌱 หลายคนที่ผ่านโรคซึมเศร้ามาได้ บอกว่าช่วงเวลานั้นทำให้พวกเขาเข้าใจตัวเองและชีวิตได้ลึกซึ้งขึ้น ชีวิตที่ดียังรออยู่ข้างหน้า
+          </div>
+          <div class="highlight" style="margin-top:12px">
+            🧘 <strong>ฝึก exercise ช่วยสนับสนุนการฟื้นตัว</strong>
+            <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:10px">
+              <a href="mindfulness.html" class="ex-link">🔔 ฝึกสติ Mindfulness →</a>
+              <a href="relaxation.html" class="ex-link">🫁 หายใจคลายเครียด →</a>
+              <a href="grounding.html" class="ex-link">🌿 Grounding 5-4-3-2-1 →</a>
+            </div>
+          </div>
+          <div class="highlight-indigo" style="margin-top:12px">
+            📞 สายด่วนสุขภาพจิต <strong>1323</strong> พร้อมรับสาย 24 ชั่วโมง
           </div>
         </div>
       </div>

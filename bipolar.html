@@ -215,6 +215,18 @@ main { max-width: 640px; margin: 0 auto; padding: 28px 20px 60px; }
 .check-row.do { background: #f0faf7; }
 .check-row.warn { background: #fff8f0; }
 .check-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+.ex-link {
+  display: inline-block;
+  background: var(--primary-light);
+  color: var(--primary-dark);
+  font-size: 13px;
+  font-weight: 700;
+  padding: 5px 14px;
+  border-radius: 20px;
+  text-decoration: none;
+  transition: background 0.2s;
+}
+.ex-link:hover { background: #d4f0ea; }
 </style>
 </head>
 <body>
@@ -377,6 +389,13 @@ main { max-width: 640px; margin: 0 auto; padding: 28px 20px 60px; }
               <span style="color:var(--text-muted);font-size:14px">ตกลงกันล่วงหน้าว่าถ้าเห็นสัญญาณเตือน เช่น นอนน้อยลงผิดปกติ ให้แจ้งหรือพาพบแพทย์</span></span>
             </div>
           </div>
+          <div class="highlight" style="margin-top:14px">
+            🧘 <strong>ฝึก exercise ช่วยรักษาเสถียรภาพอารมณ์</strong>
+            <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:10px">
+              <a href="mindfulness.html" class="ex-link">🔔 ฝึกสติ Mindfulness →</a>
+              <a href="relaxation.html" class="ex-link">🫁 หายใจคลายเครียด →</a>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -386,6 +405,39 @@ main { max-width: 640px; margin: 0 auto; padding: 28px 20px 60px; }
       <div class="acc-header">
         <div class="acc-header-left">
           <div class="acc-num">6</div>
+          <div class="acc-title">ความเข้าใจผิดที่พบบ่อย</div>
+        </div>
+        <svg class="acc-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="acc-body">
+        <div class="acc-body-inner">
+          <div class="myth-grid">
+            <div class="myth-card">
+              <div class="myth-header">❌ "อารมณ์ขึ้นๆ ลงๆ แค่นิสัย ไม่ใช่โรค"</div>
+              <div class="myth-body">✅ ไม่จริง การเปลี่ยนแปลงอารมณ์ในโรคนี้รุนแรงและยาวนานกว่าอารมณ์ปกติมาก ส่งผลต่อชีวิต การงาน และความสัมพันธ์อย่างชัดเจน</div>
+            </div>
+            <div class="myth-card">
+              <div class="myth-header">❌ "คนอารมณ์ 2 ขั้วอยู่ด้วยยาก คาดเดาไม่ได้"</div>
+              <div class="myth-body">✅ ไม่จริง ด้วยการรักษาที่ดี ผู้ป่วยส่วนใหญ่มีความสัมพันธ์ที่ดีและใช้ชีวิตได้ตามปกติ</div>
+            </div>
+            <div class="myth-card">
+              <div class="myth-header">❌ "ช่วงแมเนียรู้สึกดีมาก อยากให้คงอยู่"</div>
+              <div class="myth-body">✅ น่าเป็นห่วง แมเนียอาจนำไปสู่การตัดสินใจที่เสียหายอย่างรุนแรง ทั้งเรื่องเงิน ความสัมพันธ์ และความปลอดภัย</div>
+            </div>
+            <div class="myth-card">
+              <div class="myth-header">❌ "กินยาแล้วจะไม่เหมือนตัวเอง"</div>
+              <div class="myth-body">✅ ไม่จริง ยาช่วยให้อารมณ์คงที่เพื่อให้คุณเป็นตัวเองได้อย่างแท้จริง ไม่ได้เปลี่ยนบุคลิกหรือความเป็นคุณ</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 7 -->
+    <div class="acc-item" onclick="toggle(this)">
+      <div class="acc-header">
+        <div class="acc-header-left">
+          <div class="acc-num">7</div>
           <div class="acc-title">เมื่อไหร่ต้องพบแพทย์ด่วน?</div>
         </div>
         <svg class="acc-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>

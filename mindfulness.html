@@ -20,83 +20,48 @@
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body {
   font-family: 'Leelawadee UI', 'Leelawadee', Tahoma, 'Lucida Sans Unicode', Arial, sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  font-size: 17px;
-  line-height: 1.8;
-  min-height: 100vh;
+  background: var(--bg); color: var(--text);
+  font-size: 17px; line-height: 1.8; min-height: 100vh;
 }
 .topbar {
-  background: var(--surface);
-  border-bottom: 1px solid var(--border);
-  padding: 14px 20px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  position: sticky;
-  top: 0;
-  z-index: 10;
+  background: var(--surface); border-bottom: 1px solid var(--border);
+  padding: 14px 20px; display: flex; align-items: center; gap: 12px;
+  position: sticky; top: 0; z-index: 10;
   box-shadow: 0 2px 8px rgba(0,0,0,0.05);
 }
 .back-btn {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  color: var(--primary);
-  text-decoration: none;
-  font-size: 16px;
-  font-weight: 700;
-  padding: 6px 12px;
-  border-radius: 20px;
-  background: var(--primary-light);
-  transition: background 0.2s;
+  display: flex; align-items: center; gap: 6px;
+  color: var(--primary); text-decoration: none;
+  font-size: 16px; font-weight: 700; padding: 6px 12px;
+  border-radius: 20px; background: var(--primary-light); transition: background 0.2s;
 }
 .back-btn:hover { background: #d4f0ea; }
 .topbar-title { font-size: 17px; font-weight: 700; color: var(--text); }
 .hero {
   background: linear-gradient(135deg, #2d7a6a 0%, #3a9b8a 100%);
-  color: white;
-  padding: 32px 24px 40px;
-  text-align: center;
+  color: white; padding: 32px 24px 40px; text-align: center;
 }
 .hero-icon { font-size: 48px; margin-bottom: 10px; }
 .hero h1 { font-size: 24px; font-weight: 700; margin-bottom: 6px; }
 .hero p { font-size: 15px; opacity: 0.9; }
 main { max-width: 500px; margin: 0 auto; padding: 28px 20px 60px; }
-
 .section-title {
-  font-size: 14px;
-  font-weight: 700;
-  color: var(--text-muted);
-  text-transform: uppercase;
-  letter-spacing: 0.6px;
-  margin-bottom: 12px;
+  font-size: 14px; font-weight: 700; color: var(--text-muted);
+  text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 12px;
 }
-
-/* Duration slider */
 .slider-card {
-  background: var(--surface);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
-  padding: 22px 24px 24px;
-  margin-bottom: 20px;
-  border: 1.5px solid var(--border);
+  background: var(--surface); border-radius: var(--radius);
+  box-shadow: var(--shadow); padding: 22px 24px 24px;
+  margin-bottom: 20px; border: 1.5px solid var(--border);
 }
-.slider-header {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  margin-bottom: 18px;
-}
+.slider-header { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 18px; }
 .slider-value-wrap { display: flex; align-items: baseline; gap: 5px; }
 .slider-value { font-size: 44px; font-weight: 800; color: var(--primary); line-height: 1; }
 .slider-unit { font-size: 17px; font-weight: 600; color: var(--text-muted); }
 .slider-hint { font-size: 14px; color: var(--text-muted); }
 input[type=range] {
-  -webkit-appearance: none; appearance: none;
-  width: 100%; height: 6px;
-  background: var(--border); border-radius: 3px;
-  outline: none; cursor: pointer;
+  -webkit-appearance: none; appearance: none; width: 100%; height: 6px;
+  background: var(--border); border-radius: 3px; outline: none; cursor: pointer;
 }
 input[type=range]:disabled { opacity: 0.45; cursor: not-allowed; }
 input[type=range]::-webkit-slider-thumb {
@@ -107,41 +72,29 @@ input[type=range]::-webkit-slider-thumb {
   transition: transform 0.15s, box-shadow 0.15s;
 }
 input[type=range]:not(:disabled)::-webkit-slider-thumb:hover {
-  transform: scale(1.15);
-  box-shadow: 0 3px 12px rgba(58,155,138,0.5);
+  transform: scale(1.15); box-shadow: 0 3px 12px rgba(58,155,138,0.5);
 }
 input[type=range]::-moz-range-thumb {
   width: 26px; height: 26px; border-radius: 50%;
-  background: var(--primary); cursor: pointer;
-  border: none; box-shadow: 0 2px 8px rgba(58,155,138,0.4);
+  background: var(--primary); cursor: pointer; border: none;
+  box-shadow: 0 2px 8px rgba(58,155,138,0.4);
 }
-.slider-ticks {
-  display: flex; justify-content: space-between;
-  margin-top: 8px; padding: 0 2px;
-}
+.slider-ticks { display: flex; justify-content: space-between; margin-top: 8px; padding: 0 2px; }
 .slider-tick { font-size: 12px; color: var(--text-muted); }
-
-/* Bell interval */
 .bell-section {
-  background: var(--surface);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
-  padding: 20px 22px;
-  margin-bottom: 20px;
-  border: 1.5px solid var(--border);
+  background: var(--surface); border-radius: var(--radius);
+  box-shadow: var(--shadow); padding: 20px 22px;
+  margin-bottom: 20px; border: 1.5px solid var(--border);
 }
-.bell-row {
-  display: flex; align-items: center;
-  justify-content: space-between; gap: 12px;
-}
+.bell-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
 .bell-label { font-size: 16px; font-weight: 600; }
 .bell-sub { font-size: 13px; color: var(--text-muted); margin-top: 2px; }
 .toggle-wrap { display: flex; align-items: center; gap: 10px; }
 .toggle { position: relative; width: 52px; height: 28px; cursor: pointer; flex-shrink: 0; }
 .toggle input { opacity: 0; width: 0; height: 0; }
 .toggle-slider {
-  position: absolute; inset: 0;
-  background: var(--border); border-radius: 14px; transition: 0.3s;
+  position: absolute; inset: 0; background: var(--border);
+  border-radius: 14px; transition: 0.3s;
 }
 .toggle-slider::before {
   content: ''; position: absolute;
@@ -156,15 +109,10 @@ input[type=range]::-moz-range-thumb {
   padding: 6px 12px; font-size: 15px; color: var(--primary-dark);
   font-family: inherit; font-weight: 600; cursor: pointer; outline: none;
 }
-
-/* Bell & BG picker (shared styles) */
 .bell-picker {
-  background: var(--surface);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
-  border: 1.5px solid var(--border);
-  overflow: hidden;
-  margin-bottom: 20px;
+  background: var(--surface); border-radius: var(--radius);
+  box-shadow: var(--shadow); border: 1.5px solid var(--border);
+  overflow: hidden; margin-bottom: 20px;
 }
 .bell-opt {
   display: flex; align-items: center; gap: 12px;
@@ -196,25 +144,18 @@ input[type=range]::-moz-range-thumb {
   background: var(--primary-light); color: var(--primary-dark);
   border: none; border-radius: 20px; padding: 7px 13px;
   font-size: 13px; font-weight: 700; cursor: pointer;
-  font-family: inherit; transition: background 0.15s, transform 0.1s;
-  white-space: nowrap;
+  font-family: inherit; transition: background 0.15s, transform 0.1s; white-space: nowrap;
 }
 .bell-preview-btn:hover { background: #c8ede6; }
 .bell-preview-btn:active { transform: scale(0.94); }
 .bell-picker.locked { pointer-events: none; }
 .bell-picker.locked .bell-opt { opacity: 0.5; }
-
-/* Timer display */
 .timer-card {
-  background: var(--surface); border-radius: 24px;
-  box-shadow: var(--shadow); padding: 36px 24px;
-  text-align: center; margin-bottom: 24px;
+  background: var(--surface); border-radius: 24px; box-shadow: var(--shadow);
+  padding: 36px 24px; text-align: center; margin-bottom: 24px;
   border: 1.5px solid var(--border);
 }
-.timer-ring-wrap {
-  position: relative; width: 200px; height: 200px;
-  margin: 0 auto 24px;
-}
+.timer-ring-wrap { position: relative; width: 200px; height: 200px; margin: 0 auto 24px; }
 .timer-ring-wrap svg { transform: rotate(-90deg); }
 .ring-bg { fill: none; stroke: var(--border); stroke-width: 8; }
 .ring-progress {
@@ -225,17 +166,9 @@ input[type=range]::-moz-range-thumb {
   position: absolute; top: 50%; left: 50%;
   transform: translate(-50%, -50%); text-align: center; width: 140px;
 }
-.timer-display {
-  font-size: 44px; font-weight: 700; color: var(--text);
-  letter-spacing: 2px; line-height: 1;
-}
+.timer-display { font-size: 44px; font-weight: 700; color: var(--text); letter-spacing: 2px; line-height: 1; }
 .timer-label { font-size: 13px; color: var(--text-muted); margin-top: 5px; }
-.timer-status {
-  font-size: 17px; font-weight: 700; color: var(--primary);
-  min-height: 26px; margin-bottom: 6px;
-}
-
-/* Controls */
+.timer-status { font-size: 17px; font-weight: 700; color: var(--primary); min-height: 26px; margin-bottom: 6px; }
 .controls { display: flex; gap: 12px; justify-content: center; margin-bottom: 24px; }
 .btn {
   border: none; border-radius: 50px; padding: 14px 32px;
@@ -249,24 +182,11 @@ input[type=range]::-moz-range-thumb {
 .btn-ghost { background: var(--primary-light); color: var(--primary-dark); }
 .btn-ghost:hover { background: #d4f0ea; }
 .btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none !important; }
-
-/* Instructions */
 .instructions { background: var(--primary-light); border-radius: var(--radius); padding: 22px 24px; }
-.instructions h3 {
-  font-size: 16px; font-weight: 700; color: var(--primary-dark);
-  margin-bottom: 14px; display: flex; align-items: center; gap: 6px;
-}
+.instructions h3 { font-size: 16px; font-weight: 700; color: var(--primary-dark); margin-bottom: 14px; display: flex; align-items: center; gap: 6px; }
 .instr-lines { display: flex; flex-direction: column; gap: 10px; }
-.instr-line {
-  font-size: 15px; color: var(--primary-dark); line-height: 1.7;
-  padding-left: 18px; position: relative;
-}
-.instr-line::before {
-  content: '·'; position: absolute; left: 4px;
-  color: var(--primary); font-size: 18px; line-height: 1.5;
-}
-
-/* Completion */
+.instr-line { font-size: 15px; color: var(--primary-dark); line-height: 1.7; padding-left: 18px; position: relative; }
+.instr-line::before { content: '·'; position: absolute; left: 4px; color: var(--primary); font-size: 18px; line-height: 1.5; }
 .completion {
   display: none; background: var(--surface); border-radius: 24px;
   box-shadow: var(--shadow); padding: 40px 24px; text-align: center;
@@ -295,7 +215,6 @@ input[type=range]::-moz-range-thumb {
 
 <main>
 
-  <!-- Duration -->
   <div class="section-title">ระยะเวลา</div>
   <div class="slider-card">
     <div class="slider-header">
@@ -305,18 +224,13 @@ input[type=range]::-moz-range-thumb {
       </div>
       <span class="slider-hint">1 – 60 นาที</span>
     </div>
-    <input type="range" id="durationSlider" min="1" max="60" value="10"
-      oninput="onSliderChange(this.value)">
+    <input type="range" id="durationSlider" min="1" max="60" value="10" oninput="onSliderChange(this.value)">
     <div class="slider-ticks">
-      <span class="slider-tick">1</span>
-      <span class="slider-tick">15</span>
-      <span class="slider-tick">30</span>
-      <span class="slider-tick">45</span>
-      <span class="slider-tick">60</span>
+      <span class="slider-tick">1</span><span class="slider-tick">15</span>
+      <span class="slider-tick">30</span><span class="slider-tick">45</span><span class="slider-tick">60</span>
     </div>
   </div>
 
-  <!-- Bell interval -->
   <div class="section-title">ระฆังช่วงเวลา</div>
   <div class="bell-section">
     <div class="bell-row">
@@ -341,7 +255,6 @@ input[type=range]::-moz-range-thumb {
     </div>
   </div>
 
-  <!-- Bell sound selector -->
   <div class="section-title">เสียงระฆัง</div>
   <div class="bell-picker" id="bellPicker">
 
@@ -351,102 +264,75 @@ input[type=range]::-moz-range-thumb {
         <div class="bell-opt-name">ระฆังทิเบตเล็ก</div>
         <div class="bell-opt-desc">เสียงสูง · สั้น · สดใส</div>
       </div>
-      <button class="bell-preview-btn" onclick="previewBell('small', event)">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>ลองฟัง
-      </button>
+      <button class="bell-preview-btn" onclick="previewBell('small',event)"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>ลองฟัง</button>
     </div>
-
     <div class="bell-opt" data-id="large" onclick="selectBell('large')">
       <div class="bell-radio"><div class="bell-radio-dot"></div></div>
       <div class="bell-opt-info">
         <div class="bell-opt-name">ระฆังทิเบตใหญ่</div>
         <div class="bell-opt-desc">เสียงต่ำ · ลึก · สงบ</div>
       </div>
-      <button class="bell-preview-btn" onclick="previewBell('large', event)">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>ลองฟัง
-      </button>
+      <button class="bell-preview-btn" onclick="previewBell('large',event)"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>ลองฟัง</button>
     </div>
-
     <div class="bell-opt" data-id="thai" onclick="selectBell('thai')">
       <div class="bell-radio"><div class="bell-radio-dot"></div></div>
       <div class="bell-opt-info">
         <div class="bell-opt-name">ระฆังวัดไทย</div>
         <div class="bell-opt-desc">เสียงกลาง · กังวาน · โลหะ</div>
       </div>
-      <button class="bell-preview-btn" onclick="previewBell('thai', event)">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>ลองฟัง
-      </button>
+      <button class="bell-preview-btn" onclick="previewBell('thai',event)"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>ลองฟัง</button>
     </div>
-
     <div class="bell-opt" data-id="mokugyo" onclick="selectBell('mokugyo')">
       <div class="bell-radio"><div class="bell-radio-dot"></div></div>
       <div class="bell-opt-info">
         <div class="bell-opt-name">ไม้เคาะญี่ปุ่น</div>
         <div class="bell-opt-desc">เสียงสั้น · กลวง · สไตล์วัดเซน</div>
       </div>
-      <button class="bell-preview-btn" onclick="previewBell('mokugyo', event)">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>ลองฟัง
-      </button>
+      <button class="bell-preview-btn" onclick="previewBell('mokugyo',event)"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>ลองฟัง</button>
     </div>
-
     <div class="bell-opt" data-id="tingsha" onclick="selectBell('tingsha')">
       <div class="bell-radio"><div class="bell-radio-dot"></div></div>
       <div class="bell-opt-info">
         <div class="bell-opt-name">ทิงชา</div>
         <div class="bell-opt-desc">ฉาบนิ้วทิเบต · เสียงสูงใส · กังวาน</div>
       </div>
-      <button class="bell-preview-btn" onclick="previewBell('tingsha', event)">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>ลองฟัง
-      </button>
+      <button class="bell-preview-btn" onclick="previewBell('tingsha',event)"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>ลองฟัง</button>
     </div>
-
     <div class="bell-opt" data-id="wind" onclick="selectBell('wind')">
       <div class="bell-radio"><div class="bell-radio-dot"></div></div>
       <div class="bell-opt-info">
         <div class="bell-opt-name">ระฆังลม</div>
         <div class="bell-opt-desc">เสียงสูง · เบา · นุ่มนวล</div>
       </div>
-      <button class="bell-preview-btn" onclick="previewBell('wind', event)">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>ลองฟัง
-      </button>
+      <button class="bell-preview-btn" onclick="previewBell('wind',event)"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>ลองฟัง</button>
     </div>
-
     <div class="bell-opt" data-id="bowl" onclick="selectBell('bowl')">
       <div class="bell-radio"><div class="bell-radio-dot"></div></div>
       <div class="bell-opt-info">
         <div class="bell-opt-name">ซิงกิงโบว์ล</div>
         <div class="bell-opt-desc">เสียงอุ่น · นุ่ม · ยาว</div>
       </div>
-      <button class="bell-preview-btn" onclick="previewBell('bowl', event)">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>ลองฟัง
-      </button>
+      <button class="bell-preview-btn" onclick="previewBell('bowl',event)"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>ลองฟัง</button>
     </div>
-
     <div class="bell-opt" data-id="crystal" onclick="selectBell('crystal')">
       <div class="bell-radio"><div class="bell-radio-dot"></div></div>
       <div class="bell-opt-info">
         <div class="bell-opt-name">คริสตัล</div>
         <div class="bell-opt-desc">เสียงใสบริสุทธิ์ · ยาว · ผ่อนคลาย</div>
       </div>
-      <button class="bell-preview-btn" onclick="previewBell('crystal', event)">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>ลองฟัง
-      </button>
+      <button class="bell-preview-btn" onclick="previewBell('crystal',event)"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>ลองฟัง</button>
     </div>
-
     <div class="bell-opt" data-id="church" onclick="selectBell('church')">
       <div class="bell-radio"><div class="bell-radio-dot"></div></div>
       <div class="bell-opt-info">
         <div class="bell-opt-name">ระฆังโบสถ์</div>
         <div class="bell-opt-desc">เสียงต่ำลึก · ยาวนาน · กึกก้อง</div>
       </div>
-      <button class="bell-preview-btn" onclick="previewBell('church', event)">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>ลองฟัง
-      </button>
+      <button class="bell-preview-btn" onclick="previewBell('church',event)"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>ลองฟัง</button>
     </div>
 
   </div>
 
-  <!-- Background sound -->
   <div class="section-title">เสียงพื้นหลัง</div>
   <div class="bell-picker" id="bgPicker">
 
@@ -454,75 +340,58 @@ input[type=range]::-moz-range-thumb {
       <div class="bell-radio"><div class="bell-radio-dot"></div></div>
       <div class="bell-opt-info">
         <div class="bell-opt-name">🔇 ไม่มีเสียง</div>
-        <div class="bell-opt-desc">เงียบสงบ · สมาธิล้วนๆ</div>
+        <div class="bell-opt-desc">เงียบสงบ · สมาธิล้วน</div>
       </div>
     </div>
-
     <div class="bell-opt" data-bg="stream" onclick="selectBg('stream')">
       <div class="bell-radio"><div class="bell-radio-dot"></div></div>
       <div class="bell-opt-info">
-        <div class="bell-opt-name">🏞️ น้ำไหล</div>
-        <div class="bell-opt-desc">เสียงลำธาร · กรุกกรัก · ผ่อนคลาย</div>
+        <div class="bell-opt-name">🏞️ แม่น้ำไหล</div>
+        <div class="bell-opt-desc">เสียงน้ำไหลกรุกกรัก · มีชีวิตชีวา</div>
       </div>
-      <button class="bell-preview-btn" onclick="previewBg('stream', event)">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>ลองฟัง
-      </button>
+      <button class="bell-preview-btn" onclick="previewBg('stream',event)"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>ลองฟัง</button>
     </div>
-
-    <div class="bell-opt" data-bg="waterfall" onclick="selectBg('waterfall')">
-      <div class="bell-radio"><div class="bell-radio-dot"></div></div>
-      <div class="bell-opt-info">
-        <div class="bell-opt-name">💧 น้ำตก</div>
-        <div class="bell-opt-desc">เสียงน้ำตก · สม่ำเสมอ · ลบล้างความคิด</div>
-      </div>
-      <button class="bell-preview-btn" onclick="previewBg('waterfall', event)">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>ลองฟัง
-      </button>
-    </div>
-
     <div class="bell-opt" data-bg="ocean" onclick="selectBg('ocean')">
       <div class="bell-radio"><div class="bell-radio-dot"></div></div>
       <div class="bell-opt-info">
         <div class="bell-opt-name">🌊 ทะเล</div>
-        <div class="bell-opt-desc">คลื่นกระทบฝั่ง · จังหวะ ~14 วินาที</div>
+        <div class="bell-opt-desc">คลื่นกระทบหาดทราย · เข้าออกช้าๆ</div>
       </div>
-      <button class="bell-preview-btn" onclick="previewBg('ocean', event)">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>ลองฟัง
-      </button>
+      <button class="bell-preview-btn" onclick="previewBg('ocean',event)"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>ลองฟัง</button>
     </div>
-
     <div class="bell-opt" data-bg="wind" onclick="selectBg('wind')">
       <div class="bell-radio"><div class="bell-radio-dot"></div></div>
       <div class="bell-opt-info">
-        <div class="bell-opt-name">🍃 ลม</div>
-        <div class="bell-opt-desc">สายลมพัด · เปลี่ยนทิศทาง · ไม่ซ้ำ</div>
+        <div class="bell-opt-name">🍃 ลมในป่า</div>
+        <div class="bell-opt-desc">ลมพัดใบไม้ · กิ่งก้านไหว · เปลี่ยนทิศ</div>
       </div>
-      <button class="bell-preview-btn" onclick="previewBg('wind', event)">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>ลองฟัง
-      </button>
+      <button class="bell-preview-btn" onclick="previewBg('wind',event)"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>ลองฟัง</button>
     </div>
-
     <div class="bell-opt" data-bg="rain" onclick="selectBg('rain')">
       <div class="bell-radio"><div class="bell-radio-dot"></div></div>
       <div class="bell-opt-info">
         <div class="bell-opt-name">🌧️ ฝนเบา</div>
-        <div class="bell-opt-desc">เสียงหยดฝน · แต่ละหยดไม่ซ้ำกัน</div>
+        <div class="bell-opt-desc">เสียงหยดฝนเปาะเปะ · แต่ละหยดต่างกัน</div>
       </div>
-      <button class="bell-preview-btn" onclick="previewBg('rain', event)">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>ลองฟัง
-      </button>
+      <button class="bell-preview-btn" onclick="previewBg('rain',event)"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>ลองฟัง</button>
+    </div>
+    <div class="bell-opt" data-bg="birds" onclick="selectBg('birds')">
+      <div class="bell-radio"><div class="bell-radio-dot"></div></div>
+      <div class="bell-opt-info">
+        <div class="bell-opt-name">🦜 นกในธรรมชาติ</div>
+        <div class="bell-opt-desc">เสียงนกร้อง · หลายสายพันธุ์ · ป่าเขาเงียบ</div>
+      </div>
+      <button class="bell-preview-btn" onclick="previewBg('birds',event)"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>ลองฟัง</button>
     </div>
 
   </div>
 
-  <!-- Timer -->
   <div class="timer-card" id="timerCard">
     <div class="timer-status" id="timerStatus">พร้อมเริ่ม</div>
     <div class="timer-ring-wrap">
       <svg width="200" height="200" viewBox="0 0 200 200">
         <circle class="ring-bg" cx="100" cy="100" r="88"/>
-        <circle class="ring-progress" id="ringProgress" cx="100" cy="100" r="88"
-          stroke-dasharray="553" stroke-dashoffset="0"/>
+        <circle class="ring-progress" id="ringProgress" cx="100" cy="100" r="88" stroke-dasharray="553" stroke-dashoffset="0"/>
       </svg>
       <div class="timer-center">
         <div class="timer-display" id="timerDisplay">10:00</div>
@@ -539,12 +408,10 @@ input[type=range]::-moz-range-thumb {
 
   <div class="controls">
     <button class="btn btn-primary" id="playBtn" onclick="toggleTimer()">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-      เริ่ม
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>เริ่ม
     </button>
     <button class="btn btn-ghost" id="resetBtn" onclick="resetTimer()" disabled>
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4"/></svg>
-      รีเซ็ต
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4"/></svg>รีเซ็ต
     </button>
   </div>
 
@@ -566,115 +433,14 @@ input[type=range]::-moz-range-thumb {
 // BELL PROFILES
 // ═══════════════════════════════════════════════════════════════════════════════
 const BELLS = {
-  small: {
-    partials: [
-      { freq: 528,  peak: 0.38 },
-      { freq: 1056, peak: 0.18 },
-      { freq: 1584, peak: 0.09 },
-      { freq: 2112, peak: 0.04 },
-    ],
-    attack: 0.04, decay: 1.5,
-  },
-  large: {
-    partials: [
-      { freq: 220, peak: 0.44 },
-      { freq: 440, peak: 0.17 },
-      { freq: 605, peak: 0.08 },
-    ],
-    attack: 0.04, decay: 3.0,
-  },
-  thai: {
-    partials: [
-      { freq: 320,  peak: 0.36 },
-      { freq: 640,  peak: 0.14 },
-      { freq: 1024, peak: 0.20 },
-      { freq: 1792, peak: 0.07 },
-    ],
-    attack: 0.02, decay: 2.0,
-  },
-  mokugyo: {
-    // Custom: dual-layer synthesis for wooden percussion character
-    custom: true,
-    play(ctx) {
-      const t = ctx.currentTime;
-
-      // Layer 1 — Mallet click: bandpass-filtered noise burst (2-6 kHz)
-      const noiseLen = Math.floor(ctx.sampleRate * 0.018);
-      const noiseBuf = ctx.createBuffer(1, noiseLen, ctx.sampleRate);
-      const nd = noiseBuf.getChannelData(0);
-      for (let i = 0; i < noiseLen; i++) nd[i] = Math.random() * 2 - 1;
-      const noiseSrc = ctx.createBufferSource();
-      noiseSrc.buffer = noiseBuf;
-      const clickHpf = ctx.createBiquadFilter();
-      clickHpf.type = 'highpass'; clickHpf.frequency.value = 2000;
-      const clickLpf = ctx.createBiquadFilter();
-      clickLpf.type = 'lowpass'; clickLpf.frequency.value = 6000;
-      const clickGain = ctx.createGain();
-      clickGain.gain.setValueAtTime(0.52, t);
-      clickGain.gain.exponentialRampToValueAtTime(0.001, t + 0.018);
-      noiseSrc.connect(clickHpf); clickHpf.connect(clickLpf);
-      clickLpf.connect(clickGain); clickGain.connect(ctx.destination);
-      noiseSrc.start(t); noiseSrc.stop(t + 0.020);
-
-      // Layer 2 — Hollow body: sine with pitch drop + resonant LP filter
-      const osc = ctx.createOscillator();
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(490, t);
-      osc.frequency.exponentialRampToValueAtTime(355, t + 0.07); // drop = wood knock
-      const bodyLpf = ctx.createBiquadFilter();
-      bodyLpf.type = 'lowpass'; bodyLpf.frequency.value = 2200; bodyLpf.Q.value = 4;
-      bodyLpf.frequency.exponentialRampToValueAtTime(700, t + 0.09); // filter closes
-      const bodyGain = ctx.createGain();
-      bodyGain.gain.setValueAtTime(0.42, t + 0.003);
-      bodyGain.gain.exponentialRampToValueAtTime(0.001, t + 0.19);
-      osc.connect(bodyLpf); bodyLpf.connect(bodyGain); bodyGain.connect(ctx.destination);
-      osc.start(t); osc.stop(t + 0.21);
-    }
-  },
-  tingsha: {
-    // Tibetan finger cymbals — two oscillators 4 Hz apart → shimmer
-    partials: [
-      { freq: 920,  peak: 0.34 },
-      { freq: 924,  peak: 0.28 },
-      { freq: 1840, peak: 0.08 },
-      { freq: 2760, peak: 0.03 },
-    ],
-    attack: 0.005, decay: 2.2,
-  },
-  wind: {
-    partials: [
-      { freq: 660, peak: 0.26 },
-      { freq: 663, peak: 0.23 },
-      { freq: 1320, peak: 0.07 },
-    ],
-    attack: 0.06, decay: 1.0,
-  },
-  bowl: {
-    partials: [
-      { freq: 396,  peak: 0.42 },
-      { freq: 792,  peak: 0.13 },
-      { freq: 1091, peak: 0.05 },
-    ],
-    attack: 0.30, decay: 4.0,
-  },
-  crystal: {
-    partials: [
-      { freq: 1080, peak: 0.28 },
-      { freq: 2160, peak: 0.08 },
-      { freq: 3240, peak: 0.03 },
-    ],
-    attack: 0.12, decay: 2.8,
-  },
-  church: {
-    partials: [
-      { freq: 148,  peak: 0.18 },
-      { freq: 296,  peak: 0.26 },
-      { freq: 474,  peak: 0.14 },
-      { freq: 740,  peak: 0.09 },
-      { freq: 1184, peak: 0.04 },
-    ],
-    attack: 0.015, decay: 5.5,
-  },
+  small:   { partials:[{freq:528,peak:.38},{freq:1056,peak:.18},{freq:1584,peak:.09},{freq:2112,peak:.04}], attack:.04,  decay:1.5 },
+  large:   { partials:[{freq:220,peak:.44},{freq:440,peak:.17},{freq:605,peak:.08}],                        attack:.04,  decay:3.0 },
+  thai:    { partials:[{freq:320,peak:.36},{freq:640,peak:.14},{freq:1024,peak:.20},{freq:1792,peak:.07}],  attack:.02,  decay:2.0 },
+  tingsha: { partials:[{freq:920,peak:.34},{freq:924,peak:.28},{freq:1840,peak:.08},{freq:2760,peak:.03}],  attack:.005, decay:2.2 },
+  wind_b:  { partials:[{freq:660,peak:.26},{freq:663,peak:.23},{freq:1320,peak:.07}],                       attack:.06,  decay:1.0 },
+  bowl:    { partials:[{freq:396,peak:.42},{freq:792,peak:.13},{freq:1091,peak:.05}],                       attack:.30,  decay:4.0 },
+  crystal: { partials:[{freq:1080,peak:.28},{freq:2160,peak:.08},{freq:3240,peak:.03}],                     attack:.12,  decay:2.8 },
+  church:  { partials:[{freq:148,peak:.18},{freq:296,peak:.26},{freq:474,peak:.14},{freq:740,peak:.09},{freq:1184,peak:.04}], attack:.015, decay:5.5 },
 };
 
 // ═══════════════════════════════════════════════════════════════════════════════
@@ -689,13 +455,14 @@ let tickInterval   = null;
 let bellInterval   = null;
 let audioCtx       = null;
 
-// Background nodes
-let bgNodes        = [];
-let rainStopFlag   = false;
-let rainTimeoutId  = null;
+// Background sound cleanup
+let bgScriptNodes    = []; // ScriptProcessorNodes — just .disconnect()
+let bgNodes          = []; // other nodes — .stop() + .disconnect()
+let bgStopFlag       = false;
+let scheduledIds     = []; // all setTimeout IDs
 let bgPreviewTimeout = null;
 
-const CIRCUMFERENCE = 2 * Math.PI * 88; // ~553
+const CIRCUMFERENCE = 2 * Math.PI * 88;
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // AUDIO CONTEXT
@@ -711,14 +478,10 @@ function getAudioCtx() {
 // ═══════════════════════════════════════════════════════════════════════════════
 function playBellProfile(bell) {
   try {
-    const ctx = getAudioCtx();
-    const t   = ctx.currentTime;
-    const end = t + bell.attack + bell.decay;
-    bell.partials.forEach(({ freq, peak, wave }) => {
-      const osc  = ctx.createOscillator();
-      const gain = ctx.createGain();
-      osc.type = wave || 'sine';
-      osc.frequency.value = freq;
+    const ctx = getAudioCtx(), t = ctx.currentTime, end = t + bell.attack + bell.decay;
+    bell.partials.forEach(({freq, peak}) => {
+      const osc = ctx.createOscillator(), gain = ctx.createGain();
+      osc.type = 'sine'; osc.frequency.value = freq;
       osc.connect(gain); gain.connect(ctx.destination);
       gain.gain.setValueAtTime(0, t);
       gain.gain.linearRampToValueAtTime(peak, t + bell.attack);
@@ -728,41 +491,387 @@ function playBellProfile(bell) {
   } catch(e) {}
 }
 
+function playMokugyo(ctx) {
+  const t = ctx.currentTime;
+  // Layer 1: mallet click — bandpass filtered noise (2–6 kHz)
+  const len = Math.floor(ctx.sampleRate * 0.018);
+  const nb = ctx.createBuffer(1, len, ctx.sampleRate);
+  const nd = nb.getChannelData(0);
+  for (let i = 0; i < len; i++) nd[i] = Math.random() * 2 - 1;
+  const ns = ctx.createBufferSource(); ns.buffer = nb;
+  const hpf = ctx.createBiquadFilter(); hpf.type='highpass'; hpf.frequency.value=2000;
+  const lpf = ctx.createBiquadFilter(); lpf.type='lowpass';  lpf.frequency.value=6000;
+  const cg = ctx.createGain(); cg.gain.setValueAtTime(.50,t); cg.gain.exponentialRampToValueAtTime(.001,t+.018);
+  ns.connect(hpf); hpf.connect(lpf); lpf.connect(cg); cg.connect(ctx.destination);
+  ns.start(t); ns.stop(t+.020);
+  // Layer 2: hollow body — sine with pitch drop + resonant LP filter
+  const osc = ctx.createOscillator(); osc.type='sine';
+  osc.frequency.setValueAtTime(490,t);
+  osc.frequency.exponentialRampToValueAtTime(355, t+.07);
+  const blpf = ctx.createBiquadFilter(); blpf.type='lowpass'; blpf.frequency.value=2200; blpf.Q.value=4;
+  blpf.frequency.exponentialRampToValueAtTime(700, t+.09);
+  const bg = ctx.createGain(); bg.gain.setValueAtTime(.42,t+.003); bg.gain.exponentialRampToValueAtTime(.001,t+.19);
+  osc.connect(blpf); blpf.connect(bg); bg.connect(ctx.destination);
+  osc.start(t); osc.stop(t+.22);
+}
+
 function playBell(id) {
-  const bell = BELLS[id];
-  if (!bell) return;
-  if (bell.custom) { bell.play(getAudioCtx()); }
-  else { playBellProfile(bell); }
+  const ctx = getAudioCtx();
+  if (id === 'mokugyo') { playMokugyo(ctx); return; }
+  const key = id === 'wind' ? 'wind_b' : id;
+  if (BELLS[key]) playBellProfile(BELLS[key]);
 }
 
 function ringBell()             { playBell(selectedBellId); }
-function selectBell(id)         { selectedBellId = id; document.querySelectorAll('.bell-opt[data-id]').forEach(el => { el.classList.toggle('selected', el.dataset.id === id); }); }
+function selectBell(id)         { selectedBellId = id; document.querySelectorAll('.bell-opt[data-id]').forEach(el => el.classList.toggle('selected', el.dataset.id === id)); }
 function previewBell(id, event) { event.stopPropagation(); playBell(id); }
 
 // ═══════════════════════════════════════════════════════════════════════════════
-// BACKGROUND SOUND SYNTHESIS
+// BACKGROUND SOUND — SHARED UTILITIES
 // ═══════════════════════════════════════════════════════════════════════════════
-function createNoiseBuffer(ctx) {
-  const sr  = ctx.sampleRate;
-  const buf = ctx.createBuffer(1, 3 * sr, sr);
-  const d   = buf.getChannelData(0);
-  for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
-  const src = ctx.createBufferSource();
-  src.buffer = buf; src.loop = true;
-  return src;
+
+// Pink noise via Paul Kellet's IIR algorithm — -3 dB/octave, matches natural sounds
+function createPinkNoise(ctx) {
+  let b0=0,b1=0,b2=0,b3=0,b4=0,b5=0,b6=0;
+  const node = ctx.createScriptProcessor(4096, 0, 1);
+  node.onaudioprocess = e => {
+    const out = e.outputBuffer.getChannelData(0);
+    for (let i = 0; i < out.length; i++) {
+      const w = Math.random() * 2 - 1;
+      b0 = .99886*b0 + w*.0555179; b1 = .99332*b1 + w*.0750759;
+      b2 = .96900*b2 + w*.1538520; b3 = .86650*b3 + w*.3104856;
+      b4 = .55000*b4 + w*.5329522; b5 = -.7616*b5 - w*.0168980;
+      out[i] = (b0+b1+b2+b3+b4+b5+b6+w*.5362)*.11;
+      b6 = w*.115926;
+    }
+  };
+  bgScriptNodes.push(node);
+  return node;
 }
 
-function makeLfo(ctx, freq, depth, target) {
-  const osc = ctx.createOscillator();
-  const g   = ctx.createGain();
-  osc.frequency.value = freq; g.gain.value = depth;
-  osc.connect(g); g.connect(target); osc.start();
-  return [osc, g];
+// Brown noise — -6 dB/octave, deep bass rumble for water
+function createBrownNoise(ctx) {
+  let last = 0;
+  const node = ctx.createScriptProcessor(4096, 0, 1);
+  node.onaudioprocess = e => {
+    const out = e.outputBuffer.getChannelData(0);
+    for (let i = 0; i < out.length; i++) {
+      const w = Math.random() * 2 - 1;
+      out[i] = (last + .02*w) / 1.02 * 3.5;
+      last = out[i] / 3.5;
+    }
+  };
+  bgScriptNodes.push(node);
+  return node;
 }
 
+// Synthetic reverb — exponentially decaying noise as convolution impulse
+function createReverb(ctx, decay) {
+  const len = Math.floor(ctx.sampleRate * decay);
+  const imp = ctx.createBuffer(2, len, ctx.sampleRate);
+  for (let ch = 0; ch < 2; ch++) {
+    const d = imp.getChannelData(ch);
+    for (let i = 0; i < len; i++) d[i] = (Math.random()*2-1) * Math.pow(1-i/len, 2);
+  }
+  const conv = ctx.createConvolver(); conv.buffer = imp;
+  bgNodes.push(conv);
+  return conv;
+}
+
+// Noise-based LFO: filtered white noise for organic (non-periodic) modulation
+function createNoiseLFO(ctx, cutoffHz) {
+  const sr = ctx.sampleRate, len = 3*sr;
+  const buf = ctx.createBuffer(1, len, sr);
+  const d = buf.getChannelData(0);
+  for (let i = 0; i < len; i++) d[i] = Math.random()*2-1;
+  const src = ctx.createBufferSource(); src.buffer = buf; src.loop = true;
+  const lpf = ctx.createBiquadFilter(); lpf.type='lowpass'; lpf.frequency.value=cutoffHz;
+  src.connect(lpf); src.start();
+  bgNodes.push(src, lpf);
+  return lpf; // connect through GainNode to scale, then to any AudioParam
+}
+
+function trackTimeout(fn, delay) {
+  const id = setTimeout(fn, delay);
+  scheduledIds.push(id);
+  return id;
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// BACKGROUND SOUND BUILDERS
+// ═══════════════════════════════════════════════════════════════════════════════
+
+function buildStream(ctx) {
+  const reverb = createReverb(ctx, 1.2);
+  const master = ctx.createGain(); master.gain.value = 0.68;
+  master.connect(ctx.destination); reverb.connect(master);
+  bgNodes.push(master);
+
+  const pink = createPinkNoise(ctx);
+  const brown = createBrownNoise(ctx);
+
+  // Layer 1 — low rumble (LP 400 Hz)
+  const f1 = ctx.createBiquadFilter(); f1.type='lowpass'; f1.frequency.value=400;
+  const g1 = ctx.createGain(); g1.gain.value=.38;
+  pink.connect(f1); f1.connect(g1); g1.connect(reverb);
+  bgNodes.push(f1,g1);
+
+  // Layer 2 — mid gurgle (BP 800 Hz, Q=8, high Q = hollow resonance)
+  const f2 = ctx.createBiquadFilter(); f2.type='bandpass'; f2.frequency.value=800; f2.Q.value=8;
+  const g2 = ctx.createGain(); g2.gain.value=.32;
+  pink.connect(f2); f2.connect(g2); g2.connect(reverb);
+  bgNodes.push(f2,g2);
+  // Noise LFO sweeps filter frequency → creates gurgling/bubbling texture
+  const lfo2 = createNoiseLFO(ctx, .3);
+  const sc2 = ctx.createGain(); sc2.gain.value=200;
+  lfo2.connect(sc2); sc2.connect(f2.frequency); bgNodes.push(sc2);
+
+  // Layer 3 — high splash (BP 1800 Hz, Q=5)
+  const f3 = ctx.createBiquadFilter(); f3.type='bandpass'; f3.frequency.value=1800; f3.Q.value=5;
+  const g3 = ctx.createGain(); g3.gain.value=.22;
+  pink.connect(f3); f3.connect(g3); g3.connect(reverb);
+  bgNodes.push(f3,g3);
+  const lfo3 = createNoiseLFO(ctx, .5);
+  const sc3 = ctx.createGain(); sc3.gain.value=400;
+  lfo3.connect(sc3); sc3.connect(f3.frequency); bgNodes.push(sc3);
+
+  // Sub-bass (brown → LP 120 Hz) — body of water mass
+  const fsub = ctx.createBiquadFilter(); fsub.type='lowpass'; fsub.frequency.value=120;
+  const gsub = ctx.createGain(); gsub.gain.value=.18;
+  brown.connect(fsub); fsub.connect(gsub); gsub.connect(master);
+  bgNodes.push(fsub,gsub);
+
+  // Slow amplitude swell via noise LFO
+  const lfoAmp = createNoiseLFO(ctx, .08);
+  const scAmp = ctx.createGain(); scAmp.gain.value=.1;
+  lfoAmp.connect(scAmp); scAmp.connect(master.gain); bgNodes.push(scAmp);
+
+  // ScriptProcessors must be connected into graph
+  pink.connect(f1); brown.connect(fsub);
+}
+
+function buildOcean(ctx) {
+  const reverb = createReverb(ctx, 2.5); // long reverb = open beach space
+  const master = ctx.createGain(); master.gain.value = 0.72;
+  master.connect(ctx.destination); reverb.connect(master);
+  bgNodes.push(master);
+
+  // Constant low rumble (always present — the "presence" of ocean)
+  const brownRumble = createBrownNoise(ctx);
+  const fRumble = ctx.createBiquadFilter(); fRumble.type='lowpass'; fRumble.frequency.value=150;
+  const gRumble = ctx.createGain(); gRumble.gain.value=.22;
+  brownRumble.connect(fRumble); fRumble.connect(gRumble); gRumble.connect(master);
+  bgNodes.push(fRumble,gRumble);
+
+  // Permanent high-frequency foam layer (pink → 1000–4000 Hz)
+  const pinkFoam = createPinkNoise(ctx);
+  const hpfFoam = ctx.createBiquadFilter(); hpfFoam.type='highpass'; hpfFoam.frequency.value=1000;
+  const lpfFoam = ctx.createBiquadFilter(); lpfFoam.type='lowpass';  lpfFoam.frequency.value=4000;
+  const gFoam = ctx.createGain(); gFoam.gain.value=.06;
+  pinkFoam.connect(hpfFoam); hpfFoam.connect(lpfFoam); lpfFoam.connect(gFoam); gFoam.connect(reverb);
+  bgNodes.push(hpfFoam,lpfFoam,gFoam);
+
+  // Two wave trains with offset start — each is brown noise + wave gain automation
+  function makeWaveTrain(startDelay) {
+    const brownWave = createBrownNoise(ctx);
+    const fWave = ctx.createBiquadFilter(); fWave.type='bandpass'; fWave.frequency.value=300; fWave.Q.value=0.85;
+    const gWave = ctx.createGain(); gWave.gain.value=0.001;
+    brownWave.connect(fWave); fWave.connect(gWave); gWave.connect(reverb);
+    bgNodes.push(fWave, gWave);
+
+    function triggerWave() {
+      if (bgStopFlag) return;
+      const now  = ctx.currentTime;
+      const build  = 5 + Math.random() * 7;   // 5–12 s slow build
+      const crash  = 1.5 + Math.random() * 2; // 1.5–3.5 s fast crash
+      const peak   = .45 + Math.random() * .3;
+      const period = build + crash + 1.5 + Math.random() * 3;
+
+      // Asymmetric wave envelope: exponential rise → exponential fall
+      gWave.gain.cancelScheduledValues(now);
+      gWave.gain.setValueAtTime(.001, now);
+      gWave.gain.exponentialRampToValueAtTime(peak, now + build);
+      gWave.gain.exponentialRampToValueAtTime(.001, now + build + crash);
+
+      // Filter sweeps during crash (300 → 500 → 200) = "break" character
+      fWave.frequency.setValueAtTime(300, now + build);
+      fWave.frequency.linearRampToValueAtTime(500, now + build + crash*.35);
+      fWave.frequency.linearRampToValueAtTime(200, now + build + crash);
+
+      trackTimeout(triggerWave, period * 1000);
+    }
+    trackTimeout(triggerWave, startDelay);
+  }
+
+  makeWaveTrain(200);
+  makeWaveTrain(5000 + Math.random() * 5000); // offset second wave train
+}
+
+function buildWind(ctx) {
+  const reverb = createReverb(ctx, 2.0);
+  const master = ctx.createGain(); master.gain.value = 0.68;
+  master.connect(ctx.destination); reverb.connect(master);
+  bgNodes.push(master);
+
+  const pink = createPinkNoise(ctx);
+
+  // Main layer — leaf rustle (bandpass 1500 Hz) — wind through foliage
+  const fLeaf = ctx.createBiquadFilter(); fLeaf.type='bandpass'; fLeaf.frequency.value=1500; fLeaf.Q.value=1.5;
+  const gLeaf = ctx.createGain(); gLeaf.gain.value=.48;
+  pink.connect(fLeaf); fLeaf.connect(gLeaf);
+  bgNodes.push(fLeaf,gLeaf);
+
+  // Anti-harshness LP — cut above 3500 Hz
+  const fAir = ctx.createBiquadFilter(); fAir.type='lowpass'; fAir.frequency.value=3500;
+  gLeaf.connect(fAir); fAir.connect(reverb); bgNodes.push(fAir);
+
+  // Noise LFO → spectral wander ±500 Hz at 0.2 Hz — wind shifts direction/tone
+  const lfoSpec = createNoiseLFO(ctx, .20);
+  const scSpec = ctx.createGain(); scSpec.gain.value=500;
+  lfoSpec.connect(scSpec); scSpec.connect(fLeaf.frequency); bgNodes.push(scSpec);
+
+  // Second layer — branch creak (BP 400 Hz, Q=3)
+  const fBranch = ctx.createBiquadFilter(); fBranch.type='bandpass'; fBranch.frequency.value=400; fBranch.Q.value=3;
+  const gBranch = ctx.createGain(); gBranch.gain.value=.14;
+  pink.connect(fBranch); fBranch.connect(gBranch); gBranch.connect(reverb);
+  bgNodes.push(fBranch,gBranch);
+
+  // Noise LFO → gust amplitude (0.08 Hz, very slow) — natural gusting feel
+  const lfoGust = createNoiseLFO(ctx, .08);
+  const scGust = ctx.createGain(); scGust.gain.value=.38;
+  lfoGust.connect(scGust); scGust.connect(master.gain); bgNodes.push(scGust);
+}
+
+function buildRain(ctx) {
+  const reverb = createReverb(ctx, .6); // short reverb = close, intimate rain
+  const master = ctx.createGain(); master.gain.value = 0.62;
+  master.connect(ctx.destination); reverb.connect(master);
+  bgNodes.push(master);
+
+  // Background wash — pink noise → HPF 1100 → LPF 14000
+  const pink = createPinkNoise(ctx);
+  const hpfWash = ctx.createBiquadFilter(); hpfWash.type='highpass'; hpfWash.frequency.value=1100;
+  const lpfWash = ctx.createBiquadFilter(); lpfWash.type='lowpass';  lpfWash.frequency.value=14000;
+  const gWash = ctx.createGain(); gWash.gain.value=.28;
+  pink.connect(hpfWash); hpfWash.connect(lpfWash); lpfWash.connect(gWash); gWash.connect(reverb);
+  bgNodes.push(hpfWash,lpfWash,gWash);
+
+  // Individual raindrops: noise grains (Poisson process timing)
+  // Each drop = tiny noise grain through bandpass, with built-in envelope
+  function playDrop() {
+    if (bgStopFlag) return;
+    try {
+      const dropDur = .022 + Math.random() * .032; // 22–54 ms
+      const sr = ctx.sampleRate, len = Math.floor(dropDur * sr);
+      const buf = ctx.createBuffer(1, len, sr);
+      const d = buf.getChannelData(0);
+      // Noise grain with exponential envelope baked in
+      for (let i=0; i<len; i++) d[i] = (Math.random()*2-1) * Math.pow(1-i/len, 3);
+      const src = ctx.createBufferSource(); src.buffer = buf;
+      const bpf = ctx.createBiquadFilter(); bpf.type='bandpass';
+      bpf.frequency.value = 2000 + Math.random() * 4000; // 2–6 kHz per drop
+      bpf.Q.value = 3 + Math.random() * 5;
+      const g = ctx.createGain(); g.gain.value = .28 + Math.random() * .38;
+      src.connect(bpf); bpf.connect(g); g.connect(master);
+      src.start();
+      // BufferSource auto-stops, no cleanup needed
+    } catch(e) {}
+    // Poisson distribution timing (mean 12 drops/sec for gentle rain)
+    const nextDelay = -Math.log(Math.random()) * (1000/12);
+    trackTimeout(playDrop, nextDelay);
+  }
+  playDrop();
+}
+
+// FM bird synthesis — 3 species with burst scheduling
+function buildBirds(ctx) {
+  const reverb = createReverb(ctx, 1.8); // open forest reverb
+  const master = ctx.createGain(); master.gain.value = 0.60;
+  master.connect(ctx.destination); reverb.connect(master);
+  bgNodes.push(master);
+
+  // Subtle ambient forest background (pink, very low)
+  const pinkBg = createPinkNoise(ctx);
+  const fBg = ctx.createBiquadFilter(); fBg.type='lowpass'; fBg.frequency.value=1800;
+  const gBg = ctx.createGain(); gBg.gain.value=.03;
+  pinkBg.connect(fBg); fBg.connect(gBg); gBg.connect(master);
+  bgNodes.push(fBg,gBg);
+
+  // Bird chirp synthesizer (FM synthesis with frequency sweep)
+  function playChirp(type) {
+    if (bgStopFlag) return;
+    // Species presets: {f0, f1, f2, dur, sweepShape, vibratoHz}
+    const species = {
+      warbler: { f0:3200, f1:5500,             dur:.08, shape:'up',   vHz:18, vD:.030 },
+      sparrow: { f0:4500, f1:2800,             dur:.06, shape:'down', vHz:22, vD:.025 },
+      thrush:  { f0:2500, f1:5000, f2:3200,    dur:.18, shape:'arc',  vHz:15, vD:.025 },
+    };
+    const cfg = species[type];
+    const now = ctx.currentTime;
+
+    // Vibrato: slight FM modulation for natural warble
+    const vibOsc = ctx.createOscillator(); vibOsc.type='sine'; vibOsc.frequency.value=cfg.vHz;
+    const vibGain = ctx.createGain(); vibGain.gain.value = cfg.f0 * cfg.vD;
+    vibOsc.connect(vibGain);
+
+    const osc = ctx.createOscillator(); osc.type='sine';
+    vibGain.connect(osc.frequency); // FM: vibrato modulates carrier
+
+    if (cfg.shape === 'up') {
+      osc.frequency.setValueAtTime(cfg.f0, now);
+      osc.frequency.exponentialRampToValueAtTime(cfg.f1, now+cfg.dur);
+    } else if (cfg.shape === 'down') {
+      osc.frequency.setValueAtTime(cfg.f0, now);
+      osc.frequency.exponentialRampToValueAtTime(cfg.f1, now+cfg.dur);
+    } else { // arc: up then down
+      osc.frequency.setValueAtTime(cfg.f0, now);
+      osc.frequency.exponentialRampToValueAtTime(cfg.f1, now+cfg.dur*.45);
+      osc.frequency.exponentialRampToValueAtTime(cfg.f2, now+cfg.dur);
+    }
+
+    const env = ctx.createGain();
+    env.gain.setValueAtTime(0, now);
+    env.gain.linearRampToValueAtTime(.10, now+.006); // fast attack
+    env.gain.exponentialRampToValueAtTime(.001, now+cfg.dur+.10);
+
+    osc.connect(env); env.connect(reverb);
+    vibOsc.start(now); osc.start(now);
+    const stopT = now + cfg.dur + .12;
+    vibOsc.stop(stopT); osc.stop(stopT);
+  }
+
+  // Each bird species has independent burst scheduler
+  function scheduleBirdBurst(type, delay) {
+    trackTimeout(() => {
+      if (bgStopFlag) return;
+      const burstSize = 2 + Math.floor(Math.random() * 3); // 2–4 chirps
+      let t = 0;
+      for (let i = 0; i < burstSize; i++) {
+        (function(offset) {
+          trackTimeout(() => { if (!bgStopFlag) playChirp(type); }, offset * 1000);
+        })(t);
+        t += .09 + Math.random() * .20;
+      }
+      // Pause before next burst: 5–18 seconds
+      const nextGap = (t + 5 + Math.random() * 13) * 1000;
+      scheduleBirdBurst(type, nextGap);
+    }, delay);
+  }
+
+  scheduleBirdBurst('warbler', 800 + Math.random() * 2000);
+  scheduleBirdBurst('sparrow', 2000 + Math.random() * 3000);
+  scheduleBirdBurst('thrush',  4500 + Math.random() * 4000);
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// BG SOUND CONTROL
+// ═══════════════════════════════════════════════════════════════════════════════
 function stopBgSound() {
-  rainStopFlag = true;
-  if (rainTimeoutId) { clearTimeout(rainTimeoutId); rainTimeoutId = null; }
+  bgStopFlag = true;
+  scheduledIds.forEach(id => clearTimeout(id));
+  scheduledIds = [];
+  bgScriptNodes.forEach(n => { try { n.disconnect(); } catch(e) {} });
+  bgScriptNodes = [];
   bgNodes.forEach(n => {
     try { if (n.stop) n.stop(); } catch(e) {}
     try { n.disconnect(); } catch(e) {}
@@ -772,133 +881,35 @@ function stopBgSound() {
 
 function startBgSound(id) {
   stopBgSound();
+  bgStopFlag = false;
   if (!id || id === 'none') return;
   try {
-    const ctx    = getAudioCtx();
-    const master = ctx.createGain();
-    master.connect(ctx.destination);
-    bgNodes.push(master);
-    const noise  = createNoiseBuffer(ctx);
-    bgNodes.push(noise);
-
-    if (id === 'stream') {
-      // น้ำไหล: 2 LFOs — amplitude (0.28 Hz) + filter freq (0.15 Hz) → gurgling
-      master.gain.value = 0.062;
-      const lpf = ctx.createBiquadFilter();
-      lpf.type = 'lowpass'; lpf.frequency.value = 760; lpf.Q.value = 0.6;
-      noise.connect(lpf); lpf.connect(master); bgNodes.push(lpf);
-      const [l1a, l1b] = makeLfo(ctx, 0.28,  0.018, master.gain);   // swell
-      const [l2a, l2b] = makeLfo(ctx, 0.15,  180,   lpf.frequency); // gurgle
-      noise.start();
-      bgNodes.push(l1a, l1b, l2a, l2b);
-
-    } else if (id === 'waterfall') {
-      // น้ำตก: broadband HPF→LPF, slight turbulence LFO on gain
-      master.gain.value = 0.11;
-      const hpf = ctx.createBiquadFilter();
-      hpf.type = 'highpass'; hpf.frequency.value = 90;
-      const lpf = ctx.createBiquadFilter();
-      lpf.type = 'lowpass'; lpf.frequency.value = 5000;
-      noise.connect(hpf); hpf.connect(lpf); lpf.connect(master);
-      bgNodes.push(hpf, lpf);
-      const [la, lb] = makeLfo(ctx, 0.09, 0.012, master.gain); // gentle turbulence
-      noise.start();
-      bgNodes.push(la, lb);
-
-    } else if (id === 'ocean') {
-      // ทะเล: 3 incommensurate LFOs → amplitude + filter freq + Q
-      // Creates realistic wave interference pattern
-      master.gain.value = 0.052;
-      const lpf = ctx.createBiquadFilter();
-      lpf.type = 'lowpass'; lpf.frequency.value = 620; lpf.Q.value = 0.7;
-      noise.connect(lpf); lpf.connect(master); bgNodes.push(lpf);
-      const [l1a, l1b] = makeLfo(ctx, 0.07,   0.036, master.gain);   // wave swell ~14s
-      const [l2a, l2b] = makeLfo(ctx, 0.042,  220,   lpf.frequency); // texture change
-      const [l3a, l3b] = makeLfo(ctx, 0.11,   2.5,   lpf.Q);        // resonance breathing
-      noise.start();
-      bgNodes.push(l1a, l1b, l2a, l2b, l3a, l3b);
-
-    } else if (id === 'wind') {
-      // ลม: bandpass noise + 3 LFOs → amplitude + pitch + resonance (never repeats)
-      master.gain.value = 0.09;
-      const bpf = ctx.createBiquadFilter();
-      bpf.type = 'bandpass'; bpf.frequency.value = 320; bpf.Q.value = 1.5;
-      noise.connect(bpf); bpf.connect(master); bgNodes.push(bpf);
-      const [l1a, l1b] = makeLfo(ctx, 0.05,  0.04,  master.gain);  // gusting ~20s
-      const [l2a, l2b] = makeLfo(ctx, 0.082, 140,   bpf.frequency); // pitch howl
-      const [l3a, l3b] = makeLfo(ctx, 0.031, 0.8,   bpf.Q);        // turbulence
-      noise.start();
-      bgNodes.push(l1a, l1b, l2a, l2b, l3a, l3b);
-
-    } else if (id === 'rain') {
-      // ฝนเบา: HPF hiss background + recursive individual raindrop events
-      master.gain.value = 0.065;
-      const hpf = ctx.createBiquadFilter();
-      hpf.type = 'highpass'; hpf.frequency.value = 1100;
-      const lpf = ctx.createBiquadFilter();
-      lpf.type = 'lowpass'; lpf.frequency.value = 14000;
-      noise.connect(hpf); hpf.connect(lpf); lpf.connect(master);
-      bgNodes.push(hpf, lpf);
-      noise.start();
-      // Schedule individual raindrops (recursive, uses stop flag)
-      rainStopFlag = false;
-      scheduleRainDrop(ctx, master);
-    }
+    const ctx = getAudioCtx();
+    if      (id === 'stream') buildStream(ctx);
+    else if (id === 'ocean')  buildOcean(ctx);
+    else if (id === 'wind')   buildWind(ctx);
+    else if (id === 'rain')   buildRain(ctx);
+    else if (id === 'birds')  buildBirds(ctx);
   } catch(e) {}
 }
 
-// Rain: each drop schedules the next — random 100–380 ms intervals
-function scheduleRainDrop(ctx, masterGain) {
-  if (rainStopFlag) return;
-  const delayMs = 100 + Math.random() * 280;
-  rainTimeoutId = setTimeout(() => {
-    if (rainStopFlag) return;
-    try {
-      const t    = ctx.currentTime;
-      const osc  = ctx.createOscillator();
-      const gain = ctx.createGain();
-      osc.type = 'sine';
-      // Each drop: random pitch 2.4–3.2 kHz, falls to 800 Hz (splash merge)
-      osc.frequency.value = 2400 + Math.random() * 800;
-      osc.frequency.exponentialRampToValueAtTime(800, t + 0.08);
-      osc.connect(gain); gain.connect(masterGain);
-      gain.gain.setValueAtTime(0,     t);
-      gain.gain.linearRampToValueAtTime(0.024, t + 0.005);
-      gain.gain.exponentialRampToValueAtTime(0.001, t + 0.08);
-      osc.start(t); osc.stop(t + 0.09);
-    } catch(e) {}
-    scheduleRainDrop(ctx, masterGain);
-  }, delayMs);
-}
-
-// Select bg sound (row click): update selection, switch if running
 function selectBg(id) {
   selectedBgId = id;
-  document.querySelectorAll('.bell-opt[data-bg]').forEach(el => {
-    el.classList.toggle('selected', el.dataset.bg === id);
-  });
-  if (running) {
-    startBgSound(id);
-  } else {
-    clearTimeout(bgPreviewTimeout);
-    stopBgSound();
-  }
+  document.querySelectorAll('.bell-opt[data-bg]').forEach(el => el.classList.toggle('selected', el.dataset.bg === id));
+  if (running) { startBgSound(id); }
+  else { clearTimeout(bgPreviewTimeout); stopBgSound(); }
 }
 
-// Preview button: play 6 seconds then stop (or switch immediately if running)
 function previewBg(id, event) {
   event.stopPropagation();
-  // Also update selection
   selectedBgId = id;
-  document.querySelectorAll('.bell-opt[data-bg]').forEach(el => {
-    el.classList.toggle('selected', el.dataset.bg === id);
-  });
-  if (running) {
-    startBgSound(id); return;
-  }
+  document.querySelectorAll('.bell-opt[data-bg]').forEach(el => el.classList.toggle('selected', el.dataset.bg === id));
+  if (running) { startBgSound(id); return; }
   clearTimeout(bgPreviewTimeout);
   startBgSound(id);
-  bgPreviewTimeout = setTimeout(stopBgSound, 6000);
+  // Longer preview for ocean (needs time to hear wave cycle)
+  const dur = (id === 'ocean' || id === 'birds') ? 18000 : 9000;
+  bgPreviewTimeout = setTimeout(stopBgSound, dur);
 }
 
 // ═══════════════════════════════════════════════════════════════════════════════
@@ -908,8 +919,7 @@ function onSliderChange(val) {
   if (running) return;
   const min = parseInt(val);
   document.getElementById('sliderVal').textContent = min;
-  totalSeconds = min * 60;
-  remaining = totalSeconds;
+  totalSeconds = min * 60; remaining = totalSeconds;
   updateDisplay();
   document.getElementById('completionBox').style.display = 'none';
   document.getElementById('timerCard').style.display = '';
@@ -920,54 +930,43 @@ function onSliderChange(val) {
 // TIMER
 // ═══════════════════════════════════════════════════════════════════════════════
 function updateDisplay() {
-  const m = Math.floor(remaining / 60).toString().padStart(2, '0');
-  const s = (remaining % 60).toString().padStart(2, '0');
-  document.getElementById('timerDisplay').textContent = m + ':' + s;
-  const offset = CIRCUMFERENCE * (1 - remaining / totalSeconds);
+  const m = Math.floor(remaining/60).toString().padStart(2,'0');
+  const s = (remaining%60).toString().padStart(2,'0');
+  document.getElementById('timerDisplay').textContent = m+':'+s;
+  const offset = CIRCUMFERENCE * (1 - remaining/totalSeconds);
   document.getElementById('ringProgress').style.strokeDashoffset = offset;
 }
 
 function toggleTimer() { running ? pauseTimer() : startTimer(); }
 
 function startTimer() {
-  getAudioCtx();
-  running = true;
+  getAudioCtx(); running = true;
   clearTimeout(bgPreviewTimeout);
   startBgSound(selectedBgId);
   ringBell();
   document.getElementById('timerStatus').textContent = 'กำลังฝึกสติ…';
-  document.getElementById('playBtn').innerHTML =
-    '<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg> หยุดชั่วคราว';
+  document.getElementById('playBtn').innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg> หยุดชั่วคราว';
   document.getElementById('resetBtn').disabled = false;
   document.getElementById('durationSlider').disabled = true;
   document.getElementById('bellPicker').classList.add('locked');
-
   const useInterval = document.getElementById('intervalToggle').checked;
   const intervalSec = parseInt(document.getElementById('intervalSelect').value);
-  if (useInterval) {
-    bellInterval = setInterval(() => { if (running && remaining > 0) ringBell(); }, intervalSec * 1000);
-  }
-  tickInterval = setInterval(() => { remaining--; updateDisplay(); if (remaining <= 0) finishTimer(); }, 1000);
+  if (useInterval) bellInterval = setInterval(() => { if (running && remaining>0) ringBell(); }, intervalSec*1000);
+  tickInterval = setInterval(() => { remaining--; updateDisplay(); if (remaining<=0) finishTimer(); }, 1000);
 }
 
 function pauseTimer() {
-  running = false;
-  clearInterval(tickInterval); clearInterval(bellInterval);
+  running = false; clearInterval(tickInterval); clearInterval(bellInterval);
   stopBgSound();
   document.getElementById('timerStatus').textContent = 'หยุดชั่วคราว';
-  document.getElementById('playBtn').innerHTML =
-    '<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg> ดำเนินต่อ';
+  document.getElementById('playBtn').innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg> ดำเนินต่อ';
 }
 
 function resetTimer() {
-  running = false;
-  clearInterval(tickInterval); clearInterval(bellInterval);
-  stopBgSound();
-  remaining = totalSeconds;
-  updateDisplay();
+  running = false; clearInterval(tickInterval); clearInterval(bellInterval);
+  stopBgSound(); remaining = totalSeconds; updateDisplay();
   document.getElementById('timerStatus').textContent = 'พร้อมเริ่ม';
-  document.getElementById('playBtn').innerHTML =
-    '<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg> เริ่ม';
+  document.getElementById('playBtn').innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg> เริ่ม';
   document.getElementById('playBtn').onclick = toggleTimer;
   document.getElementById('resetBtn').disabled = true;
   document.getElementById('completionBox').style.display = 'none';
@@ -977,22 +976,18 @@ function resetTimer() {
 }
 
 function finishTimer() {
-  running = false;
-  clearInterval(tickInterval); clearInterval(bellInterval);
-  stopBgSound();
-  ringBell(); setTimeout(ringBell, 2000);
-  document.getElementById('completedMin').textContent = Math.round(totalSeconds / 60);
+  running = false; clearInterval(tickInterval); clearInterval(bellInterval);
+  stopBgSound(); ringBell(); setTimeout(ringBell, 2000);
+  document.getElementById('completedMin').textContent = Math.round(totalSeconds/60);
   document.getElementById('timerCard').style.display = 'none';
   document.getElementById('completionBox').style.display = 'block';
-  document.getElementById('playBtn').innerHTML =
-    '<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg> เริ่มใหม่';
+  document.getElementById('playBtn').innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg> เริ่มใหม่';
   document.getElementById('playBtn').onclick = resetTimer;
   document.getElementById('resetBtn').disabled = true;
   document.getElementById('durationSlider').disabled = false;
   document.getElementById('bellPicker').classList.remove('locked');
 }
 
-// ─── Init ─────────────────────────────────────────────────────────────────────
 updateDisplay();
 </script>
 </body>

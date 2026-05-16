@@ -346,8 +346,8 @@ input[type=range]::-moz-range-thumb {
     <div class="bell-opt" data-bg="stream" onclick="selectBg('stream')">
       <div class="bell-radio"><div class="bell-radio-dot"></div></div>
       <div class="bell-opt-info">
-        <div class="bell-opt-name">🏞️ แม่น้ำไหล</div>
-        <div class="bell-opt-desc">เสียงน้ำไหลกรุกกรัก · มีชีวิตชีวา</div>
+        <div class="bell-opt-name">💧 น้ำไหล</div>
+        <div class="bell-opt-desc">สวนหินญี่ปุ่น · หยดน้ำกระทบหิน · ใสสะอาด</div>
       </div>
       <button class="bell-preview-btn" onclick="previewBg('stream',event)"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>ลองฟัง</button>
     </div>
@@ -382,6 +382,14 @@ input[type=range]::-moz-range-thumb {
         <div class="bell-opt-desc">เสียงนกร้อง · หลายสายพันธุ์ · ป่าเขาเงียบ</div>
       </div>
       <button class="bell-preview-btn" onclick="previewBg('birds',event)"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>ลองฟัง</button>
+    </div>
+    <div class="bell-opt" data-bg="fire" onclick="selectBg('fire')">
+      <div class="bell-radio"><div class="bell-radio-dot"></div></div>
+      <div class="bell-opt-info">
+        <div class="bell-opt-name">🔥 กองไฟ</div>
+        <div class="bell-opt-desc">เปลวไฟสะเก็ด · เตาผิงอบอุ่น · เสียงไม้แตกดัง</div>
+      </div>
+      <button class="bell-preview-btn" onclick="previewBg('fire',event)"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>ลองฟัง</button>
     </div>
 
   </div>
@@ -602,144 +610,192 @@ function trackTimeout(fn, delay) {
 // ═══════════════════════════════════════════════════════════════════════════════
 
 function buildStream(ctx) {
-  const reverb = createReverb(ctx, 1.2);
-  const master = ctx.createGain(); master.gain.value = 0.68;
+  // Japanese water garden: crystal-clear trickle + drops into stone basin (tsukubai)
+  const reverb = createReverb(ctx, 1.1);
+  const master = ctx.createGain(); master.gain.value = 0.62;
   master.connect(ctx.destination); reverb.connect(master);
   bgNodes.push(master);
 
   const pink = createPinkNoise(ctx);
-  const brown = createBrownNoise(ctx);
 
-  // Layer 1 — low rumble (LP 400 Hz)
-  const f1 = ctx.createBiquadFilter(); f1.type='lowpass'; f1.frequency.value=400;
-  const g1 = ctx.createGain(); g1.gain.value=.38;
-  pink.connect(f1); f1.connect(g1); g1.connect(reverb);
-  bgNodes.push(f1,g1);
+  // Thin water flow: high-pass 1500Hz removes muddy bass → crystal clear
+  const hpFlow = ctx.createBiquadFilter(); hpFlow.type='highpass'; hpFlow.frequency.value=1500;
+  const lpFlow = ctx.createBiquadFilter(); lpFlow.type='lowpass';  lpFlow.frequency.value=9000;
+  const gFlow = ctx.createGain(); gFlow.gain.value=0.30;
+  pink.connect(hpFlow); hpFlow.connect(lpFlow); lpFlow.connect(gFlow); gFlow.connect(reverb);
+  bgNodes.push(hpFlow, lpFlow, gFlow);
 
-  // Layer 2 — mid gurgle (BP 800 Hz, Q=8, high Q = hollow resonance)
-  const f2 = ctx.createBiquadFilter(); f2.type='bandpass'; f2.frequency.value=800; f2.Q.value=8;
-  const g2 = ctx.createGain(); g2.gain.value=.32;
-  pink.connect(f2); f2.connect(g2); g2.connect(reverb);
-  bgNodes.push(f2,g2);
-  // Noise LFO sweeps filter frequency → creates gurgling/bubbling texture
-  const lfo2 = createNoiseLFO(ctx, .3);
-  const sc2 = ctx.createGain(); sc2.gain.value=200;
-  lfo2.connect(sc2); sc2.connect(f2.frequency); bgNodes.push(sc2);
+  // Mid shimmer: bandpass at 3kHz — water sparkle
+  const fShimmer = ctx.createBiquadFilter(); fShimmer.type='bandpass'; fShimmer.frequency.value=3000; fShimmer.Q.value=2.5;
+  const gShimmer = ctx.createGain(); gShimmer.gain.value=0.14;
+  pink.connect(fShimmer); fShimmer.connect(gShimmer); gShimmer.connect(reverb);
+  bgNodes.push(fShimmer, gShimmer);
 
-  // Layer 3 — high splash (BP 1800 Hz, Q=5)
-  const f3 = ctx.createBiquadFilter(); f3.type='bandpass'; f3.frequency.value=1800; f3.Q.value=5;
-  const g3 = ctx.createGain(); g3.gain.value=.22;
-  pink.connect(f3); f3.connect(g3); g3.connect(reverb);
-  bgNodes.push(f3,g3);
-  const lfo3 = createNoiseLFO(ctx, .5);
-  const sc3 = ctx.createGain(); sc3.gain.value=400;
-  lfo3.connect(sc3); sc3.connect(f3.frequency); bgNodes.push(sc3);
+  // Very gentle flow variation (not strong like a river — just a trickle)
+  const lfoFlow = createNoiseLFO(ctx, 0.25);
+  const scFlow = ctx.createGain(); scFlow.gain.value=0.04;
+  lfoFlow.connect(scFlow); scFlow.connect(master.gain); bgNodes.push(scFlow);
 
-  // Sub-bass (brown → LP 120 Hz) — body of water mass
-  const fsub = ctx.createBiquadFilter(); fsub.type='lowpass'; fsub.frequency.value=120;
-  const gsub = ctx.createGain(); gsub.gain.value=.18;
-  brown.connect(fsub); fsub.connect(gsub); gsub.connect(master);
-  bgNodes.push(fsub,gsub);
+  // Water drops into stone basin — the defining sound of Japanese water garden
+  function playDrop() {
+    if (bgStopFlag) return;
+    try {
+      const now = ctx.currentTime;
+      // Impact: bandpass noise burst (sound of water hitting stone/water surface)
+      const impLen = Math.floor(ctx.sampleRate * (0.025 + Math.random()*0.035));
+      const impBuf = ctx.createBuffer(1, impLen, ctx.sampleRate);
+      const impD = impBuf.getChannelData(0);
+      for (let i=0; i<impLen; i++) impD[i] = (Math.random()*2-1) * Math.pow(1-i/impLen, 2.5);
+      const impSrc = ctx.createBufferSource(); impSrc.buffer = impBuf;
+      const bpImp = ctx.createBiquadFilter(); bpImp.type='bandpass';
+      bpImp.frequency.value = 900 + Math.random()*1000; bpImp.Q.value = 4+Math.random()*4;
+      const gImp = ctx.createGain(); gImp.gain.value = 0.40 + Math.random()*0.30;
+      impSrc.connect(bpImp); bpImp.connect(gImp); gImp.connect(reverb);
+      impSrc.start(now);
 
-  // Slow amplitude swell via noise LFO
-  const lfoAmp = createNoiseLFO(ctx, .08);
-  const scAmp = ctx.createGain(); scAmp.gain.value=.1;
-  lfoAmp.connect(scAmp); scAmp.connect(master.gain); bgNodes.push(scAmp);
-
-  // ScriptProcessors must be connected into graph
-  pink.connect(f1); brown.connect(fsub);
+      // Basin ring: soft sine resonance — hollow stone / water surface ring
+      const ringOsc = ctx.createOscillator(); ringOsc.type='sine';
+      ringOsc.frequency.value = 200 + Math.random()*200;
+      const gRing = ctx.createGain();
+      gRing.gain.setValueAtTime(0.050 + Math.random()*0.035, now);
+      gRing.gain.exponentialRampToValueAtTime(0.001, now + 0.5 + Math.random()*0.7);
+      ringOsc.connect(gRing); gRing.connect(reverb);
+      ringOsc.start(now); ringOsc.stop(now + 1.5);
+      ringOsc.onended = () => { try { ringOsc.disconnect(); gRing.disconnect(); } catch(e) {} };
+    } catch(e) {}
+    // Each drop 0.8–3.5s apart (gentle, unhurried)
+    trackTimeout(playDrop, 800 + Math.random()*2700);
+  }
+  playDrop();
 }
 
 function buildOcean(ctx) {
-  const reverb = createReverb(ctx, 2.5); // long reverb = open beach space
-  const master = ctx.createGain(); master.gain.value = 0.72;
+  // Beach waves: approach + crash + sand hiss recession
+  const reverb = createReverb(ctx, 2.2); // open beach reverb
+  const master = ctx.createGain(); master.gain.value = 0.78;
   master.connect(ctx.destination); reverb.connect(master);
   bgNodes.push(master);
 
-  // Constant low rumble (always present — the "presence" of ocean)
-  const brownRumble = createBrownNoise(ctx);
-  const fRumble = ctx.createBiquadFilter(); fRumble.type='lowpass'; fRumble.frequency.value=150;
-  const gRumble = ctx.createGain(); gRumble.gain.value=.22;
-  brownRumble.connect(fRumble); fRumble.connect(gRumble); gRumble.connect(master);
-  bgNodes.push(fRumble,gRumble);
+  // Constant deep ocean presence (distant rumble, always there)
+  const brownBase = createBrownNoise(ctx);
+  const fBase = ctx.createBiquadFilter(); fBase.type='lowpass'; fBase.frequency.value=100;
+  const gBase = ctx.createGain(); gBase.gain.value=0.18;
+  brownBase.connect(fBase); fBase.connect(gBase); gBase.connect(master);
+  bgNodes.push(fBase, gBase);
 
-  // Permanent high-frequency foam layer (pink → 1000–4000 Hz)
-  const pinkFoam = createPinkNoise(ctx);
-  const hpfFoam = ctx.createBiquadFilter(); hpfFoam.type='highpass'; hpfFoam.frequency.value=1000;
-  const lpfFoam = ctx.createBiquadFilter(); lpfFoam.type='lowpass';  lpfFoam.frequency.value=4000;
-  const gFoam = ctx.createGain(); gFoam.gain.value=.06;
-  pinkFoam.connect(hpfFoam); hpfFoam.connect(lpfFoam); lpfFoam.connect(gFoam); gFoam.connect(reverb);
-  bgNodes.push(hpfFoam,lpfFoam,gFoam);
-
-  // Two wave trains with offset start — each is brown noise + wave gain automation
+  // Two independent wave trains — offset for natural staggering
   function makeWaveTrain(startDelay) {
-    const brownWave = createBrownNoise(ctx);
-    const fWave = ctx.createBiquadFilter(); fWave.type='bandpass'; fWave.frequency.value=300; fWave.Q.value=0.85;
-    const gWave = ctx.createGain(); gWave.gain.value=0.001;
-    brownWave.connect(fWave); fWave.connect(gWave); gWave.connect(reverb);
-    bgNodes.push(fWave, gWave);
+    const brownWave = createBrownNoise(ctx); // wave body (low-mid rumble)
+    const pinkSurf  = createPinkNoise(ctx);  // surf + sand hiss (high freq)
+
+    // Wave body: bandpass 200Hz — the approaching swell
+    const fBody = ctx.createBiquadFilter(); fBody.type='bandpass'; fBody.frequency.value=200; fBody.Q.value=0.6;
+    const gBody = ctx.createGain(); gBody.gain.value=0.001;
+    brownWave.connect(fBody); fBody.connect(gBody); gBody.connect(reverb);
+    bgNodes.push(fBody, gBody);
+
+    // Surf/sand: high-pass 2000Hz — foam + sand hiss as wave recedes
+    const fSurf = ctx.createBiquadFilter(); fSurf.type='highpass'; fSurf.frequency.value=2000;
+    const gSurf = ctx.createGain(); gSurf.gain.value=0.001;
+    pinkSurf.connect(fSurf); fSurf.connect(gSurf); gSurf.connect(reverb);
+    bgNodes.push(fSurf, gSurf);
 
     function triggerWave() {
       if (bgStopFlag) return;
-      const now  = ctx.currentTime;
-      const build  = 5 + Math.random() * 7;   // 5–12 s slow build
-      const crash  = 1.5 + Math.random() * 2; // 1.5–3.5 s fast crash
-      const peak   = .45 + Math.random() * .3;
-      const period = build + crash + 1.5 + Math.random() * 3;
+      const now    = ctx.currentTime;
+      const build  = 3 + Math.random() * 4;     // 3–7s approach (beach waves, faster)
+      const crash  = 0.8 + Math.random() * 1.2; // 0.8–2s crash
+      const recede = 3 + Math.random() * 4;     // 3–7s recession (water draining through sand)
+      const gap    = 1 + Math.random() * 2;     // 1–3s quiet between waves
+      const period = build + crash + recede + gap;
+      const bodyPk = 0.55 + Math.random() * 0.25;
 
-      // Asymmetric wave envelope: exponential rise → exponential fall
-      gWave.gain.cancelScheduledValues(now);
-      gWave.gain.setValueAtTime(.001, now);
-      gWave.gain.exponentialRampToValueAtTime(peak, now + build);
-      gWave.gain.exponentialRampToValueAtTime(.001, now + build + crash);
+      // Wave body: slow exponential build → quick crash → gone
+      gBody.gain.cancelScheduledValues(now);
+      gBody.gain.setValueAtTime(0.001, now);
+      gBody.gain.exponentialRampToValueAtTime(bodyPk, now + build);
+      gBody.gain.exponentialRampToValueAtTime(0.001, now + build + crash);
 
-      // Filter sweeps during crash (300 → 500 → 200) = "break" character
-      fWave.frequency.setValueAtTime(300, now + build);
-      fWave.frequency.linearRampToValueAtTime(500, now + build + crash*.35);
-      fWave.frequency.linearRampToValueAtTime(200, now + build + crash);
+      // Surf/sand hiss: silent during approach, bursts at crash, fades slowly (sand draining)
+      gSurf.gain.cancelScheduledValues(now);
+      gSurf.gain.setValueAtTime(0.001, now);
+      gSurf.gain.setValueAtTime(0.001, now + build - 0.5); // stay quiet during approach
+      gSurf.gain.exponentialRampToValueAtTime(0.52, now + build + crash * 0.5);
+      gSurf.gain.exponentialRampToValueAtTime(0.14, now + build + crash + recede * 0.45);
+      gSurf.gain.exponentialRampToValueAtTime(0.001, now + build + crash + recede);
+
+      // Filter: wave approaching (150Hz) → crashes (550Hz) → recedes (100Hz)
+      fBody.frequency.cancelScheduledValues(now);
+      fBody.frequency.setValueAtTime(150, now);
+      fBody.frequency.linearRampToValueAtTime(400, now + build);
+      fBody.frequency.linearRampToValueAtTime(550, now + build + crash * 0.4);
+      fBody.frequency.linearRampToValueAtTime(100, now + build + crash + recede * 0.6);
 
       trackTimeout(triggerWave, period * 1000);
     }
     trackTimeout(triggerWave, startDelay);
   }
 
-  makeWaveTrain(200);
-  makeWaveTrain(5000 + Math.random() * 5000); // offset second wave train
+  makeWaveTrain(400);
+  makeWaveTrain(7000 + Math.random() * 5000); // offset second wave train
 }
 
 function buildWind(ctx) {
-  const reverb = createReverb(ctx, 2.0);
-  const master = ctx.createGain(); master.gain.value = 0.68;
+  // Forest wind: distinct gusts with silence between — very different from water
+  const reverb = createReverb(ctx, 2.8);
+  const master = ctx.createGain(); master.gain.value = 0.60;
   master.connect(ctx.destination); reverb.connect(master);
   bgNodes.push(master);
 
-  const pink = createPinkNoise(ctx);
+  // Each gust stream has its own nodes — no interference between streams
+  function makeGustStream(startDelay) {
+    const pinkL = createPinkNoise(ctx); // leaf layer (high freq)
+    const pinkB = createPinkNoise(ctx); // wind body (low freq)
 
-  // Main layer — leaf rustle (bandpass 1500 Hz) — wind through foliage
-  const fLeaf = ctx.createBiquadFilter(); fLeaf.type='bandpass'; fLeaf.frequency.value=1500; fLeaf.Q.value=1.5;
-  const gLeaf = ctx.createGain(); gLeaf.gain.value=.48;
-  pink.connect(fLeaf); fLeaf.connect(gLeaf);
-  bgNodes.push(fLeaf,gLeaf);
+    // Leaf rustle: HIGH-PASS 2500Hz — unmistakably different from any water sound
+    const fLeaf = ctx.createBiquadFilter(); fLeaf.type='highpass'; fLeaf.frequency.value=2500;
+    const lpLeaf = ctx.createBiquadFilter(); lpLeaf.type='lowpass'; lpLeaf.frequency.value=10000;
+    const gLeaf = ctx.createGain(); gLeaf.gain.value=0.001; // starts silent, gusts bring it in
+    pinkL.connect(fLeaf); fLeaf.connect(lpLeaf); lpLeaf.connect(gLeaf); gLeaf.connect(reverb);
+    bgNodes.push(fLeaf, lpLeaf, gLeaf);
 
-  // Anti-harshness LP — cut above 3500 Hz
-  const fAir = ctx.createBiquadFilter(); fAir.type='lowpass'; fAir.frequency.value=3500;
-  gLeaf.connect(fAir); fAir.connect(reverb); bgNodes.push(fAir);
+    // Wind body: low-pass <420Hz — the deep "breath" of wind through canopy
+    const fBody = ctx.createBiquadFilter(); fBody.type='lowpass'; fBody.frequency.value=420;
+    const gBody = ctx.createGain(); gBody.gain.value=0.001;
+    pinkB.connect(fBody); fBody.connect(gBody); gBody.connect(master);
+    bgNodes.push(fBody, gBody);
 
-  // Noise LFO → spectral wander ±500 Hz at 0.2 Hz — wind shifts direction/tone
-  const lfoSpec = createNoiseLFO(ctx, .20);
-  const scSpec = ctx.createGain(); scSpec.gain.value=500;
-  lfoSpec.connect(scSpec); scSpec.connect(fLeaf.frequency); bgNodes.push(scSpec);
+    function triggerGust() {
+      if (bgStopFlag) return;
+      const now  = ctx.currentTime;
+      const rise = 1.5 + Math.random() * 3;    // 1.5–4.5s rise
+      const hold = 0.8 + Math.random() * 2.5;  // 0.8–3.3s sustain
+      const fall = 2.5 + Math.random() * 4;    // 2.5–6.5s die down
+      const peak = 0.32 + Math.random() * 0.40;
+      const gap  = 4 + Math.random() * 9;      // 4–13s silence between gusts
 
-  // Second layer — branch creak (BP 400 Hz, Q=3)
-  const fBranch = ctx.createBiquadFilter(); fBranch.type='bandpass'; fBranch.frequency.value=400; fBranch.Q.value=3;
-  const gBranch = ctx.createGain(); gBranch.gain.value=.14;
-  pink.connect(fBranch); fBranch.connect(gBranch); gBranch.connect(reverb);
-  bgNodes.push(fBranch,gBranch);
+      // Leaf rustle swells and falls with gust
+      gLeaf.gain.cancelScheduledValues(now);
+      gLeaf.gain.setValueAtTime(0.001, now);
+      gLeaf.gain.linearRampToValueAtTime(peak, now + rise);
+      gLeaf.gain.setValueAtTime(peak * (0.85 + Math.random()*0.15), now + rise + hold);
+      gLeaf.gain.exponentialRampToValueAtTime(0.001, now + rise + hold + fall);
 
-  // Noise LFO → gust amplitude (0.08 Hz, very slow) — natural gusting feel
-  const lfoGust = createNoiseLFO(ctx, .08);
-  const scGust = ctx.createGain(); scGust.gain.value=.38;
-  lfoGust.connect(scGust); scGust.connect(master.gain); bgNodes.push(scGust);
+      // Wind body: slightly delayed (inertia), slightly lower amplitude
+      gBody.gain.cancelScheduledValues(now);
+      gBody.gain.setValueAtTime(0.001, now);
+      gBody.gain.linearRampToValueAtTime(peak * 0.48, now + rise + 0.5);
+      gBody.gain.setValueAtTime(peak * 0.48, now + rise + hold);
+      gBody.gain.exponentialRampToValueAtTime(0.001, now + rise + hold + fall);
+
+      trackTimeout(triggerGust, (rise + hold + fall + gap) * 1000);
+    }
+    trackTimeout(triggerGust, startDelay);
+  }
+
+  // Two independent gust streams — natural layering without interference
+  makeGustStream(300);
+  makeGustStream((8 + Math.random() * 8) * 1000);
 }
 
 function buildRain(ctx) {
@@ -863,6 +919,57 @@ function buildBirds(ctx) {
   scheduleBirdBurst('thrush',  4500 + Math.random() * 4000);
 }
 
+function buildFire(ctx) {
+  // Campfire / fireplace: base rumble + flame flicker + crackle/pop events
+  const reverb = createReverb(ctx, 0.35); // short reverb — close, intimate
+  const master = ctx.createGain(); master.gain.value = 0.70;
+  master.connect(ctx.destination); reverb.connect(master);
+  bgNodes.push(master);
+
+  const brown = createBrownNoise(ctx);
+  const pink  = createPinkNoise(ctx);
+
+  // Deep fire base: brown → lowpass 500Hz — the low rumble of burning logs
+  const fBase = ctx.createBiquadFilter(); fBase.type='lowpass'; fBase.frequency.value=500;
+  const gBase = ctx.createGain(); gBase.gain.value=0.40;
+  brown.connect(fBase); fBase.connect(gBase); gBase.connect(master);
+  bgNodes.push(fBase, gBase);
+
+  // Mid flame: pink → bandpass 1200Hz — the "whoosh" of flame
+  const fMid = ctx.createBiquadFilter(); fMid.type='bandpass'; fMid.frequency.value=1200; fMid.Q.value=1.2;
+  const gMid = ctx.createGain(); gMid.gain.value=0.18;
+  pink.connect(fMid); fMid.connect(gMid); gMid.connect(master);
+  bgNodes.push(fMid, gMid);
+
+  // Flame flicker: noise LFO at ~1.5Hz — fire flickers faster than wind
+  const lfoFlick = createNoiseLFO(ctx, 1.5);
+  const scFlick = ctx.createGain(); scFlick.gain.value=0.13;
+  lfoFlick.connect(scFlick); scFlick.connect(master.gain); bgNodes.push(scFlick);
+
+  // Crackle/pop — สะเก็ดไฟ — Poisson stochastic events
+  function playCrackle() {
+    if (bgStopFlag) return;
+    try {
+      const isBig = Math.random() < 0.12; // 12% chance of bigger snap
+      const dur = isBig ? (0.03 + Math.random()*0.05) : (0.005 + Math.random()*0.012);
+      const len = Math.floor(dur * ctx.sampleRate);
+      const buf = ctx.createBuffer(1, len, ctx.sampleRate);
+      const d = buf.getChannelData(0);
+      const dec = isBig ? 1.8 : 3.5; // big snap decays slower
+      for (let i=0; i<len; i++) d[i] = (Math.random()*2-1) * Math.pow(1-i/len, dec);
+      const src = ctx.createBufferSource(); src.buffer = buf;
+      const hpf = ctx.createBiquadFilter(); hpf.type='highpass';
+      hpf.frequency.value = isBig ? 400 : 1200; // big snaps have more body
+      const g = ctx.createGain(); g.gain.value = isBig ? (0.55+Math.random()*0.40) : (0.28+Math.random()*0.32);
+      src.connect(hpf); hpf.connect(g); g.connect(reverb);
+      src.start();
+    } catch(e) {}
+    // Poisson timing: mean 5 crackles/sec — lively but not distracting
+    trackTimeout(playCrackle, -Math.log(Math.random()) * (1000/5));
+  }
+  playCrackle();
+}
+
 // ═══════════════════════════════════════════════════════════════════════════════
 // BG SOUND CONTROL
 // ═══════════════════════════════════════════════════════════════════════════════
@@ -890,6 +997,7 @@ function startBgSound(id) {
     else if (id === 'wind')   buildWind(ctx);
     else if (id === 'rain')   buildRain(ctx);
     else if (id === 'birds')  buildBirds(ctx);
+    else if (id === 'fire')   buildFire(ctx);
   } catch(e) {}
 }
 

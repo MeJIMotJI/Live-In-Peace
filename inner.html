@@ -237,6 +237,11 @@
   .body-pair-remove { cursor: pointer; color: var(--primary); font-size: 18px; line-height: 1; opacity: .65; }
   .body-pair-remove:hover { opacity: 1; }
   .chip.part-active { background: var(--primary-dark); border-color: var(--primary-dark); color: #fff; }
+  .thought-group-header { font-size: 12px; font-weight: 700; color: var(--text-muted); letter-spacing: .5px; text-transform: uppercase; margin: 14px 0 6px; }
+  .thought-group-header:first-child { margin-top: 0; }
+  .thought-box { border-radius: 12px; padding: 10px 12px 12px; margin-bottom: 8px; }
+  .thought-box-label { font-size: 13px; font-weight: 700; margin-bottom: 6px; }
+  .thought-box textarea { min-height: 60px; margin-bottom: 0; font-size: 15px; }
 
 
   /* Intensity slider */
@@ -559,10 +564,8 @@
         <div class="step-title">ความคิดที่ผุดขึ้นมา</div>
       </div>
       <div class="step-question">ตอนนั้น มีอะไรวิ่งผ่านหัวบ้าง?</div>
-      <div class="step-guide">ไม่ต้องกรองว่าสมเหตุสมผลไหม แค่ลองดักจับความคิดที่ผุดขึ้นมาในขณะนั้น</div>
-      <textarea id="input-thoughts" rows="5"
-        placeholder="เช่น ทำไมฉันถึงไม่เคยทำได้ทัน... หัวหน้าคงคิดว่าฉันไม่มีความสามารถ... ต้องทำให้เสร็จ ไม่อย่างนั้นจะมีปัญหาแน่..."
-        oninput="this.style.height='auto';this.style.height=this.scrollHeight+'px'"></textarea>
+      <div class="step-guide">พิมพ์ในกล่องที่ใกล้เคียง จะกรอกทุกกล่องหรือแค่บางอันก็ได้</div>
+      <div id="thought-boxes-wrap"></div>
       <div class="nav-row">
         <button class="btn btn-outline" onclick="prevStep(2)">← ย้อนกลับ</button>
         <button class="btn btn-primary" onclick="nextStep(2)">ถัดไป →</button>
@@ -722,10 +725,11 @@ let state = {
   visited: new Set([0]),
   data: {
     situation: '',
-    thoughts: '',
+    thoughtBoxes: {self:'', others:'', situation:'', rules:'', expectSelf:'', expectOthers:'', expectFromOthers:''},
     emotions: [],
     intensity: 5,
     emotionNote: '',
+    thoughtChips: [],
     bodyPairs: [],
     body: '',
     behavior: ''
@@ -763,7 +767,56 @@ const BODY_SENSATIONS = [
   'สั่น','ชา','เกร็ง','ปวด','ตึง','เย็น','ร้อน','แน่น','หนัก','เมื่อย','บวม','อ่อนแรง'
 ];
 
+const THOUGHT_SECTIONS = [
+  { key: 'self',             group: 'มุมมอง',        label: '👁 มุมมองต่อตัวเอง',                  color: '#5b3fa0', bg: '#f5f0ff', border: '#d4c5f9', placeholder: 'เช่น ฉันไม่เก่งพอ... ฉันเป็นภาระ... ฉันทำอะไรก็ผิด...' },
+  { key: 'others',           group: 'มุมมอง',        label: '👥 มุมมองต่อคนอื่น',                  color: '#2e5da8', bg: '#edf3fc', border: '#b8d3f8', placeholder: 'เช่น เขาไม่เข้าใจฉัน... เขาคิดไม่ดีกับฉัน... คนอื่นตัดสินฉัน...' },
+  { key: 'situation',        group: 'มุมมอง',        label: '🌐 มุมมองต่อสถานการณ์',               color: '#2d7a6a', bg: '#e8f7f4', border: '#cde8e2', placeholder: 'เช่น มันเลวร้ายมาก... ไม่มีทางออก... ทุกอย่างพัง...' },
+  { key: 'rules',            group: 'กฎที่ยึดถือ',   label: '📏 กฎที่ยึดถือในใจ',                  color: '#8a5c00', bg: '#fff8ed', border: '#f5d99a', placeholder: 'เช่น ต้องทำได้สมบูรณ์แบบ... ห้ามขอความช่วยเหลือ... ต้องไม่แสดงความอ่อนแอ...' },
+  { key: 'expectSelf',       group: 'ความคาดหวัง',   label: '🎯 ความคาดหวังต่อตัวเอง',             color: '#a0294a', bg: '#fff0f5', border: '#f9c5d8', placeholder: 'เช่น ฉันต้องทำได้ทุกอย่าง... ต้องเข้มแข็งเสมอ... ต้องดูแลทุกคนได้...' },
+  { key: 'expectOthers',     group: 'ความคาดหวัง',   label: '💭 ความคาดหวังต่อคนอื่น',             color: '#5b3fa0', bg: '#f5f0ff', border: '#d4c5f9', placeholder: 'เช่น เขาควรเข้าใจโดยไม่ต้องบอก... ควรให้ความสำคัญกับฉัน...' },
+  { key: 'expectFromOthers', group: 'ความคาดหวัง',   label: '🔍 ที่คิดว่าคนอื่นคาดหวังจากเรา',    color: '#276644', bg: '#f1f9f4', border: '#b8dfcc', placeholder: 'เช่น เขาคงอยากให้ฉันแข็งแกร่ง... คงผิดหวังถ้าฉันล้มเหลว...' },
+];
+
 let selectedBodyPart = null;
+
+// ─── Thought boxes ───────────────────────────────────────────────────────────
+function buildThoughtBoxes() {
+  const wrap = document.getElementById('thought-boxes-wrap');
+  wrap.innerHTML = '';
+  let lastGroup = null;
+  THOUGHT_SECTIONS.forEach(sec => {
+    if (sec.group !== lastGroup) {
+      const gh = document.createElement('div');
+      gh.className = 'thought-group-header';
+      gh.textContent = sec.group;
+      wrap.appendChild(gh);
+      lastGroup = sec.group;
+    }
+    const box = document.createElement('div');
+    box.className = 'thought-box';
+    box.style.cssText = 'background:' + sec.bg + ';border:1.5px solid ' + sec.border;
+
+    const lbl = document.createElement('div');
+    lbl.className = 'thought-box-label';
+    lbl.style.color = sec.color;
+    lbl.textContent = sec.label;
+    box.appendChild(lbl);
+
+    const ta = document.createElement('textarea');
+    ta.id = 'thought-' + sec.key;
+    ta.placeholder = sec.placeholder;
+    ta.value = state.data.thoughtBoxes[sec.key] || '';
+    ta.rows = 2;
+    ta.oninput = function() {
+      this.style.height = 'auto';
+      this.style.height = this.scrollHeight + 'px';
+      state.data.thoughtBoxes[sec.key] = this.value;
+    };
+    if (ta.value) { setTimeout(() => { ta.style.height = 'auto'; ta.style.height = ta.scrollHeight + 'px'; }, 0); }
+    box.appendChild(ta);
+    wrap.appendChild(box);
+  });
+}
 
 // ─── Emotion categories ───────────────────────────────────────────────────────
 function buildEmotionCategories() {
@@ -929,7 +982,7 @@ function saveData() {
   if (s === 1) {
     state.data.situation = document.getElementById('input-situation').value;
   } else if (s === 2) {
-    state.data.thoughts = document.getElementById('input-thoughts').value;
+    // thoughtBoxes saved live via oninput
   } else if (s === 3) {
     // emotions and body chips handled live via onclick
     state.data.intensity = parseInt(document.getElementById('intensity-slider').value);
@@ -949,8 +1002,7 @@ function loadData() {
     document.getElementById('input-situation').value = state.data.situation;
     autoResize('input-situation');
   } else if (s === 2) {
-    document.getElementById('input-thoughts').value = state.data.thoughts;
-    autoResize('input-thoughts');
+    buildThoughtBoxes();
   } else if (s === 3) {
     buildEmotionCategories();
     document.getElementById('intensity-slider').value = state.data.intensity;
@@ -982,7 +1034,18 @@ function renderSummary() {
   document.getElementById('summary-date').textContent = 'บันทึกเมื่อ ' + dateStr;
 
   setContent('sum-situation', d.situation);
-  setContent('sum-thoughts', d.thoughts);
+  // Thought boxes → combine non-empty into summary
+  const thoughtLines = THOUGHT_SECTIONS
+    .filter(s => d.thoughtBoxes && d.thoughtBoxes[s.key] && d.thoughtBoxes[s.key].trim())
+    .map(s => d.thoughtBoxes[s.key].trim());
+  const thoughtEl = document.getElementById('sum-thoughts');
+  if (thoughtLines.length > 0) {
+    thoughtEl.textContent = thoughtLines.join(' / ');
+    thoughtEl.classList.remove('empty');
+  } else {
+    thoughtEl.textContent = '—';
+    thoughtEl.classList.add('empty');
+  }
   setContent('sum-emotion-note', d.emotionNote);
   setContent('sum-body', d.body);
   setContent('sum-behavior', d.behavior);
@@ -1031,7 +1094,7 @@ function setContent(id, text) {
 function resetAll() {
   if (!confirm('ต้องการเริ่มใหม่ทั้งหมดใช่ไหม? ข้อมูลที่กรอกไว้จะหายไป')) return;
   state.data = {
-    situation: '', thoughts: '', emotions: [], intensity: 5,
+    situation: '', thoughtBoxes: {self:'', others:'', situation:'', rules:'', expectSelf:'', expectOthers:'', expectFromOthers:''}, emotions: [], intensity: 5,
     emotionNote: '', bodyPairs: [], body: '', behavior: ''
   };
   state.visited = new Set([0]);
@@ -1124,7 +1187,8 @@ function saveAsImage() {
   ctx.fillText('💭 ความคิด', col1X + pad, gridY + 20);
   ctx.fillStyle = '#1e3240';
   ctx.font = '13px "Leelawadee UI", Tahoma, sans-serif';
-  wrapText(ctx, d.thoughts || '—', col1X + pad, gridY + 40, colW - pad * 2, 17, 6);
+  const thoughtsText = THOUGHT_SECTIONS.filter(s => d.thoughtBoxes && d.thoughtBoxes[s.key] && d.thoughtBoxes[s.key].trim()).map(s => d.thoughtBoxes[s.key].trim()).join(' / ') || '—';
+  wrapText(ctx, thoughtsText, col1X + pad, gridY + 40, colW - pad * 2, 17, 6);
 
   // Top-right: ความรู้สึก
   roundRect(ctx, col2X, gridY, colW, row1H, boxR, '#e8f7f4', '#cde8e2');

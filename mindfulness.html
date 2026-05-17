@@ -215,7 +215,19 @@ input[type=range]::-moz-range-thumb {
 
 <main>
 
-  <div class="section-title">ระยะเวลา</div>
+  <div class="instructions">
+    <h3>🌿 แนวทางการฝึก</h3>
+    <div class="instr-lines">
+      <div class="instr-line">คุณสามารถอยู่ในท่าที่คุณสบายที่สุด ทุกท่าสามารถฝึกสติได้ อาจจะนั่ง นอน ยืน หรือเดินก็ได้</div>
+      <div class="instr-line">คุณสามารถหลับตาหรือลืมตาก็ได้ ไม่มีถูกหรือผิด</div>
+      <div class="instr-line">หลังจากนั้นให้คุณค่อยๆ สังเกตลมหายใจหรือร่างกายส่วนอื่นๆของคุณไปเรื่อยๆ ไม่ต้องพยายามปรับหรือบังคับมัน แค่สังเกตความเป็นไปของร่างกาย เมื่อสังเกตแล้วหากอยากจะปรับให้ค่อยๆลองปรับเพื่อความสมดุลโดยไม่ฝืนจนเกินไป</div>
+      <div class="instr-line">ถ้าความคิดเข้ามา ไม่ว่าจะเป็น คำพูด เสียงของความคิด ภาพต่างๆ ไม่เป็นไร มันเป็นเรื่องปกติมาก เพียงแค่คุณรับรู้ว่ามีความคิดเข้ามา และค่อยๆ พาใจกลับมาอยู่ที่ร่างกายในขณะนี้ได้ เพียงเท่านี้ก็ประสบความสำเร็จแล้ว</div>
+      <div class="instr-line">เสียงระฆัง มีไว้เพื่อเตือนให้กลับมาอยู่กับปัจจุบัน เป็นสัญญาณให้คุณสังเกตว่าตอนนี้คุณยังคงจดจ่อในปัจจุบัน หรือเผลอหลงไปกับกระแสความคิดจากอดีตหรืออนาคต หลังจากรู้ตัวแล้ว ขอเพียงคุณพาตัวเองกลับมาอยู่กับปัจจุบัน</div>
+      <div class="instr-line">การฝึกฝนบ่อยๆ จะช่วยให้คุณอยู่กับความสุขสงบในปัจจุบันได้บ่อยและนานมากยิ่งขึ้น โดยไม่มีความทุกข์ของอดีตและอนาคตเข้ามารบกวนความสงบในปัจจุบันขณะ</div>
+    </div>
+  </div>
+
+  <div class="section-title">ระยะเวลาฝึก</div>
   <div class="slider-card">
     <div class="slider-header">
       <div class="slider-value-wrap">
@@ -231,7 +243,7 @@ input[type=range]::-moz-range-thumb {
     </div>
   </div>
 
-  <div class="section-title">ระฆังช่วงเวลา</div>
+  <div class="section-title">ระฆังเตือนระหว่างฝึก</div>
   <div class="bell-section">
     <div class="bell-row">
       <div>
@@ -258,53 +270,13 @@ input[type=range]::-moz-range-thumb {
   <div class="section-title">เสียงระฆัง</div>
   <div class="bell-picker" id="bellPicker">
 
-    <div class="bell-opt selected" data-id="small" onclick="selectBell('small')">
+    <div class="bell-opt" data-id="crystal" onclick="selectBell('crystal')">
       <div class="bell-radio"><div class="bell-radio-dot"></div></div>
       <div class="bell-opt-info">
-        <div class="bell-opt-name">ระฆังทิเบตเล็ก</div>
-        <div class="bell-opt-desc">เสียงสูง · สั้น · สดใส</div>
+        <div class="bell-opt-name">คริสตัล</div>
+        <div class="bell-opt-desc">เสียงใสบริสุทธิ์ · ยาว · ผ่อนคลาย</div>
       </div>
-      <button class="bell-preview-btn" onclick="previewBell('small',event)"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>ลองฟัง</button>
-    </div>
-    <div class="bell-opt" data-id="large" onclick="selectBell('large')">
-      <div class="bell-radio"><div class="bell-radio-dot"></div></div>
-      <div class="bell-opt-info">
-        <div class="bell-opt-name">ระฆังทิเบตใหญ่</div>
-        <div class="bell-opt-desc">เสียงต่ำ · ลึก · สงบ</div>
-      </div>
-      <button class="bell-preview-btn" onclick="previewBell('large',event)"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>ลองฟัง</button>
-    </div>
-    <div class="bell-opt" data-id="thai" onclick="selectBell('thai')">
-      <div class="bell-radio"><div class="bell-radio-dot"></div></div>
-      <div class="bell-opt-info">
-        <div class="bell-opt-name">ระฆังวัดไทย</div>
-        <div class="bell-opt-desc">เสียงกลาง · กังวาน · โลหะ</div>
-      </div>
-      <button class="bell-preview-btn" onclick="previewBell('thai',event)"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>ลองฟัง</button>
-    </div>
-    <div class="bell-opt" data-id="mokugyo" onclick="selectBell('mokugyo')">
-      <div class="bell-radio"><div class="bell-radio-dot"></div></div>
-      <div class="bell-opt-info">
-        <div class="bell-opt-name">ไม้เคาะญี่ปุ่น</div>
-        <div class="bell-opt-desc">เสียงสั้น · กลวง · สไตล์วัดเซน</div>
-      </div>
-      <button class="bell-preview-btn" onclick="previewBell('mokugyo',event)"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>ลองฟัง</button>
-    </div>
-    <div class="bell-opt" data-id="tingsha" onclick="selectBell('tingsha')">
-      <div class="bell-radio"><div class="bell-radio-dot"></div></div>
-      <div class="bell-opt-info">
-        <div class="bell-opt-name">ทิงชา</div>
-        <div class="bell-opt-desc">ฉาบนิ้วทิเบต · เสียงสูงใส · กังวาน</div>
-      </div>
-      <button class="bell-preview-btn" onclick="previewBell('tingsha',event)"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>ลองฟัง</button>
-    </div>
-    <div class="bell-opt" data-id="wind" onclick="selectBell('wind')">
-      <div class="bell-radio"><div class="bell-radio-dot"></div></div>
-      <div class="bell-opt-info">
-        <div class="bell-opt-name">ระฆังลม</div>
-        <div class="bell-opt-desc">เสียงสูง · เบา · นุ่มนวล</div>
-      </div>
-      <button class="bell-preview-btn" onclick="previewBell('wind',event)"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>ลองฟัง</button>
+      <button class="bell-preview-btn" onclick="previewBell('crystal',event)"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>ลองฟัง</button>
     </div>
     <div class="bell-opt" data-id="bowl" onclick="selectBell('bowl')">
       <div class="bell-radio"><div class="bell-radio-dot"></div></div>
@@ -314,13 +286,37 @@ input[type=range]::-moz-range-thumb {
       </div>
       <button class="bell-preview-btn" onclick="previewBell('bowl',event)"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>ลองฟัง</button>
     </div>
-    <div class="bell-opt" data-id="crystal" onclick="selectBell('crystal')">
+    <div class="bell-opt" data-id="tingsha" onclick="selectBell('tingsha')">
       <div class="bell-radio"><div class="bell-radio-dot"></div></div>
       <div class="bell-opt-info">
-        <div class="bell-opt-name">คริสตัล</div>
-        <div class="bell-opt-desc">เสียงใสบริสุทธิ์ · ยาว · ผ่อนคลาย</div>
+        <div class="bell-opt-name">ทิงชา</div>
+        <div class="bell-opt-desc">ฉาบนิ้วทิเบต · เสียงสูงใส · กังวาน</div>
       </div>
-      <button class="bell-preview-btn" onclick="previewBell('crystal',event)"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>ลองฟัง</button>
+      <button class="bell-preview-btn" onclick="previewBell('tingsha',event)"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>ลองฟัง</button>
+    </div>
+    <div class="bell-opt" data-id="mokugyo" onclick="selectBell('mokugyo')">
+      <div class="bell-radio"><div class="bell-radio-dot"></div></div>
+      <div class="bell-opt-info">
+        <div class="bell-opt-name">ไม้เคาะญี่ปุ่น</div>
+        <div class="bell-opt-desc">เสียงสั้น · กลวง · สไตล์วัดเซน</div>
+      </div>
+      <button class="bell-preview-btn" onclick="previewBell('mokugyo',event)"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>ลองฟัง</button>
+    </div>
+    <div class="bell-opt" data-id="large" onclick="selectBell('large')">
+      <div class="bell-radio"><div class="bell-radio-dot"></div></div>
+      <div class="bell-opt-info">
+        <div class="bell-opt-name">ระฆังทิเบตใหญ่</div>
+        <div class="bell-opt-desc">เสียงต่ำ · ลึก · สงบ</div>
+      </div>
+      <button class="bell-preview-btn" onclick="previewBell('large',event)"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>ลองฟัง</button>
+    </div>
+    <div class="bell-opt selected" data-id="small" onclick="selectBell('small')">
+      <div class="bell-radio"><div class="bell-radio-dot"></div></div>
+      <div class="bell-opt-info">
+        <div class="bell-opt-name">ระฆังทิเบตเล็ก</div>
+        <div class="bell-opt-desc">เสียงสูง · สั้น · สดใส</div>
+      </div>
+      <button class="bell-preview-btn" onclick="previewBell('small',event)"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>ลองฟัง</button>
     </div>
     <div class="bell-opt" data-id="church" onclick="selectBell('church')">
       <div class="bell-radio"><div class="bell-radio-dot"></div></div>
@@ -329,6 +325,22 @@ input[type=range]::-moz-range-thumb {
         <div class="bell-opt-desc">เสียงต่ำลึก · ยาวนาน · กึกก้อง</div>
       </div>
       <button class="bell-preview-btn" onclick="previewBell('church',event)"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>ลองฟัง</button>
+    </div>
+    <div class="bell-opt" data-id="wind" onclick="selectBell('wind')">
+      <div class="bell-radio"><div class="bell-radio-dot"></div></div>
+      <div class="bell-opt-info">
+        <div class="bell-opt-name">ระฆังลม</div>
+        <div class="bell-opt-desc">เสียงสูง · เบา · นุ่มนวล</div>
+      </div>
+      <button class="bell-preview-btn" onclick="previewBell('wind',event)"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>ลองฟัง</button>
+    </div>
+    <div class="bell-opt" data-id="thai" onclick="selectBell('thai')">
+      <div class="bell-radio"><div class="bell-radio-dot"></div></div>
+      <div class="bell-opt-info">
+        <div class="bell-opt-name">ระฆังวัดไทย</div>
+        <div class="bell-opt-desc">เสียงกลาง · กังวาน · โลหะ</div>
+      </div>
+      <button class="bell-preview-btn" onclick="previewBell('thai',event)"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>ลองฟัง</button>
     </div>
 
   </div>
@@ -416,16 +428,6 @@ input[type=range]::-moz-range-thumb {
     </button>
   </div>
 
-  <div class="instructions">
-    <h3>🌿 แนวทางการฝึก</h3>
-    <div class="instr-lines">
-      <div class="instr-line">อยู่ในท่าที่สบายที่สุด ไม่ว่าจะนั่ง นอน หรือเดิน ทุกท่าใช้ได้</div>
-      <div class="instr-line">หลับตาหรือลืมตาก็ได้ ไม่มีทางถูกหรือผิด</div>
-      <div class="instr-line">ค่อยๆ สังเกตลมหายใจไปเรื่อยๆ ไม่ต้องปรับ ไม่ต้องบังคับ แค่รู้สึก</div>
-      <div class="instr-line">ถ้าความคิดล่องลอยไป — เป็นเรื่องปกติมาก ค่อยๆ พาใจกลับมาได้เลย</div>
-      <div class="instr-line">เสียงระฆังเป็นเพื่อนเตือนให้กลับมาอยู่กับปัจจุบัน ไม่ใช่สัญญาณผิดพลาด</div>
-    </div>
-  </div>
 
 </main>
 

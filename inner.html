@@ -1,0 +1,1301 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ฝึกสังเกตโลกภายใน — Live In Peace</title>
+<style>
+  :root {
+    --primary: #3a9b8a;
+    --primary-dark: #2d7a6a;
+    --primary-light: #e8f7f4;
+    --blue: #5b8fd9;
+    --blue-light: #dbeffe;
+    --bg: #f5fbf9;
+    --surface: #ffffff;
+    --text: #1e3240;
+    --text-muted: #6b849a;
+    --border: #cde8e2;
+    --radius: 16px;
+    --radius-sm: 8px;
+    --shadow: 0 2px 16px rgba(58,155,138,0.10);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Leelawadee UI', 'Leelawadee', Tahoma, Arial, sans-serif;
+    font-size: 17px;
+    line-height: 1.85;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* Back nav */
+  .back-nav {
+    padding: 14px 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .back-nav a {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--primary-dark);
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: 600;
+    padding: 6px 12px;
+    border-radius: var(--radius-sm);
+    transition: background 0.2s;
+  }
+  .back-nav a:hover { background: var(--primary-light); }
+
+  /* Hero */
+  .hero {
+    text-align: center;
+    padding: 28px 20px 18px;
+  }
+  .hero-icon { font-size: 52px; line-height: 1; margin-bottom: 10px; display: block; }
+  .hero h1 {
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--primary-dark);
+    margin-bottom: 8px;
+  }
+  .hero p {
+    color: var(--text-muted);
+    font-size: 16px;
+    max-width: 480px;
+    margin: 0 auto;
+  }
+
+  /* Container */
+  .container {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 0 16px 60px;
+  }
+
+  /* Step indicator */
+  .step-indicator {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    padding: 20px 0 8px;
+  }
+  .step-dot {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    font-weight: 700;
+    border: 2px solid var(--border);
+    color: var(--text-muted);
+    background: var(--surface);
+    transition: all 0.25s;
+    cursor: default;
+    user-select: none;
+    flex-shrink: 0;
+  }
+  .step-dot.completed {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: #fff;
+    cursor: pointer;
+  }
+  .step-dot.current {
+    border-color: var(--primary);
+    color: var(--primary-dark);
+    background: var(--primary-light);
+    cursor: pointer;
+  }
+  .step-connector {
+    flex: 1;
+    height: 2px;
+    background: var(--border);
+    max-width: 40px;
+    transition: background 0.25s;
+  }
+  .step-connector.filled { background: var(--primary); }
+
+  /* Card */
+  .card {
+    background: var(--surface);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 28px 24px;
+    margin-bottom: 20px;
+    animation: fadeIn 0.3s ease;
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Disclaimer card */
+  .disclaimer-card {
+    background: var(--primary-light);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px 22px;
+    margin-bottom: 20px;
+    font-size: 15.5px;
+    color: var(--primary-dark);
+    line-height: 1.85;
+  }
+  .disclaimer-card strong { font-weight: 700; }
+
+  /* Step card header */
+  .step-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 18px;
+  }
+  .step-icon { font-size: 32px; line-height: 1; flex-shrink: 0; }
+  .step-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--primary-dark);
+    line-height: 1.3;
+  }
+
+  .step-question {
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+  .step-guide {
+    font-size: 15px;
+    font-style: italic;
+    color: var(--text-muted);
+    margin-bottom: 16px;
+    line-height: 1.7;
+  }
+
+  /* Textarea */
+  textarea {
+    width: 100%;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 12px 14px;
+    font-family: inherit;
+    font-size: 16px;
+    color: var(--text);
+    background: var(--bg);
+    resize: none;
+    outline: none;
+    transition: border-color 0.2s;
+    min-height: 80px;
+    overflow: hidden;
+  }
+  textarea:focus { border-color: var(--primary); background: #fff; }
+  textarea::placeholder { color: #b0c4bc; }
+
+  /* Chips */
+  .chips-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+  .chip {
+    padding: 6px 14px;
+    border-radius: 999px;
+    border: 1.5px solid var(--border);
+    font-size: 15px;
+    color: var(--text-muted);
+    cursor: pointer;
+    user-select: none;
+    transition: all 0.18s;
+    background: var(--surface);
+    line-height: 1.4;
+  }
+  .chip:hover { border-color: var(--primary); color: var(--primary-dark); }
+  .chip.selected {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: #fff;
+  }
+  .emotion-category { border-radius: 12px; padding: 10px 12px 14px; margin-bottom: 12px; }
+  .emotion-category-label { font-size: 13px; font-weight: 700; margin-bottom: 8px; opacity: .75; }
+  .body-part-row { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 8px; }
+  .body-sensation-panel { display: none; padding: 12px 14px; background: #f0faf7; border-radius: 12px; border: 1.5px solid var(--border); margin-bottom: 14px; }
+  .body-sensation-panel.visible { display: block; }
+  .body-sensation-prompt { font-size: 14px; color: var(--text-muted); margin-bottom: 10px; font-style: italic; }
+  .body-sensation-row { display: flex; flex-wrap: wrap; gap: 8px; }
+  .body-pairs-wrap { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; min-height: 4px; }
+  .body-pair-tag { display: inline-flex; align-items: center; background: var(--primary-light); color: var(--primary-dark); border-radius: 999px; padding: 5px 10px 5px 14px; font-size: 14px; font-weight: 600; border: 1.5px solid var(--border); gap: 6px; }
+  .body-pair-remove { cursor: pointer; color: var(--primary); font-size: 18px; line-height: 1; opacity: .65; }
+  .body-pair-remove:hover { opacity: 1; }
+  .chip.part-active { background: var(--primary-dark); border-color: var(--primary-dark); color: #fff; }
+
+
+  /* Intensity slider */
+  .intensity-label {
+    font-size: 15.5px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .intensity-badge {
+    background: var(--primary);
+    color: #fff;
+    border-radius: 999px;
+    min-width: 32px;
+    text-align: center;
+    padding: 2px 10px;
+    font-size: 15px;
+    font-weight: 700;
+  }
+  input[type=range] {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 6px;
+    border-radius: 3px;
+    background: var(--border);
+    outline: none;
+    margin-bottom: 6px;
+    cursor: pointer;
+  }
+  input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: var(--primary);
+    border: 3px solid #fff;
+    box-shadow: 0 1px 6px rgba(58,155,138,0.3);
+    cursor: pointer;
+  }
+  input[type=range]::-moz-range-thumb {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: var(--primary);
+    border: 3px solid #fff;
+    box-shadow: 0 1px 6px rgba(58,155,138,0.3);
+    cursor: pointer;
+  }
+  .slider-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-bottom: 18px;
+  }
+  .intensity-section { margin: 18px 0 4px; }
+
+  /* Buttons */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 12px 22px;
+    border-radius: var(--radius-sm);
+    font-family: inherit;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s;
+    text-decoration: none;
+    line-height: 1.3;
+  }
+  .btn-primary {
+    background: var(--primary);
+    color: #fff;
+  }
+  .btn-primary:hover { background: var(--primary-dark); }
+  .btn-outline {
+    background: transparent;
+    border: 2px solid var(--border);
+    color: var(--text-muted);
+  }
+  .btn-outline:hover { border-color: var(--primary); color: var(--primary-dark); }
+  .btn-blue {
+    background: var(--blue);
+    color: #fff;
+  }
+  .btn-blue:hover { background: #4a7dc7; }
+  .btn-ghost {
+    background: transparent;
+    color: var(--text-muted);
+    border: 2px solid var(--border);
+  }
+  .btn-ghost:hover { background: var(--primary-light); color: var(--primary-dark); border-color: var(--border); }
+
+  .nav-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-top: 24px;
+    flex-wrap: wrap;
+  }
+  .nav-row-single { justify-content: flex-end; }
+
+  /* Summary */
+  .summary-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--primary-dark);
+    text-align: center;
+    margin-bottom: 6px;
+  }
+  .summary-subtitle {
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 14.5px;
+    margin-bottom: 22px;
+  }
+
+  /* Cycle diagram */
+  .cycle-diagram {
+    margin-bottom: 20px;
+  }
+  .cycle-situation {
+    background: var(--blue-light);
+    border: 1.5px solid #b8d8f8;
+    border-radius: var(--radius-sm);
+    padding: 14px 16px;
+    margin-bottom: 10px;
+  }
+  .cycle-situation-label {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-weight: 700;
+    color: #3a6bbf;
+    font-size: 15px;
+    margin-bottom: 4px;
+  }
+  .cycle-arrow-down {
+    display: flex;
+    justify-content: center;
+    color: var(--text-muted);
+    font-size: 20px;
+    margin: 2px 0 4px;
+  }
+  .cycle-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  .cycle-box {
+    background: var(--primary-light);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 12px 14px;
+    position: relative;
+  }
+  .cycle-box-label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 700;
+    color: var(--primary-dark);
+    font-size: 14.5px;
+    margin-bottom: 5px;
+  }
+  .cycle-box-content {
+    font-size: 14px;
+    color: var(--text);
+    line-height: 1.6;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .cycle-box-content.empty {
+    color: var(--text-muted);
+    font-style: italic;
+  }
+  .cycle-arrows-area {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 4px 0;
+    font-size: 13px;
+    color: var(--text-muted);
+    gap: 4px;
+  }
+  .mini-chips { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 4px; }
+  .mini-chip {
+    background: var(--primary);
+    color: #fff;
+    border-radius: 999px;
+    padding: 2px 9px;
+    font-size: 12.5px;
+    line-height: 1.5;
+  }
+  .intensity-display {
+    font-size: 12.5px;
+    color: var(--text-muted);
+    margin-top: 3px;
+  }
+
+  /* Warmth message */
+  .warmth-card {
+    background: var(--primary-light);
+    border-left: 4px solid var(--primary);
+    border-radius: var(--radius-sm);
+    padding: 16px 18px;
+    margin-bottom: 14px;
+    font-size: 16px;
+    color: var(--primary-dark);
+    line-height: 1.8;
+  }
+  .closing-message {
+    text-align: center;
+    font-size: 16px;
+    color: var(--text-muted);
+    margin-bottom: 22px;
+    line-height: 1.8;
+  }
+
+  /* Summary buttons */
+  .summary-btns {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    margin-bottom: 10px;
+  }
+
+  /* Step display */
+  .step-page { display: none; }
+  .step-page.active { display: block; }
+
+  /* Mobile */
+  @media (max-width: 420px) {
+    .card { padding: 20px 16px; }
+    .hero h1 { font-size: 22px; }
+    .step-title { font-size: 18px; }
+    .btn { padding: 11px 16px; font-size: 15px; }
+    .cycle-grid { gap: 8px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="back-nav">
+  <a href="index.html">← กลับหน้าหลัก</a>
+</div>
+
+<div class="hero">
+  <span class="hero-icon">🔍</span>
+  <h1>ฝึกสังเกตโลกภายใน</h1>
+  <p>สังเกตความคิด ความรู้สึก และร่างกายของตัวเอง ทีละขั้นตอน</p>
+</div>
+
+<div class="container">
+
+  <!-- Step indicator (hidden on step 0) -->
+  <div id="step-indicator" class="step-indicator" style="display:none;">
+    <div class="step-dot" id="dot-1" onclick="dotClick(1)">1</div>
+    <div class="step-connector" id="conn-1"></div>
+    <div class="step-dot" id="dot-2" onclick="dotClick(2)">2</div>
+    <div class="step-connector" id="conn-2"></div>
+    <div class="step-dot" id="dot-3" onclick="dotClick(3)">3</div>
+    <div class="step-connector" id="conn-3"></div>
+    <div class="step-dot" id="dot-4" onclick="dotClick(4)">4</div>
+    <div class="step-connector" id="conn-4"></div>
+    <div class="step-dot" id="dot-5" onclick="dotClick(5)">5</div>
+  </div>
+
+  <!-- Step 0: Intro -->
+  <div id="step-0" class="step-page active">
+    <div class="disclaimer-card">
+      <strong>ก่อนเริ่ม:</strong> แบบฝึกนี้เหมาะสำหรับช่วงที่รู้สึกพอรับได้ ถ้ากำลังรู้สึกรุนแรงมาก ให้หยุดพักก่อน หรือโทรสายด่วนสุขภาพจิต <strong>1323</strong>
+    </div>
+    <div class="card" style="text-align:center; padding: 32px 24px;">
+      <p style="color:var(--text-muted); margin-bottom:24px; font-size:16px; line-height:1.9;">
+        การสังเกตตัวเองคือก้าวแรกของการดูแลสุขภาพจิต<br>
+        เราจะเดินผ่าน 5 ขั้นตอน ด้วยกัน ใช้เวลาประมาณ 10–15 นาที
+      </p>
+      <button class="btn btn-primary" style="font-size:17px; padding:14px 32px;" onclick="goToStep(1)">
+        เริ่มสังเกตตัวเอง →
+      </button>
+    </div>
+  </div>
+
+  <!-- Step 1: สถานการณ์ -->
+  <div id="step-1" class="step-page">
+    <div class="card">
+      <div class="step-header">
+        <span class="step-icon">📍</span>
+        <div class="step-title">สถานการณ์ที่เกิดขึ้น</div>
+      </div>
+      <div class="step-question">เกิดอะไรขึ้น? เมื่อไหร่ ที่ไหน?</div>
+      <div class="step-guide">ลองเล่าสั้นๆ ว่าเหตุการณ์อะไรทำให้รู้สึกแบบนี้ ไม่ต้องเล่าให้ครบทุกอย่าง</div>
+      <textarea id="input-situation" rows="5"
+        placeholder="เช่น วันนี้ตื่นมาแล้วเห็นข้อความจากหัวหน้า ให้ส่งรายงานเพิ่มภายในวันนี้ ทั้งที่ยังมีงานค้างอยู่อีกเยอะ..."
+        oninput="this.style.height='auto';this.style.height=this.scrollHeight+'px'"></textarea>
+      <div class="nav-row nav-row-single">
+        <button class="btn btn-primary" onclick="nextStep(1)">ถัดไป →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 2: ความคิด -->
+  <div id="step-2" class="step-page">
+    <div class="card">
+      <div class="step-header">
+        <span class="step-icon">💭</span>
+        <div class="step-title">ความคิดที่ผุดขึ้นมา</div>
+      </div>
+      <div class="step-question">ตอนนั้น มีอะไรวิ่งผ่านหัวบ้าง?</div>
+      <div class="step-guide">ไม่ต้องกรองว่าสมเหตุสมผลไหม แค่ลองดักจับความคิดที่ผุดขึ้นมาในขณะนั้น</div>
+      <textarea id="input-thoughts" rows="5"
+        placeholder="เช่น ทำไมฉันถึงไม่เคยทำได้ทัน... หัวหน้าคงคิดว่าฉันไม่มีความสามารถ... ต้องทำให้เสร็จ ไม่อย่างนั้นจะมีปัญหาแน่..."
+        oninput="this.style.height='auto';this.style.height=this.scrollHeight+'px'"></textarea>
+      <div class="nav-row">
+        <button class="btn btn-outline" onclick="prevStep(2)">← ย้อนกลับ</button>
+        <button class="btn btn-primary" onclick="nextStep(2)">ถัดไป →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 3: ความรู้สึก -->
+  <div id="step-3" class="step-page">
+    <div class="card">
+      <div class="step-header">
+        <span class="step-icon">🫧</span>
+        <div class="step-title">ความรู้สึก</div>
+      </div>
+      <div class="step-question">รู้สึกอะไรบ้างตอนนั้น?</div>
+      <div class="step-guide">เลือกได้มากกว่าหนึ่งอย่าง ความรู้สึกหลายอย่างเกิดพร้อมกันได้</div>
+      <div id="emotion-categories-wrap"></div>
+      <div class="intensity-section">
+        <div class="intensity-label">
+          <span>ความรุนแรงโดยรวม</span>
+          <span class="intensity-badge" id="intensity-display">5</span>
+        </div>
+        <input type="range" id="intensity-slider" min="0" max="10" value="5"
+          oninput="document.getElementById('intensity-display').textContent=this.value">
+        <div class="slider-labels">
+          <span>พอทนได้</span>
+          <span>รุนแรงมาก</span>
+        </div>
+      </div>
+      <textarea id="input-emotion-note" rows="3"
+        placeholder="เพิ่มเติมได้ถ้าอยากอธิบาย เช่น รู้สึกโกรธตัวเองมากกว่าโกรธคนอื่น..."
+        oninput="this.style.height='auto';this.style.height=this.scrollHeight+'px'"></textarea>
+      <div class="nav-row">
+        <button class="btn btn-outline" onclick="prevStep(3)">← ย้อนกลับ</button>
+        <button class="btn btn-primary" onclick="nextStep(3)">ถัดไป →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 4: ร่างกาย -->
+  <div id="step-4" class="step-page">
+    <div class="card">
+      <div class="step-header">
+        <span class="step-icon">🫀</span>
+        <div class="step-title">สัญญาณจากร่างกาย</div>
+      </div>
+      <div class="step-question">ร่างกายรู้สึกอย่างไรบ้าง?</div>
+      <div class="step-guide">แตะส่วนของร่างกายก่อน แล้วเลือกว่ารู้สึกอย่างไรในส่วนนั้น</div>
+      <div class="body-part-row" id="body-part-chips"></div>
+      <div class="body-sensation-panel" id="body-sensation-panel">
+        <div class="body-sensation-prompt" id="body-sensation-prompt"></div>
+        <div class="body-sensation-row" id="body-sensation-chips"></div>
+      </div>
+      <div class="body-pairs-wrap" id="body-pairs-display"></div>
+      <textarea id="input-body" rows="3"
+        placeholder="เพิ่มเติมได้ถ้าอยากอธิบาย เช่น รู้สึกแปลกๆ ทั่วร่างกาย ไม่รู้จะเรียกว่าอะไร..."
+        oninput="this.style.height='auto';this.style.height=this.scrollHeight+'px'"></textarea>
+      <div class="nav-row">
+        <button class="btn btn-outline" onclick="prevStep(4)">← ย้อนกลับ</button>
+        <button class="btn btn-primary" onclick="nextStep(4)">ถัดไป →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 5: พฤติกรรม -->
+  <div id="step-5" class="step-page">
+    <div class="card">
+      <div class="step-header">
+        <span class="step-icon">🚶</span>
+        <div class="step-title">สิ่งที่ทำหรือไม่ได้ทำ</div>
+      </div>
+      <div class="step-question">หลังจากนั้น ทำอะไรบ้าง?</div>
+      <div class="step-guide">การหลีกเลี่ยงหรือไม่ทำอะไรเลยก็นับเหมือนกัน</div>
+      <textarea id="input-behavior" rows="5"
+        placeholder="เช่น รีบเปิดคอมทำรายงานทันทีโดยไม่ได้พัก ไม่ตอบไลน์ใคร โทรหาเพื่อนเพื่อระบาย แต่สุดท้ายนั่งดูซีรีส์แทนเพราะรู้สึกทำอะไรไม่ถูก..."
+        oninput="this.style.height='auto';this.style.height=this.scrollHeight+'px'"></textarea>
+      <div class="nav-row">
+        <button class="btn btn-outline" onclick="prevStep(5)">← ย้อนกลับ</button>
+        <button class="btn btn-primary" onclick="goToSummary()">ดูสรุป →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 6: Summary -->
+  <div id="step-6" class="step-page">
+    <div class="card">
+      <div class="summary-title">โลกภายในของฉัน</div>
+      <div class="summary-subtitle" id="summary-date"></div>
+
+      <!-- Cycle diagram -->
+      <div class="cycle-diagram">
+        <!-- Situation box -->
+        <div class="cycle-situation">
+          <div class="cycle-situation-label">📍 สถานการณ์</div>
+          <div class="cycle-box-content" id="sum-situation"></div>
+        </div>
+
+        <!-- Arrow down -->
+        <div class="cycle-arrow-down">↓</div>
+
+        <!-- 4 boxes with arrows -->
+        <div class="cycle-grid">
+          <div class="cycle-box" id="sum-box-thoughts">
+            <div class="cycle-box-label">💭 ความคิด</div>
+            <div class="cycle-box-content" id="sum-thoughts"></div>
+          </div>
+          <div class="cycle-box" id="sum-box-emotions">
+            <div class="cycle-box-label">🫧 ความรู้สึก</div>
+            <div id="sum-emotion-chips" class="mini-chips"></div>
+            <div class="intensity-display" id="sum-intensity"></div>
+            <div class="cycle-box-content" id="sum-emotion-note"></div>
+          </div>
+          <div class="cycle-box" id="sum-box-body">
+            <div class="cycle-box-label">🫀 ร่างกาย</div>
+            <div id="sum-body-chips" class="mini-chips" style=""></div>
+            <div class="cycle-box-content" id="sum-body"></div>
+          </div>
+          <div class="cycle-box" id="sum-box-behavior">
+            <div class="cycle-box-label">🚶 พฤติกรรม</div>
+            <div class="cycle-box-content" id="sum-behavior"></div>
+          </div>
+        </div>
+
+        <!-- Arrows row -->
+        <div class="cycle-arrows-area" style="margin-top:6px;">
+          <span style="font-size:11px; color:var(--text-muted);">↕ ความคิด — ความรู้สึก — ร่างกาย — พฤติกรรม ส่งผลกันและกัน ↕</span>
+        </div>
+      </div>
+
+      <!-- Warmth message -->
+      <div class="warmth-card">
+        ดูสิว่าแต่ละอย่างส่งผลกันอย่างไร — มันไม่ใช่ความผิดของใคร แค่เป็นวงจรที่ร่างกายและจิตใจทำงานร่วมกัน
+      </div>
+
+      <!-- Closing message -->
+      <div class="closing-message">
+        การสังเกตตัวเองแบบนี้ต้องอาศัยความกล้า ขอบคุณที่ดูแลตัวเองนะ 🙏
+      </div>
+
+      <!-- Buttons -->
+      <div class="summary-btns">
+        <button class="btn btn-blue" id="save-img-btn" onclick="saveAsImage()">
+          📷 บันทึกเป็นรูป
+        </button>
+        <button class="btn btn-ghost" onclick="goToStep(5)">← กลับแก้ไข</button>
+        <button class="btn btn-outline" onclick="resetAll()">🔄 เริ่มใหม่</button>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /container -->
+
+<script>
+// ─── State ───────────────────────────────────────────────────────────────────
+let state = {
+  step: 0,
+  visited: new Set([0]),
+  data: {
+    situation: '',
+    thoughts: '',
+    emotions: [],
+    intensity: 5,
+    emotionNote: '',
+    bodyPairs: [],
+    body: '',
+    behavior: ''
+  }
+};
+
+const EMOTION_CATEGORIES = [
+  {
+    label: '⚡ พลังงานสูง / ไม่สบายใจ',
+    bg: '#fff5f5', border: '#fcd5d5', color: '#c0392b',
+    emotions: ['วิตกกังวล','กลัว','โกรธ','หงุดหงิด','ฉุนเฉียว','ไม่พอใจ','แค้น','รังเกียจ','วุ่นวายใจ','ตื่นตระหนก','ระแวง']
+  },
+  {
+    label: '🌧 พลังงานต่ำ / ไม่สบายใจ',
+    bg: '#f3f4f9', border: '#c5cae9', color: '#4a5480',
+    emotions: ['เศร้า','เสียใจ','น้อยใจ','หดหู่','ท้อแท้','สิ้นหวัง','โดดเดี่ยว','เหงา','ผิดหวัง','รู้สึกผิด','อาย','เหนื่อย','หมดแรง','ว่างเปล่า','สับสน','อึดอัด']
+  },
+  {
+    label: '✨ พลังงานสูง / สบายใจ',
+    bg: '#fffde7', border: '#f9e07e', color: '#856a00',
+    emotions: ['ตื่นเต้น','มีความสุข','ภูมิใจ','กระฉับกระเฉง','สนุก']
+  },
+  {
+    label: '🌿 พลังงานต่ำ / สบายใจ',
+    bg: '#f1f9f4', border: '#b8dfcc', color: '#276644',
+    emotions: ['สงบ','ผ่อนคลาย','อบอุ่น','พึงพอใจ','ปลอดภัย']
+  }
+];
+
+const BODY_PARTS = [
+  'ศีรษะ/หน้าผาก','ใบหน้า','คอ','ไหล่','หน้าอก',
+  'ท้อง','แขน','มือ','ขา','เท้า','ทั่วร่างกาย'
+];
+const BODY_SENSATIONS = [
+  'สั่น','ชา','เกร็ง','ปวด','ตึง','เย็น','ร้อน','แน่น','หนัก','เมื่อย','บวม','อ่อนแรง'
+];
+
+let selectedBodyPart = null;
+
+// ─── Emotion categories ───────────────────────────────────────────────────────
+function buildEmotionCategories() {
+  const wrap = document.getElementById('emotion-categories-wrap');
+  wrap.innerHTML = '';
+  EMOTION_CATEGORIES.forEach(cat => {
+    const catDiv = document.createElement('div');
+    catDiv.className = 'emotion-category';
+    catDiv.style.cssText = 'background:' + cat.bg + ';border:1.5px solid ' + cat.border;
+
+    const label = document.createElement('div');
+    label.className = 'emotion-category-label';
+    label.style.color = cat.color;
+    label.textContent = cat.label;
+    catDiv.appendChild(label);
+
+    const chipsDiv = document.createElement('div');
+    chipsDiv.className = 'chips-wrap';
+    chipsDiv.style.marginBottom = '0';
+    cat.emotions.forEach(emotion => {
+      const chip = document.createElement('div');
+      chip.className = 'chip' + (state.data.emotions.includes(emotion) ? ' selected' : '');
+      chip.textContent = emotion;
+      chip.onclick = function() {
+        const idx = state.data.emotions.indexOf(emotion);
+        if (idx === -1) { state.data.emotions.push(emotion); chip.classList.add('selected'); }
+        else { state.data.emotions.splice(idx, 1); chip.classList.remove('selected'); }
+      };
+      chipsDiv.appendChild(chip);
+    });
+    catDiv.appendChild(chipsDiv);
+    wrap.appendChild(catDiv);
+  });
+}
+
+// ─── Body two-level picker ────────────────────────────────────────────────────
+function buildBodyPicker() {
+  const partRow = document.getElementById('body-part-chips');
+  partRow.innerHTML = '';
+  selectedBodyPart = null;
+  document.getElementById('body-sensation-panel').classList.remove('visible');
+
+  BODY_PARTS.forEach(part => {
+    const chip = document.createElement('div');
+    chip.className = 'chip';
+    chip.id = 'bpart-' + part;
+    chip.textContent = part;
+    chip.onclick = function() { selectBodyPart(part); };
+    partRow.appendChild(chip);
+  });
+  renderBodyPairs();
+}
+
+function selectBodyPart(part) {
+  selectedBodyPart = part;
+  BODY_PARTS.forEach(p => {
+    const el = document.getElementById('bpart-' + p);
+    if (el) el.className = 'chip' + (p === part ? ' part-active' : '');
+  });
+
+  const panel = document.getElementById('body-sensation-panel');
+  panel.classList.add('visible');
+  document.getElementById('body-sensation-prompt').textContent = part + ' — รู้สึกอย่างไร?';
+
+  const sensRow = document.getElementById('body-sensation-chips');
+  sensRow.innerHTML = '';
+  BODY_SENSATIONS.forEach(sensation => {
+    const chip = document.createElement('div');
+    const exists = state.data.bodyPairs.some(p => p.part === part && p.sensation === sensation);
+    chip.className = 'chip' + (exists ? ' selected' : '');
+    chip.textContent = sensation;
+    chip.onclick = function() { toggleBodyPair(part, sensation, chip); };
+    sensRow.appendChild(chip);
+  });
+}
+
+function toggleBodyPair(part, sensation, chip) {
+  const idx = state.data.bodyPairs.findIndex(p => p.part === part && p.sensation === sensation);
+  if (idx === -1) { state.data.bodyPairs.push({part, sensation}); chip.classList.add('selected'); }
+  else { state.data.bodyPairs.splice(idx, 1); chip.classList.remove('selected'); }
+  renderBodyPairs();
+}
+
+function removeBodyPair(idx) {
+  state.data.bodyPairs.splice(idx, 1);
+  if (selectedBodyPart) selectBodyPart(selectedBodyPart);
+  renderBodyPairs();
+}
+
+function renderBodyPairs() {
+  const wrap = document.getElementById('body-pairs-display');
+  wrap.innerHTML = '';
+  state.data.bodyPairs.forEach((pair, idx) => {
+    const tag = document.createElement('div');
+    tag.className = 'body-pair-tag';
+    tag.innerHTML = pair.part + ' · ' + pair.sensation +
+      '<span class="body-pair-remove" onclick="removeBodyPair(' + idx + ')">×</span>';
+    wrap.appendChild(tag);
+  });
+}
+
+// ─── Step navigation ──────────────────────────────────────────────────────────
+function goToStep(n) {
+  saveData();
+  const prev = state.step;
+  state.step = n;
+  state.visited.add(n);
+
+  // Hide all
+  document.querySelectorAll('.step-page').forEach(p => p.classList.remove('active'));
+  document.getElementById('step-' + n).classList.add('active');
+
+  // Show/hide indicator
+  const indicator = document.getElementById('step-indicator');
+  indicator.style.display = (n >= 1 && n <= 5) ? 'flex' : 'none';
+
+  updateIndicator();
+  loadData();
+
+  if (n === 6) renderSummary();
+  window.scrollTo({top: 0, behavior: 'smooth'});
+}
+
+function nextStep(current) {
+  saveData();
+  goToStep(current + 1);
+}
+
+function prevStep(current) {
+  saveData();
+  goToStep(current - 1);
+}
+
+function goToSummary() {
+  saveData();
+  goToStep(6);
+}
+
+function dotClick(n) {
+  if (state.visited.has(n)) goToStep(n);
+}
+
+function updateIndicator() {
+  for (let i = 1; i <= 5; i++) {
+    const dot = document.getElementById('dot-' + i);
+    dot.className = 'step-dot';
+    if (i < state.step && state.visited.has(i)) {
+      dot.classList.add('completed');
+    } else if (i === state.step) {
+      dot.classList.add('current');
+    }
+    // connector
+    if (i < 5) {
+      const conn = document.getElementById('conn-' + i);
+      conn.className = 'step-connector' + (state.visited.has(i + 1) || i < state.step ? ' filled' : '');
+    }
+  }
+}
+
+// ─── Save / Load data ─────────────────────────────────────────────────────────
+function saveData() {
+  const s = state.step;
+  if (s === 1) {
+    state.data.situation = document.getElementById('input-situation').value;
+  } else if (s === 2) {
+    state.data.thoughts = document.getElementById('input-thoughts').value;
+  } else if (s === 3) {
+    // emotions and body chips handled live via onclick
+    state.data.intensity = parseInt(document.getElementById('intensity-slider').value);
+    state.data.emotionNote = document.getElementById('input-emotion-note').value;
+  } else if (s === 4) {
+    state.data.body = document.getElementById('input-body').value;
+  } else if (s === 5) {
+    state.data.behavior = document.getElementById('input-behavior').value;
+  }
+  // persist draft
+  try { localStorage.setItem('lip_inner_draft', JSON.stringify({data: state.data, visited: [...state.visited]})); } catch(e) {}
+}
+
+function loadData() {
+  const s = state.step;
+  if (s === 1) {
+    document.getElementById('input-situation').value = state.data.situation;
+    autoResize('input-situation');
+  } else if (s === 2) {
+    document.getElementById('input-thoughts').value = state.data.thoughts;
+    autoResize('input-thoughts');
+  } else if (s === 3) {
+    buildEmotionCategories();
+    document.getElementById('intensity-slider').value = state.data.intensity;
+    document.getElementById('intensity-display').textContent = state.data.intensity;
+    document.getElementById('input-emotion-note').value = state.data.emotionNote;
+    autoResize('input-emotion-note');
+  } else if (s === 4) {
+    buildBodyPicker();
+    document.getElementById('input-body').value = state.data.body;
+    autoResize('input-body');
+  } else if (s === 5) {
+    document.getElementById('input-behavior').value = state.data.behavior;
+    autoResize('input-behavior');
+  }
+}
+
+function autoResize(id) {
+  const el = document.getElementById(id);
+  if (el) { el.style.height = 'auto'; el.style.height = el.scrollHeight + 'px'; }
+}
+
+// ─── Summary render ───────────────────────────────────────────────────────────
+function renderSummary() {
+  const d = state.data;
+
+  // Date
+  const now = new Date();
+  const dateStr = now.toLocaleDateString('th-TH', {year:'numeric',month:'long',day:'numeric'});
+  document.getElementById('summary-date').textContent = 'บันทึกเมื่อ ' + dateStr;
+
+  setContent('sum-situation', d.situation);
+  setContent('sum-thoughts', d.thoughts);
+  setContent('sum-emotion-note', d.emotionNote);
+  setContent('sum-body', d.body);
+  setContent('sum-behavior', d.behavior);
+
+  // Emotion chips
+  const chipWrap = document.getElementById('sum-emotion-chips');
+  chipWrap.innerHTML = '';
+  if (d.emotions.length > 0) {
+    d.emotions.forEach(e => {
+      const c = document.createElement('span');
+      c.className = 'mini-chip';
+      c.textContent = e;
+      chipWrap.appendChild(c);
+    });
+  }
+
+  // Intensity
+  const intEl = document.getElementById('sum-intensity');
+  intEl.textContent = 'ความรุนแรง: ' + d.intensity + '/10';
+
+  // Body pairs
+  const bodyChipWrap = document.getElementById('sum-body-chips');
+  bodyChipWrap.innerHTML = '';
+  if (d.bodyPairs && d.bodyPairs.length > 0) {
+    d.bodyPairs.forEach(pair => {
+      const c = document.createElement('span');
+      c.className = 'mini-chip';
+      c.textContent = pair.part + ' · ' + pair.sensation;
+      bodyChipWrap.appendChild(c);
+    });
+  }
+}
+
+function setContent(id, text) {
+  const el = document.getElementById(id);
+  if (text && text.trim()) {
+    el.textContent = text.trim();
+    el.classList.remove('empty');
+  } else {
+    el.textContent = '—';
+    el.classList.add('empty');
+  }
+}
+
+// ─── Reset ────────────────────────────────────────────────────────────────────
+function resetAll() {
+  if (!confirm('ต้องการเริ่มใหม่ทั้งหมดใช่ไหม? ข้อมูลที่กรอกไว้จะหายไป')) return;
+  state.data = {
+    situation: '', thoughts: '', emotions: [], intensity: 5,
+    emotionNote: '', bodyPairs: [], body: '', behavior: ''
+  };
+  state.visited = new Set([0]);
+  state.step = 0;
+  try { localStorage.removeItem('lip_inner_draft'); } catch(e) {}
+  goToStep(0);
+}
+
+// ─── Load draft on page load ──────────────────────────────────────────────────
+(function loadDraft() {
+  try {
+    const raw = localStorage.getItem('lip_inner_draft');
+    if (raw) {
+      const saved = JSON.parse(raw);
+      if (saved.data) state.data = Object.assign(state.data, saved.data);
+      if (saved.visited) state.visited = new Set(saved.visited);
+    }
+  } catch(e) {}
+})();
+
+// ─── Canvas image export ──────────────────────────────────────────────────────
+function saveAsImage() {
+  const btn = document.getElementById('save-img-btn');
+  const d = state.data;
+  const dpr = window.devicePixelRatio || 1;
+  const W = 900, H = 720;
+
+  const canvas = document.createElement('canvas');
+  canvas.width = W * dpr;
+  canvas.height = H * dpr;
+  const ctx = canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+
+  // Background
+  ctx.fillStyle = '#f5fbf9';
+  ctx.fillRect(0, 0, W, H);
+
+  // Title
+  ctx.fillStyle = '#2d7a6a';
+  ctx.font = 'bold 28px "Leelawadee UI", Tahoma, sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('โลกภายในของฉัน', W / 2, 46);
+
+  // Date
+  const now = new Date();
+  const dateStr = now.toLocaleDateString('th-TH', {year:'numeric',month:'long',day:'numeric'});
+  ctx.fillStyle = '#6b849a';
+  ctx.font = '14px "Leelawadee UI", Tahoma, sans-serif';
+  ctx.fillText('บันทึกเมื่อ ' + dateStr, W / 2, 68);
+
+  // Divider
+  ctx.strokeStyle = '#cde8e2';
+  ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(40, 78); ctx.lineTo(W - 40, 78); ctx.stroke();
+
+  const pad = 16;
+  const boxR = 10;
+
+  // ─── Situation box ─────────────────────────────────────────────────────
+  const sitX = 40, sitY = 88, sitW = W - 80, sitH = 72;
+  roundRect(ctx, sitX, sitY, sitW, sitH, boxR, '#dbeffe', '#b8d8f8');
+
+  ctx.fillStyle = '#3a6bbf';
+  ctx.font = 'bold 14px "Leelawadee UI", Tahoma, sans-serif';
+  ctx.textAlign = 'left';
+  ctx.fillText('📍 สถานการณ์', sitX + pad, sitY + 20);
+
+  ctx.fillStyle = '#1e3240';
+  ctx.font = '13px "Leelawadee UI", Tahoma, sans-serif';
+  wrapText(ctx, d.situation || '—', sitX + pad, sitY + 38, sitW - pad * 2, 18, 2);
+
+  // Arrow down
+  ctx.fillStyle = '#6b849a';
+  ctx.font = '20px sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('↓', W / 2, 175);
+
+  // ─── 4 boxes ─────────────────────────────────────────────────────────
+  const gridY = 183;
+  const col1X = 40, col2X = W / 2 + 8;
+  const colW = W / 2 - 48;
+  const row1H = 170, row2H = 170;
+  const gapY = 10;
+
+  // Top-left: ความคิด
+  roundRect(ctx, col1X, gridY, colW, row1H, boxR, '#e8f7f4', '#cde8e2');
+  ctx.fillStyle = '#2d7a6a';
+  ctx.font = 'bold 14px "Leelawadee UI", Tahoma, sans-serif';
+  ctx.textAlign = 'left';
+  ctx.fillText('💭 ความคิด', col1X + pad, gridY + 20);
+  ctx.fillStyle = '#1e3240';
+  ctx.font = '13px "Leelawadee UI", Tahoma, sans-serif';
+  wrapText(ctx, d.thoughts || '—', col1X + pad, gridY + 40, colW - pad * 2, 17, 6);
+
+  // Top-right: ความรู้สึก
+  roundRect(ctx, col2X, gridY, colW, row1H, boxR, '#e8f7f4', '#cde8e2');
+  ctx.fillStyle = '#2d7a6a';
+  ctx.font = 'bold 14px "Leelawadee UI", Tahoma, sans-serif';
+  ctx.textAlign = 'left';
+  ctx.fillText('🫧 ความรู้สึก', col2X + pad, gridY + 20);
+  ctx.fillStyle = '#1e3240';
+  ctx.font = '12.5px "Leelawadee UI", Tahoma, sans-serif';
+  const emotionText = d.emotions.length > 0 ? d.emotions.join(', ') : '—';
+  wrapText(ctx, emotionText, col2X + pad, gridY + 40, colW - pad * 2, 16, 4);
+  ctx.fillStyle = '#6b849a';
+  ctx.font = '12px "Leelawadee UI", Tahoma, sans-serif';
+  ctx.fillText('ความรุนแรง: ' + d.intensity + '/10', col2X + pad, gridY + 104);
+  if (d.emotionNote) {
+    ctx.fillStyle = '#1e3240';
+    ctx.font = '12px "Leelawadee UI", Tahoma, sans-serif';
+    wrapText(ctx, d.emotionNote, col2X + pad, gridY + 120, colW - pad * 2, 16, 2);
+  }
+
+  // Row 2 Y
+  const row2Y = gridY + row1H + gapY;
+
+  // Bottom-left: ร่างกาย
+  roundRect(ctx, col1X, row2Y, colW, row2H, boxR, '#e8f7f4', '#cde8e2');
+  ctx.fillStyle = '#2d7a6a';
+  ctx.font = 'bold 14px "Leelawadee UI", Tahoma, sans-serif';
+  ctx.textAlign = 'left';
+  ctx.fillText('🫀 ร่างกาย', col1X + pad, row2Y + 20);
+  ctx.fillStyle = '#1e3240';
+  ctx.font = '12.5px "Leelawadee UI", Tahoma, sans-serif';
+  const bodyPairText = d.bodyPairs && d.bodyPairs.length > 0 ? d.bodyPairs.map(p => p.part + '·' + p.sensation).join(', ') : '';
+  if (bodyPairText) {
+    wrapText(ctx, bodyPairText, col1X + pad, row2Y + 40, colW - pad * 2, 16, 3);
+  }
+  ctx.font = '13px "Leelawadee UI", Tahoma, sans-serif';
+  wrapText(ctx, d.body || '—', col1X + pad, row2Y + (bodyPairText ? 92 : 40), colW - pad * 2, 17, 4);
+
+  // Bottom-right: พฤติกรรม
+  roundRect(ctx, col2X, row2Y, colW, row2H, boxR, '#e8f7f4', '#cde8e2');
+  ctx.fillStyle = '#2d7a6a';
+  ctx.font = 'bold 14px "Leelawadee UI", Tahoma, sans-serif';
+  ctx.textAlign = 'left';
+  ctx.fillText('🚶 พฤติกรรม', col2X + pad, row2Y + 20);
+  ctx.fillStyle = '#1e3240';
+  ctx.font = '13px "Leelawadee UI", Tahoma, sans-serif';
+  wrapText(ctx, d.behavior || '—', col2X + pad, row2Y + 40, colW - pad * 2, 17, 6);
+
+  // ─── Arrows between 4 boxes ───────────────────────────────────────────
+  const centerX = W / 2;
+  const centerY = gridY + row1H + gapY / 2;
+
+  ctx.strokeStyle = '#3a9b8a';
+  ctx.lineWidth = 1.5;
+
+  // Vertical arrows between top and bottom rows
+  // Left column vertical
+  const lvTopY = gridY + row1H;
+  const lvBotY = row2Y;
+  const lvX = col1X + colW / 2;
+  drawArrow(ctx, lvX, lvTopY - 2, lvX, lvBotY + 2);
+  drawArrow(ctx, lvX, lvBotY + 2, lvX, lvTopY - 2);
+
+  // Right column vertical
+  const rvX = col2X + colW / 2;
+  drawArrow(ctx, rvX, lvTopY - 2, rvX, lvBotY + 2);
+  drawArrow(ctx, rvX, lvBotY + 2, rvX, lvTopY - 2);
+
+  // Horizontal arrows top row
+  const htY = gridY + row1H / 2;
+  drawArrow(ctx, col1X + colW + 2, htY, col2X - 2, htY);
+  drawArrow(ctx, col2X - 2, htY, col1X + colW + 2, htY);
+
+  // Horizontal arrows bottom row
+  const hbY = row2Y + row2H / 2;
+  drawArrow(ctx, col1X + colW + 2, hbY, col2X - 2, hbY);
+  drawArrow(ctx, col2X - 2, hbY, col1X + colW + 2, hbY);
+
+  // ─── Warmth message ───────────────────────────────────────────────────
+  const msgY = row2Y + row2H + 18;
+  ctx.fillStyle = '#6b849a';
+  ctx.font = 'italic 13.5px "Leelawadee UI", Tahoma, sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('มันไม่ใช่ความผิดของใคร แค่เป็นวงจรที่ร่างกายและจิตใจทำงานร่วมกัน', W / 2, msgY);
+  ctx.fillText('การสังเกตตัวเองแบบนี้ต้องอาศัยความกล้า ขอบคุณที่ดูแลตัวเองนะ 🙏', W / 2, msgY + 20);
+
+  // ─── Download ─────────────────────────────────────────────────────────
+  canvas.toBlob(function(blob) {
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    const dateTag = now.toISOString().slice(0, 10);
+    a.download = 'โลกภายใน_' + dateTag + '.png';
+    a.href = url;
+    a.click();
+    setTimeout(() => URL.revokeObjectURL(url), 5000);
+
+    // Button feedback
+    btn.textContent = 'บันทึกแล้ว ✓';
+    btn.style.background = '#2d7a6a';
+    setTimeout(() => {
+      btn.innerHTML = '📷 บันทึกเป็นรูป';
+      btn.style.background = '';
+    }, 2200);
+  }, 'image/png');
+}
+
+// ─── Canvas helpers ───────────────────────────────────────────────────────────
+function roundRect(ctx, x, y, w, h, r, fillColor, strokeColor) {
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.lineTo(x + w - r, y);
+  ctx.arcTo(x + w, y, x + w, y + r, r);
+  ctx.lineTo(x + w, y + h - r);
+  ctx.arcTo(x + w, y + h, x + w - r, y + h, r);
+  ctx.lineTo(x + r, y + h);
+  ctx.arcTo(x, y + h, x, y + h - r, r);
+  ctx.lineTo(x, y + r);
+  ctx.arcTo(x, y, x + r, y, r);
+  ctx.closePath();
+  if (fillColor) { ctx.fillStyle = fillColor; ctx.fill(); }
+  if (strokeColor) { ctx.strokeStyle = strokeColor; ctx.lineWidth = 1.5; ctx.stroke(); }
+}
+
+function wrapText(ctx, text, x, y, maxW, lineH, maxLines) {
+  if (!text) return;
+  const words = text.split('');
+  // For Thai text, wrap by character width
+  let line = '';
+  let lineCount = 0;
+  let cy = y;
+  // Split by words if possible (spaces)
+  const tokens = text.split(' ');
+  line = '';
+  for (let i = 0; i < tokens.length; i++) {
+    const testLine = line + (line ? ' ' : '') + tokens[i];
+    const m = ctx.measureText(testLine);
+    if (m.width > maxW && line !== '') {
+      if (lineCount >= (maxLines || 99) - 1) {
+        // Truncate with ellipsis
+        ctx.fillText(line + '...', x, cy);
+        return;
+      }
+      ctx.fillText(line, x, cy);
+      line = tokens[i];
+      cy += lineH;
+      lineCount++;
+    } else {
+      line = testLine;
+    }
+  }
+  if (line) ctx.fillText(line, x, cy);
+}
+
+function drawArrow(ctx, x1, y1, x2, y2) {
+  const headLen = 6;
+  const angle = Math.atan2(y2 - y1, x2 - x1);
+  ctx.beginPath();
+  ctx.moveTo(x1, y1);
+  ctx.lineTo(x2, y2);
+  ctx.stroke();
+  // Arrowhead
+  ctx.beginPath();
+  ctx.moveTo(x2, y2);
+  ctx.lineTo(x2 - headLen * Math.cos(angle - Math.PI / 6), y2 - headLen * Math.sin(angle - Math.PI / 6));
+  ctx.moveTo(x2, y2);
+  ctx.lineTo(x2 - headLen * Math.cos(angle + Math.PI / 6), y2 - headLen * Math.sin(angle + Math.PI / 6));
+  ctx.stroke();
+}
+
+// ─── Init ─────────────────────────────────────────────────────────────────────
+goToStep(0);
+</script>
+</body>
+</html>

@@ -17,7 +17,7 @@ Interactive Thai-language website for psychiatric patient education and home pra
 Claude Code ทำหน้าที่เป็น **PM** และ coordinate agent ทุกตัว
 
 ### 1. 📋 PM (Project Manager) — บทบาท default ของ Claude Code
-- รับ task จาก user (พี่แดง)
+- รับ task จาก user
 - แบ่ง task และส่งให้ agent ที่เหมาะสม
 - นำผลลัพธ์มาเสนอที่ **approval gate** ทุกจุด
 - **ห้าม** ผ่าน gate โดยไม่ได้รับ approve

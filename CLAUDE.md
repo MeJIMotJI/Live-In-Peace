@@ -51,15 +51,20 @@ Live-In-Peace/
 ├── agents/
 │   ├── researcher.md         ← Researcher system prompt + trusted sources
 │   ├── builder.md            ← Builder design system + tech rules
-│   └── checker.md            ← Thai language rules
-├── orchestrator.py           ← Python CLI: รัน agent pipeline ผ่าน Anthropic API
+│   ├── checker.md            ← Thai language rules
+│   ├── base.py / builder.py / checker.py / researcher.py  ← Python CLI agents (ไม่ใช้ใน Claude Code)
+├── orchestrator.py           ← Python CLI: รัน agent pipeline ผ่าน Anthropic API (ไม่ใช้ใน Claude Code)
 ├── index.html                ← Landing page
-├── sleep.html
-├── panic.html
-├── mdd.html
-├── mindfulness.html
-├── relaxation.html
-└── grounding.html
+├── sleep.html                ← โรค: สุขอนามัยการนอนหลับ
+├── panic.html                ← โรค: แพนิก
+├── mdd.html                  ← โรค: ซึมเศร้า
+├── bipolar.html              ← โรค: อารมณ์ 2 ขั้ว
+├── schizophrenia.html        ← โรค: จิตเภท
+├── ocd.html                  ← โรค: ย้ำคิดย้ำทำ
+├── mindfulness.html          ← Exercise: ฝึกสติ (timer + bells + bg sounds)
+├── relaxation.html           ← Exercise: หายใจผ่อนคลาย
+├── grounding.html            ← Exercise: เทคนิค 5-4-3-2-1
+└── inner.html                ← Exercise: ฝึกสังเกตโลกภายใน (CBT 5-component journal)
 ```
 
 ---
@@ -184,24 +189,26 @@ line-height: 1.8–1.9;
 ### Disease Pages
 | ไฟล์ | สถานะ | หมายเหตุ |
 |------|--------|----------|
-| sleep.html | ✅ Draft v1 | 5 accordion sections |
-| panic.html | ✅ Draft v1 | 6 accordion sections |
-| mdd.html | ✅ Draft v1 | 6 accordion sections, crisis line 1323 |
+| sleep.html | ✅ v1 | 5 accordion sections |
+| panic.html | ✅ v1 | 6 accordion sections |
+| mdd.html | ✅ v1 | 6 accordion sections, crisis line 1323 |
+| bipolar.html | ✅ v1 | โรคอารมณ์ 2 ขั้ว |
+| schizophrenia.html | ✅ v1 | โรคจิตเภท |
+| ocd.html | ✅ v1 | โรคย้ำคิดย้ำทำ |
 
 ### Exercise Pages
 | ไฟล์ | สถานะ | หมายเหตุ |
 |------|--------|----------|
-| mindfulness.html | ✅ Draft v2 | timer + 5 bell sounds (Web Audio API) |
-| relaxation.html | ✅ Draft v1 | 4 breathing patterns + animation |
-| grounding.html | ✅ Draft v1 | 5-4-3-2-1 interactive steps |
+| mindfulness.html | ✅ v3 | timer + 9 bell sounds + 6 bg sounds (Web Audio API, FM synthesis) |
+| relaxation.html | ✅ v1 | 4 breathing patterns + animation |
+| grounding.html | ✅ v1 | 5-4-3-2-1 interactive steps |
+| inner.html | ✅ v1 | CBT 5-component self-observation journal; Satir Iceberg thought boxes; body two-level picker; canvas PNG export |
 
 ### Open Items
-- [ ] Design system redesign: เพิ่ม illustration/visual elements
-- [ ] User customization: font size, dark mode
 - [ ] Researcher review: ตรวจสอบความถูกต้องเนื้อหาทุกหน้า
-- [ ] Checker review: ตรวจภาษาไทยทุกหน้า
-- [ ] วางแผน disease pages เพิ่มเติม (GAD? OCD? PTSD?)
-- [ ] วางแผน exercise เพิ่มเติม
+- [ ] Checker review: ตรวจภาษาไทยทุกหน้า (ทำแล้วเฉพาะ inner.html)
+- [ ] Disease pages ที่ยังไม่มี: GAD, PTSD
+- [ ] User customization: font size, dark mode
 
 ---
 

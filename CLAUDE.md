@@ -64,7 +64,10 @@ Live-In-Peace/
 ├── mindfulness.html          ← Exercise: ฝึกสติ (timer + bells + bg sounds)
 ├── relaxation.html           ← Exercise: หายใจผ่อนคลาย
 ├── grounding.html            ← Exercise: เทคนิค 5-4-3-2-1
-└── inner.html                ← Exercise: ฝึกสังเกตโลกภายใน (CBT 5-component journal)
+├── inner.html                ← Exercise: ฝึกสังเกตโลกภายใน (CBT 5-component journal)
+├── values.html               ← Exercise: การ์ดคุณค่าในตัวฉัน (values card-sort, canvas PNG export)
+├── game.html                 ← Game: จับฟองลมหายใจ (breathing-rhythm mini-game, no fail state)
+└── balloon.html              ← Game: ลูกโป่งความกังวล (release-a-worry exercise, balloons float away)
 ```
 
 ---
@@ -203,6 +206,13 @@ line-height: 1.8–1.9;
 | relaxation.html | ✅ v1 | 4 breathing patterns + animation |
 | grounding.html | ✅ v1 | 5-4-3-2-1 interactive steps |
 | inner.html | ✅ v1 | CBT 5-component self-observation journal; Satir Iceberg thought boxes; body two-level picker; canvas PNG export |
+| values.html | ✅ v1 | การ์ดคุณค่าในตัวฉัน — values card-sort (8 หมวด × 12 คำ = 96 คำ), เลือกคำใส่ตะกร้า, ช่องเขียนสะท้อนสั้นๆ "วันนี้ฉัน...", การ์ดสรุปอยู่บนสุดของหน้า สี pill ตามหมวดคำ, export PNG (canvas), บันทึก draft ผ่าน localStorage |
+
+### Game Pages
+| ไฟล์ | สถานะ | หมายเหตุ |
+|------|--------|----------|
+| game.html | ✅ v1 | จับฟองลมหายใจ — bubble-catch mini-game synced to 3 breathing patterns, bonus score on inhale, no fail state; แยกหมวด "เล่นเกม" ใน index.html |
+| balloon.html | ✅ v1 | ลูกโป่งความกังวล (เดิมชื่อ "ใบไม้บนลำธาร" เปลี่ยน theme) — พิมพ์ความกังวลแล้วปล่อยเป็นลูกโป่งสีสุ่ม 8 สี ลอยขึ้นฟ้าพร้อมป้ายข้อความห้อยเชือก ไม่มีคะแนน/เป้าหมาย มี disclaimer สายด่วน 1323 |
 
 ### Open Items
 - [ ] Researcher review: ตรวจสอบความถูกต้องเนื้อหาทุกหน้า

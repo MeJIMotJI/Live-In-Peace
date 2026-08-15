@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>การ์ดคุณค่าในตัวฉัน — Live In Peace</title>
+<style>
+:root {
+  --bg: #f5fbf9;
+  --surface: #ffffff;
+  --primary: #3a9b8a;
+  --primary-dark: #2d7a6a;
+  --primary-light: #e8f7f4;
+  --blue: #5b8fd9;
+  --blue-light: #edf3fc;
+  --purple: #8b78c8;
+  --purple-dark: #6f5fb0;
+  --purple-light: #efebfb;
+  --text: #1e3240;
+  --text-muted: #6b849a;
+  --border: #cde8e2;
+  --radius: 16px;
+  --radius-sm: 10px;
+  --shadow: 0 2px 16px rgba(58,155,138,0.10);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Leelawadee UI', 'Leelawadee', Tahoma, 'Lucida Sans Unicode', Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 17px;
+  line-height: 1.8;
+  min-height: 100vh;
+}
+.topbar {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 14px 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+.back-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--purple-dark);
+  text-decoration: none;
+  font-size: 16px;
+  font-weight: 700;
+  padding: 6px 12px;
+  border-radius: 20px;
+  background: var(--purple-light);
+  transition: background 0.2s;
+}
+.back-btn:hover { background: #e1d9f5; }
+.topbar-title { font-size: 17px; font-weight: 700; }
+.hero {
+  background: linear-gradient(135deg, var(--purple-dark) 0%, var(--purple) 100%);
+  color: white;
+  padding: 32px 24px 40px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50px; right: -30px;
+  width: 160px; height: 160px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 50%;
+}
+.hero-icon { font-size: 48px; margin-bottom: 10px; }
+.hero h1 { font-size: 24px; font-weight: 700; margin-bottom: 6px; }
+.hero p { font-size: 15px; opacity: 0.92; max-width: 380px; margin: 0 auto; }
+main { max-width: 640px; margin: 0 auto; padding: 24px 20px 110px; }
+
+/* Intro */
+.info-box {
+  background: var(--purple-light);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  font-size: 14.5px;
+  color: #4a3f80;
+  margin-bottom: 24px;
+  line-height: 1.75;
+}
+
+/* Category */
+.value-category {
+  border-radius: 14px;
+  padding: 12px 14px 16px;
+  margin-bottom: 12px;
+}
+.value-category-label {
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+.chips-wrap { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip {
+  padding: 8px 15px;
+  border-radius: 999px;
+  border: 1.5px solid var(--border);
+  font-size: 14.5px;
+  color: var(--text-muted);
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.15s;
+  background: var(--surface);
+  line-height: 1.4;
+}
+.chip:hover { border-color: var(--purple); color: var(--purple-dark); }
+.chip.selected {
+  background: var(--purple);
+  border-color: var(--purple);
+  color: #fff;
+  font-weight: 600;
+}
+
+/* Sticky basket bar */
+.basket-bar {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  box-shadow: 0 -2px 16px rgba(0,0,0,0.08);
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  z-index: 20;
+}
+.basket-count { font-size: 15px; font-weight: 700; color: var(--text); }
+.basket-count span { color: var(--purple-dark); }
+.btn {
+  border: none;
+  border-radius: 50px;
+  padding: 12px 24px;
+  font-size: 15.5px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+.btn-primary { background: var(--purple); color: white; box-shadow: 0 4px 14px rgba(139,120,200,0.4); }
+.btn-primary:hover { background: var(--purple-dark); }
+.btn-primary:disabled { opacity: 0.4; cursor: not-allowed; box-shadow: none; }
+.btn-ghost { background: var(--purple-light); color: var(--purple-dark); }
+.btn-ghost:hover { background: #e1d9f5; }
+.btn-blue { background: var(--blue); color: white; }
+.btn-blue:hover { background: #4a7ec8; }
+
+/* Summary card */
+.summary-anchor { scroll-margin-top: 76px; }
+.summary-card {
+  background: var(--surface);
+  border-radius: 24px;
+  box-shadow: var(--shadow);
+  padding: 32px 24px;
+  text-align: center;
+  border: 1.5px solid var(--border);
+  margin-bottom: 28px;
+}
+.summary-card-icon { font-size: 44px; margin-bottom: 8px; }
+.summary-card h2 { font-size: 21px; font-weight: 700; color: var(--purple-dark); margin-bottom: 4px; }
+.summary-card-sub { font-size: 14.5px; color: var(--text-muted); margin-bottom: 18px; }
+.reflection-block { text-align: left; margin: 18px 0 20px; }
+.reflection-label { font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 8px; }
+.reflection-input {
+  width: 100%;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+  font-family: inherit;
+  font-size: 15px;
+  color: var(--text);
+  background: var(--bg);
+  resize: none;
+  outline: none;
+  transition: border-color 0.2s;
+  min-height: 64px;
+  overflow: hidden;
+  line-height: 1.7;
+}
+.reflection-input:focus { border-color: var(--purple); background: #fff; }
+.reflection-input::placeholder { color: #b8ade0; }
+.reflection-connector { font-size: 14px; color: var(--text-muted); font-style: italic; margin-top: 10px; text-align: center; }
+.summary-empty { color: var(--text-muted); font-size: 15px; padding: 12px 0; }
+.summary-pills {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+.summary-pill {
+  background: var(--purple-light);
+  color: var(--purple-dark);
+  border: 1.5px solid #d9cff0;
+  border-radius: 999px;
+  padding: 7px 16px;
+  font-size: 14.5px;
+  font-weight: 700;
+}
+.warmth-msg {
+  background: var(--purple-light);
+  border-left: 4px solid var(--purple);
+  border-radius: var(--radius-sm);
+  padding: 14px 16px;
+  font-size: 14.5px;
+  color: #4a3f80;
+  line-height: 1.8;
+  margin-bottom: 18px;
+  text-align: left;
+}
+.summary-btns {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a href="index.html" class="back-btn">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+    กลับ
+  </a>
+  <span class="topbar-title">การ์ดคุณค่าในตัวฉัน</span>
+</div>
+
+<div class="hero">
+  <div class="hero-icon">🌟</div>
+  <h1>การ์ดคุณค่าในตัวฉัน</h1>
+  <p>เลือกคำที่ใช่กับตัวคุณ แล้วรับการ์ดให้กำลังใจตัวเอง</p>
+</div>
+
+<main>
+  <div class="summary-anchor" id="summaryAnchor"></div>
+  <div class="summary-card">
+    <div class="summary-card-icon">🌟</div>
+    <h2>การ์ดของฉัน</h2>
+
+    <div class="reflection-block">
+      <div class="reflection-label">วันนี้ฉัน...</div>
+      <textarea id="reflectionInput" class="reflection-input" rows="2"
+        placeholder="เช่น ตั้งใจทำงานจนเสร็จทั้งที่เหนื่อยมาก, ช่วยเพื่อนที่กำลังเครียด, ให้อภัยตัวเองที่ทำพลาดวันนี้..."
+        oninput="onReflectionInput(this)"></textarea>
+      <div class="reflection-connector">แล้วฉันเลยพบคุณค่าในตัวฉัน — ฉันเป็นคนที่...</div>
+    </div>
+
+    <div id="summaryEmpty" class="summary-empty">ยังไม่ได้เลือกคำเลย — ลองแตะคำที่ใช่กับตัวคุณด้านล่างดูนะ</div>
+    <div id="summaryPills" class="summary-pills"></div>
+    <div id="warmthMsg" class="warmth-msg" style="display:none">
+      คำเหล่านี้คือส่วนหนึ่งของคุณจริงๆ แม้บางวันจะรู้สึกไม่เหมือนแบบนี้ ก็ไม่ได้แปลว่ามันไม่จริง ลองกลับมาดูการ์ดนี้อีกครั้งเมื่อรู้สึกไม่มั่นใจในตัวเอง 💜
+    </div>
+    <div class="summary-btns">
+      <button class="btn btn-blue" id="saveImgBtn" onclick="saveAsImage()" disabled>📷 บันทึกเป็นรูป</button>
+      <button class="btn btn-ghost" onclick="clearAll()">🔄 ล้างและเริ่มใหม่</button>
+    </div>
+  </div>
+
+  <div class="info-box">
+    💡 แตะคำที่รู้สึกว่า "ใช่ฉัน" ใส่ตะกร้าด้านล่าง เลือกได้เท่าที่อยากเลือก ไม่มีคำตอบผิดหรือถูก และแตะซ้ำเพื่อเอาออกได้ตลอดเวลา
+  </div>
+
+  <div id="categoriesWrap"></div>
+</main>
+
+<div class="basket-bar">
+  <div class="basket-count">เลือกไว้ <span id="basketCount">0</span> คำ</div>
+  <button class="btn btn-primary" id="viewCardBtn" onclick="scrollToSummary()" disabled>ดูการ์ดของฉัน ↑</button>
+</div>
+
+<script>
+const CATEGORIES = [
+  {
+    label: '💪 ความเข้มแข็งภายใน',
+    bg: '#fff5f0', border: '#f5c9a8', color: '#b5651d',
+    words: ['เข้มแข็ง','กล้าหาญ','อดทน','ยืดหยุ่น','ล้มแล้วลุกได้','ใจสู้','กล้าเผชิญปัญหา','ไม่ยอมแพ้ง่ายๆ','มั่นคง','กล้าที่จะรู้สึก','ฮึดสู้ได้เสมอ','ใจแข็งพอที่จะเริ่มใหม่']
+  },
+  {
+    label: '💗 ความรักและห่วงใย',
+    bg: '#fff0f5', border: '#f9c5d8', color: '#a0294a',
+    words: ['มีความรัก','ห่วงใยรอบข้าง','ใจดี','เอื้อเฟื้อ','เห็นอกเห็นใจ','อบอุ่น','เป็นที่พึ่งให้คนอื่นได้','ใจกว้าง','อ่อนโยน','รักแบบไม่มีเงื่อนไข','ปกป้องคนที่รัก','ใส่ใจคนรอบข้าง']
+  },
+  {
+    label: '🎯 ความมุ่งมั่นและวินัย',
+    bg: '#edf3fc', border: '#b8d3f8', color: '#2e5da8',
+    words: ['ตั้งใจ','ขยัน','มุ่งมั่น','เด็ดเดี่ยว','รับผิดชอบ','มีวินัย','จริงจังกับสิ่งที่ทำ','ไม่ทิ้งงานกลางคัน','ไม่ผัดวันประกันพรุ่ง','ทำตามเป้าหมายจนสำเร็จ','ตรงต่อเวลา','มีระเบียบ']
+  },
+  {
+    label: '🌱 การเติบโตและมุมมองบวก',
+    bg: '#e8f7f4', border: '#cde8e2', color: '#2d7a6a',
+    words: ['ใฝ่เรียนรู้','มองโลกในแง่ดี','กล้าเริ่มต้นใหม่','ให้อภัยตัวเองได้','มีความหวัง','เปิดใจรับสิ่งใหม่','ปรับตัวเก่ง','ไม่หยุดพัฒนาตัวเอง','เชื่อมั่นในตัวเอง','กล้าลองผิดลองถูก','มองเห็นโอกาสในวิกฤต','อยากเป็นคนที่ดีขึ้นทุกวัน']
+  },
+  {
+    label: '🎨 ความคิดสร้างสรรค์และความสนุก',
+    bg: '#fffde7', border: '#f9e07e', color: '#856a00',
+    words: ['สร้างสรรค์','ร่าเริง','มีอารมณ์ขัน','ชอบจินตนาการ','ชอบลองอะไรใหม่ๆ','มีไอเดียเยอะ','สนุกสนาน','มองมุมต่างได้','มีเสน่ห์เฉพาะตัว','รักอิสระทางความคิด','เล่าเรื่องสนุก','ทำให้คนรอบข้างยิ้มได้']
+  },
+  {
+    label: '🕊️ ความสงบและความสมดุล',
+    bg: '#f1f9f4', border: '#b8dfcc', color: '#276644',
+    words: ['ใจเย็น','สงบ','รู้จักพักผ่อน','ยอมรับตัวเองได้','ไม่กดดันตัวเองมาก','รู้จักปล่อยวาง','มีสติ','อยู่กับปัจจุบันได้','รู้จักพอ','ใช้ชีวิตเรียบง่าย','รู้เท่าทันอารมณ์ตัวเอง','ตั้งสติได้เมื่อเครียด']
+  },
+  {
+    label: '🤝 ความซื่อสัตย์และยุติธรรม',
+    bg: '#f5f0ff', border: '#d4c5f9', color: '#5b3fa0',
+    words: ['ซื่อตรง','ยุติธรรม','รักษาคำพูด','ตรงไปตรงมา','เคารพผู้อื่น','ไม่เอาเปรียบคนอื่น','กตัญญู','มีน้ำใจ','รักษาความลับได้','ไม่พูดลับหลัง','รับผิดเมื่อทำผิด','จริงใจ']
+  },
+  {
+    label: '👥 การเป็นเพื่อนและผู้นำที่ดี',
+    bg: '#eef7fb', border: '#b9e0f0', color: '#1f6e8c',
+    words: ['เป็นเพื่อนที่ดี','รับฟังคนอื่น','ให้กำลังใจคนรอบข้าง','พร้อมช่วยเหลือ','เป็นที่ปรึกษาได้','กล้าตัดสินใจ','นำทีมได้','เสียสละเพื่อส่วนรวม','อยู่เคียงข้างในวันที่แย่','ทำให้คนอื่นรู้สึกปลอดภัย','เป็นแรงบันดาลใจให้คนอื่น','พึ่งพาได้เสมอ']
+  }
+];
+
+const WORD_COLOR = {};
+CATEGORIES.forEach(cat => { cat.words.forEach(w => { WORD_COLOR[w] = cat; }); });
+
+let selected = [];
+let reflection = '';
+
+function onReflectionInput(el) {
+  reflection = el.value;
+  el.style.height = 'auto';
+  el.style.height = el.scrollHeight + 'px';
+  saveDraft();
+}
+
+function saveDraft() {
+  try { localStorage.setItem('lip_values_draft', JSON.stringify({ selected, reflection })); } catch (e) {}
+}
+
+function loadDraft() {
+  try {
+    const raw = localStorage.getItem('lip_values_draft');
+    if (!raw) return;
+    const saved = JSON.parse(raw);
+    if (Array.isArray(saved.selected)) selected = saved.selected;
+    if (typeof saved.reflection === 'string') reflection = saved.reflection;
+  } catch (e) {}
+}
+
+function buildCategories() {
+  const wrap = document.getElementById('categoriesWrap');
+  wrap.innerHTML = '';
+  CATEGORIES.forEach(cat => {
+    const catDiv = document.createElement('div');
+    catDiv.className = 'value-category';
+    catDiv.style.cssText = 'background:' + cat.bg + ';border:1.5px solid ' + cat.border;
+
+    const label = document.createElement('div');
+    label.className = 'value-category-label';
+    label.style.color = cat.color;
+    label.textContent = cat.label;
+    catDiv.appendChild(label);
+
+    const chipsDiv = document.createElement('div');
+    chipsDiv.className = 'chips-wrap';
+    cat.words.forEach(word => {
+      const chip = document.createElement('div');
+      chip.className = 'chip' + (selected.includes(word) ? ' selected' : '');
+      chip.textContent = word;
+      chip.onclick = function() { toggleWord(word, chip); };
+      chipsDiv.appendChild(chip);
+    });
+    catDiv.appendChild(chipsDiv);
+    wrap.appendChild(catDiv);
+  });
+}
+
+function toggleWord(word, chip) {
+  const idx = selected.indexOf(word);
+  if (idx === -1) {
+    selected.push(word);
+    chip.classList.add('selected');
+  } else {
+    selected.splice(idx, 1);
+    chip.classList.remove('selected');
+  }
+  updateBasket();
+  updateSummary();
+  saveDraft();
+}
+
+function updateBasket() {
+  document.getElementById('basketCount').textContent = selected.length;
+  document.getElementById('viewCardBtn').disabled = selected.length === 0;
+}
+
+function updateSummary() {
+  const pillsWrap = document.getElementById('summaryPills');
+  const emptyMsg = document.getElementById('summaryEmpty');
+  const warmth = document.getElementById('warmthMsg');
+  const saveBtn = document.getElementById('saveImgBtn');
+
+  pillsWrap.innerHTML = '';
+  if (selected.length === 0) {
+    emptyMsg.style.display = 'block';
+    warmth.style.display = 'none';
+    saveBtn.disabled = true;
+    return;
+  }
+  emptyMsg.style.display = 'none';
+  warmth.style.display = 'block';
+  saveBtn.disabled = false;
+  selected.forEach(word => {
+    const pill = document.createElement('span');
+    pill.className = 'summary-pill';
+    pill.textContent = word;
+    const cat = WORD_COLOR[word];
+    if (cat) {
+      pill.style.background = cat.bg;
+      pill.style.borderColor = cat.border;
+      pill.style.color = cat.color;
+    }
+    pillsWrap.appendChild(pill);
+  });
+}
+
+function scrollToSummary() {
+  document.getElementById('summaryAnchor').scrollIntoView({ behavior: 'smooth' });
+}
+
+function clearAll() {
+  if (selected.length > 0 && !confirm('ล้างคำที่เลือกไว้ทั้งหมดใช่ไหม?')) return;
+  selected = [];
+  reflection = '';
+  const input = document.getElementById('reflectionInput');
+  input.value = '';
+  input.style.height = 'auto';
+  buildCategories();
+  updateBasket();
+  updateSummary();
+  try { localStorage.removeItem('lip_values_draft'); } catch (e) {}
+}
+
+// ─── Canvas image export ──────────────────────────────────────────────────
+function saveAsImage() {
+  if (selected.length === 0) return;
+  const btn = document.getElementById('saveImgBtn');
+  const dpr = window.devicePixelRatio || 1;
+  const W = 720;
+  const padX = 48;
+  const maxW = W - padX * 2;
+  const pillFont = '15px "Leelawadee UI", Tahoma, sans-serif';
+
+  const measure = document.createElement('canvas').getContext('2d');
+  measure.font = pillFont;
+  const pillLines = wrapPills(measure, selected, maxW);
+
+  const reflectionText = reflection.trim();
+  const hasReflection = reflectionText.length > 0;
+  const reflBoxX = 34, reflBoxW = W - reflBoxX * 2;
+  let reflectionLines = [];
+  if (hasReflection) {
+    measure.font = '14px "Leelawadee UI", Tahoma, sans-serif';
+    reflectionLines = wrapByChar(measure, reflectionText, reflBoxW - 28);
+  }
+
+  // ─── Layout (top to bottom) ───
+  const dividerY = 66;
+  const contentStartY = 84;
+  const pillLineH = 46;
+
+  let reflBoxY = 0, reflBoxH = 0, connectorY = 0, subtitleY = 0, pillsTopY;
+  if (hasReflection) {
+    reflBoxY = contentStartY;
+    reflBoxH = 14 + 20 + reflectionLines.length * 20 + 14;
+    connectorY = reflBoxY + reflBoxH + 26;
+    pillsTopY = connectorY + 20;
+  } else {
+    subtitleY = contentStartY + 10;
+    pillsTopY = subtitleY + 26;
+  }
+
+  const pillsBottomY = pillsTopY + pillLines.length * pillLineH;
+  const msgTopY = pillsBottomY + 14;
+  const H = msgTopY + 20 * 2 + 40;
+
+  const canvas = document.createElement('canvas');
+  canvas.width = W * dpr;
+  canvas.height = H * dpr;
+  const ctx = canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+
+  ctx.fillStyle = '#f5fbf9';
+  ctx.fillRect(0, 0, W, H);
+
+  ctx.textAlign = 'center';
+  ctx.fillStyle = '#6f5fb0';
+  ctx.font = 'bold 26px "Leelawadee UI", Tahoma, sans-serif';
+  ctx.fillText('🌟 การ์ดคุณค่าในตัวฉัน', W / 2, 46);
+
+  ctx.strokeStyle = '#cde8e2';
+  ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(40, dividerY); ctx.lineTo(W - 40, dividerY); ctx.stroke();
+
+  if (hasReflection) {
+    roundRect(ctx, reflBoxX, reflBoxY, reflBoxW, reflBoxH, 12, '#efebfb', '#d9cff0');
+    ctx.textAlign = 'left';
+    ctx.fillStyle = '#6f5fb0';
+    ctx.font = 'bold 13px "Leelawadee UI", Tahoma, sans-serif';
+    ctx.fillText('วันนี้ฉัน...', padX, reflBoxY + 22);
+    ctx.fillStyle = '#4a3f80';
+    ctx.font = '14px "Leelawadee UI", Tahoma, sans-serif';
+    let ly = reflBoxY + 42;
+    reflectionLines.forEach(line => {
+      ctx.fillText(line, padX, ly);
+      ly += 20;
+    });
+
+    ctx.textAlign = 'center';
+    ctx.fillStyle = '#6b849a';
+    ctx.font = 'italic 13px "Leelawadee UI", Tahoma, sans-serif';
+    ctx.fillText('แล้วฉันเลยพบคุณค่าในตัวฉัน — ฉันเป็นคนที่...', W / 2, connectorY);
+  } else {
+    ctx.textAlign = 'center';
+    ctx.fillStyle = '#6b849a';
+    ctx.font = '15px "Leelawadee UI", Tahoma, sans-serif';
+    ctx.fillText('ฉันเป็นคนที่...', W / 2, subtitleY);
+  }
+
+  let py = pillsTopY;
+  pillLines.forEach(line => {
+    let x = (W - line.totalWidth) / 2;
+    line.pills.forEach(p => {
+      const cat = WORD_COLOR[p.text] || { bg: '#efebfb', border: '#d9cff0', color: '#6f5fb0' };
+      roundRect(ctx, x, py, p.width, 34, 17, cat.bg, cat.border);
+      ctx.fillStyle = cat.color;
+      ctx.textAlign = 'center';
+      ctx.font = 'bold ' + pillFont;
+      ctx.fillText(p.text, x + p.width / 2, py + 22);
+      x += p.width + 10;
+    });
+    py += pillLineH;
+  });
+
+  ctx.fillStyle = '#4a3f80';
+  ctx.font = 'italic 13.5px "Leelawadee UI", Tahoma, sans-serif';
+  ctx.textAlign = 'center';
+  wrapText(ctx, 'คำเหล่านี้คือส่วนหนึ่งของคุณจริงๆ แม้บางวันจะรู้สึกไม่เหมือนแบบนี้', W / 2, msgTopY, W - 80, 20, 2);
+  wrapText(ctx, 'ก็ไม่ได้แปลว่ามันไม่จริง กลับมาดูการ์ดนี้ได้ทุกเมื่อ 💜', W / 2, msgTopY + 20, W - 80, 20, 2);
+
+  const now = new Date();
+  const dateStr = now.toLocaleDateString('th-TH', { year: 'numeric', month: 'long', day: 'numeric' });
+  ctx.fillStyle = '#6b849a';
+  ctx.font = '12px "Leelawadee UI", Tahoma, sans-serif';
+  ctx.fillText('บันทึกเมื่อ ' + dateStr, W / 2, H - 20);
+
+  canvas.toBlob(function(blob) {
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    const dateTag = now.toISOString().slice(0, 10);
+    a.download = 'คุณค่าในตัวฉัน_' + dateTag + '.png';
+    a.href = url;
+    a.click();
+    setTimeout(() => URL.revokeObjectURL(url), 5000);
+
+    btn.textContent = 'บันทึกแล้ว ✓';
+    setTimeout(() => { btn.innerHTML = '📷 บันทึกเป็นรูป'; }, 2200);
+  }, 'image/png');
+}
+
+function wrapPills(ctx, words, maxWidth) {
+  const padX = 18, gap = 10;
+  const lines = [];
+  let current = { pills: [], totalWidth: 0 };
+  words.forEach(word => {
+    const w = ctx.measureText(word).width + padX * 2;
+    const addedWidth = current.pills.length > 0 ? w + gap : w;
+    if (current.totalWidth + addedWidth > maxWidth && current.pills.length > 0) {
+      lines.push(current);
+      current = { pills: [], totalWidth: 0 };
+    }
+    current.pills.push({ text: word, width: w });
+    current.totalWidth += current.pills.length > 1 ? w + gap : w;
+  });
+  if (current.pills.length > 0) lines.push(current);
+  return lines;
+}
+
+function wrapByChar(ctx, text, maxW) {
+  const lines = [];
+  let line = '';
+  for (const ch of text) {
+    const test = line + ch;
+    if (ctx.measureText(test).width > maxW && line) {
+      lines.push(line);
+      line = ch;
+    } else {
+      line = test;
+    }
+  }
+  if (line) lines.push(line);
+  return lines;
+}
+
+function roundRect(ctx, x, y, w, h, r, fillColor, strokeColor) {
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.lineTo(x + w - r, y);
+  ctx.arcTo(x + w, y, x + w, y + r, r);
+  ctx.lineTo(x + w, y + h - r);
+  ctx.arcTo(x + w, y + h, x + w - r, y + h, r);
+  ctx.lineTo(x + r, y + h);
+  ctx.arcTo(x, y + h, x, y + h - r, r);
+  ctx.lineTo(x, y + r);
+  ctx.arcTo(x, y, x + r, y, r);
+  ctx.closePath();
+  if (fillColor) { ctx.fillStyle = fillColor; ctx.fill(); }
+  if (strokeColor) { ctx.strokeStyle = strokeColor; ctx.lineWidth = 1.5; ctx.stroke(); }
+}
+
+function wrapText(ctx, text, x, y, maxW, lineH, maxLines) {
+  if (!text) return;
+  const tokens = text.split(' ');
+  let line = '';
+  let lineCount = 0;
+  let cy = y;
+  for (let i = 0; i < tokens.length; i++) {
+    const testLine = line + (line ? ' ' : '') + tokens[i];
+    const m = ctx.measureText(testLine);
+    if (m.width > maxW && line !== '') {
+      if (lineCount >= (maxLines || 99) - 1) {
+        ctx.fillText(line, x, cy);
+        return;
+      }
+      ctx.fillText(line, x, cy);
+      line = tokens[i];
+      cy += lineH;
+      lineCount++;
+    } else {
+      line = testLine;
+    }
+  }
+  if (line) ctx.fillText(line, x, cy);
+}
+
+// Init
+loadDraft();
+buildCategories();
+updateBasket();
+updateSummary();
+if (reflection) {
+  const input = document.getElementById('reflectionInput');
+  input.value = reflection;
+  input.style.height = 'auto';
+  input.style.height = input.scrollHeight + 'px';
+}
+</script>
+</body>
+</html>

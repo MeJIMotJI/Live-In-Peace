@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>จับฟองลมหายใจ — Live In Peace</title>
+<style>
+:root {
+  --bg: #f5fbf9;
+  --surface: #ffffff;
+  --primary: #3a9b8a;
+  --primary-dark: #2d7a6a;
+  --primary-light: #e8f7f4;
+  --blue: #5b8fd9;
+  --blue-dark: #3a6fbf;
+  --blue-light: #edf3fc;
+  --purple: #8b78c8;
+  --purple-dark: #6f5fb0;
+  --purple-light: #efebfb;
+  --text: #1e3240;
+  --text-muted: #6b849a;
+  --border: #cde8e2;
+  --radius: 16px;
+  --shadow: 0 2px 16px rgba(58,155,138,0.10);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Leelawadee UI', 'Leelawadee', Tahoma, 'Lucida Sans Unicode', Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 17px;
+  line-height: 1.8;
+  min-height: 100vh;
+}
+.topbar {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 14px 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+.back-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--purple-dark);
+  text-decoration: none;
+  font-size: 16px;
+  font-weight: 700;
+  padding: 6px 12px;
+  border-radius: 20px;
+  background: var(--purple-light);
+  transition: background 0.2s;
+}
+.back-btn:hover { background: #e1d9f5; }
+.topbar-title { font-size: 17px; font-weight: 700; }
+.hero {
+  background: linear-gradient(135deg, var(--purple-dark) 0%, var(--purple) 100%);
+  color: white;
+  padding: 32px 24px 40px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50px; right: -30px;
+  width: 160px; height: 160px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 50%;
+}
+.hero-icon { font-size: 48px; margin-bottom: 10px; }
+.hero h1 { font-size: 24px; font-weight: 700; margin-bottom: 6px; }
+.hero p { font-size: 15px; opacity: 0.92; max-width: 340px; margin: 0 auto; }
+main { max-width: 480px; margin: 0 auto; padding: 24px 20px 60px; }
+
+/* Pattern picker */
+.section-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-muted);
+  letter-spacing: 0.5px;
+  margin-bottom: 12px;
+}
+.pattern-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+.pat-btn {
+  background: var(--surface);
+  border: 2px solid var(--border);
+  border-radius: 14px;
+  padding: 12px 8px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.2s;
+  text-align: center;
+}
+.pat-btn:hover { border-color: var(--purple); }
+.pat-btn.active { background: var(--purple-light); border-color: var(--purple); }
+.pat-name { font-size: 14px; font-weight: 700; color: var(--text); }
+.pat-ratio { font-size: 12px; color: var(--purple-dark); font-weight: 600; margin-top: 4px; }
+.pat-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* Score bar */
+.score-bar {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+.score-box {
+  flex: 1;
+  background: var(--surface);
+  border-radius: 14px;
+  padding: 10px 8px;
+  box-shadow: var(--shadow);
+  text-align: center;
+  border: 1.5px solid var(--border);
+}
+.score-num { font-size: 24px; font-weight: 800; color: var(--primary-dark); }
+.score-num.combo-num { color: var(--purple-dark); }
+.score-label { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+
+/* Breathing guide (compact) */
+.breath-mini {
+  text-align: center;
+  margin-bottom: 14px;
+}
+.breath-phase-label {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--purple-dark);
+  min-height: 24px;
+  transition: opacity 0.3s;
+}
+.mini-circle-wrap {
+  width: 100px;
+  height: 100px;
+  margin: 8px auto 0;
+  position: relative;
+}
+.mini-circle {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 40% 35%, #d4c8f0, var(--purple));
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%) scale(0.85);
+}
+.mini-circle.inhale { animation: miniInhale var(--dur, 4s) ease-in forwards; }
+.mini-circle.exhale { animation: miniExhale var(--dur, 6s) ease-out forwards; }
+@keyframes miniInhale {
+  from { transform: translate(-50%, -50%) scale(0.7); }
+  to   { transform: translate(-50%, -50%) scale(1.15); }
+}
+@keyframes miniExhale {
+  from { transform: translate(-50%, -50%) scale(1.15); }
+  to   { transform: translate(-50%, -50%) scale(0.7); }
+}
+
+/* Game area */
+.game-area {
+  position: relative;
+  height: 360px;
+  border-radius: 24px;
+  overflow: hidden;
+  background: linear-gradient(180deg, var(--blue-light), #e8f7f4);
+  box-shadow: var(--shadow);
+  border: 1.5px solid var(--border);
+  margin-bottom: 20px;
+  transition: background 0.7s ease;
+}
+.game-area.phase-inhale { background: linear-gradient(180deg, #e3f7f0, #c9ecdf); }
+.game-area.phase-exhale { background: linear-gradient(180deg, var(--blue-light), #d7e6fa); }
+.game-area.idle::before {
+  content: 'แตะ "เริ่มเล่น" เพื่อเริ่มจับฟอง 🫧';
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 15px;
+  color: var(--text-muted);
+  text-align: center;
+  width: 80%;
+}
+.phase-pill {
+  position: absolute;
+  top: 12px; left: 50%;
+  transform: translateX(-50%);
+  background: rgba(255,255,255,0.85);
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-weight: 700;
+  font-size: 13px;
+  color: var(--text);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  opacity: 0;
+  transition: opacity 0.3s;
+  pointer-events: none;
+}
+.phase-pill.show { opacity: 1; }
+.bubble {
+  position: absolute;
+  bottom: -60px;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  border: none;
+  background: transparent;
+  font-size: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+  animation: floatUp var(--dur, 6s) linear forwards;
+  touch-action: manipulation;
+  filter: drop-shadow(0 2px 4px rgba(58,155,138,0.2));
+}
+.bubble:active { transform: scale(0.9); }
+@keyframes floatUp {
+  0%   { bottom: -60px; opacity: 0; }
+  8%   { opacity: 1; }
+  92%  { opacity: 1; }
+  100% { bottom: 105%; opacity: 0; }
+}
+.score-pop {
+  position: absolute;
+  font-weight: 800;
+  font-size: 18px;
+  color: var(--primary-dark);
+  pointer-events: none;
+  animation: popFade 0.8s ease-out forwards;
+  white-space: nowrap;
+}
+.score-pop.bonus { color: var(--purple-dark); }
+@keyframes popFade {
+  from { opacity: 1; transform: translate(-50%, 0) scale(1); }
+  to   { opacity: 0; transform: translate(-50%, -36px) scale(1.15); }
+}
+.toast {
+  position: absolute;
+  bottom: 14px; left: 50%;
+  transform: translateX(-50%);
+  background: rgba(45,122,106,0.92);
+  color: white;
+  padding: 8px 18px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 700;
+  animation: toastFade 1.8s ease forwards;
+  pointer-events: none;
+}
+@keyframes toastFade {
+  0% { opacity: 0; transform: translate(-50%, 6px); }
+  15% { opacity: 1; transform: translate(-50%, 0); }
+  80% { opacity: 1; }
+  100% { opacity: 0; transform: translate(-50%, -6px); }
+}
+
+/* Controls */
+.controls { display: flex; gap: 12px; justify-content: center; margin-bottom: 24px; }
+.btn {
+  border: none;
+  border-radius: 50px;
+  padding: 14px 32px;
+  font-size: 17px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.btn-primary { background: var(--purple); color: white; box-shadow: 0 4px 14px rgba(139,120,200,0.4); }
+.btn-primary:hover { background: var(--purple-dark); transform: translateY(-1px); }
+.btn-ghost { background: var(--purple-light); color: var(--purple-dark); }
+.btn-ghost:hover { background: #e1d9f5; }
+
+/* Summary */
+.summary {
+  display: none;
+  background: var(--surface);
+  border-radius: 24px;
+  box-shadow: var(--shadow);
+  padding: 40px 24px;
+  text-align: center;
+  border: 1.5px solid var(--border);
+  margin-bottom: 24px;
+}
+.summary-icon { font-size: 56px; margin-bottom: 12px; }
+.summary h2 { font-size: 22px; font-weight: 700; color: var(--purple-dark); margin-bottom: 10px; }
+.summary p { color: var(--text-muted); font-size: 15px; margin-bottom: 4px; }
+.summary-stats {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  margin: 18px 0 4px;
+}
+.summary-stat-num { font-size: 26px; font-weight: 800; color: var(--primary-dark); }
+.summary-stat-label { font-size: 12px; color: var(--text-muted); }
+
+/* Info */
+.info-box {
+  background: var(--purple-light);
+  border-radius: var(--radius);
+  padding: 18px 20px;
+  font-size: 14px;
+  color: #4a3f80;
+  margin-bottom: 24px;
+}
+.info-box h4 { font-size: 15px; margin-bottom: 8px; }
+.info-box ul { padding-left: 20px; }
+.info-box li { margin-bottom: 4px; }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a href="index.html" class="back-btn">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+    กลับ
+  </a>
+  <span class="topbar-title">จับฟองลมหายใจ</span>
+</div>
+
+<div class="hero">
+  <div class="hero-icon">🫧</div>
+  <h1>จับฟองลมหายใจ</h1>
+  <p>เกมเบาๆ ที่ให้คุณจับฟองไปพร้อมกับจังหวะหายใจ ไม่มีแพ้ ไม่มีกดดัน เล่นเพื่อผ่อนคลาย</p>
+</div>
+
+<main>
+  <div class="info-box">
+    <h4>🫧 วิธีเล่น</h4>
+    <ul>
+      <li>แตะฟองสบู่ที่ลอยขึ้นมา เพื่อเก็บคะแนน</li>
+      <li>ถ้าแตะตอนพื้นหลังเป็นสีเขียว (จังหวะหายใจเข้า) จะได้คะแนนพิเศษ x2</li>
+      <li>พลาดฟองไม่เป็นไร — ไม่มีการเสียคะแนน เล่นได้เรื่อยๆ ตามสบาย</li>
+      <li>ลองหายใจตามวงกลมไปด้วยขณะเล่น จะช่วยผ่อนคลายมากขึ้น</li>
+    </ul>
+  </div>
+
+  <div class="section-title">เลือกจังหวะหายใจ</div>
+  <div class="pattern-grid" id="patternGrid">
+    <button class="pat-btn active" data-pattern="calm" onclick="setPattern('calm')">
+      <div class="pat-name">ผ่อนคลาย</div>
+      <div class="pat-ratio">4–6</div>
+    </button>
+    <button class="pat-btn" data-pattern="box" onclick="setPattern('box')">
+      <div class="pat-name">จังหวะเท่ากัน</div>
+      <div class="pat-ratio">4–4</div>
+    </button>
+    <button class="pat-btn" data-pattern="slow" onclick="setPattern('slow')">
+      <div class="pat-name">ช้าลึก</div>
+      <div class="pat-ratio">5–7</div>
+    </button>
+  </div>
+
+  <div class="score-bar">
+    <div class="score-box">
+      <div class="score-num" id="scoreNum">0</div>
+      <div class="score-label">คะแนน</div>
+    </div>
+    <div class="score-box">
+      <div class="score-num combo-num" id="comboNum">0</div>
+      <div class="score-label">ต่อเนื่อง</div>
+    </div>
+    <div class="score-box">
+      <div class="score-num" id="caughtNum">0</div>
+      <div class="score-label">ฟองที่จับได้</div>
+    </div>
+  </div>
+
+  <div class="breath-mini">
+    <div class="breath-phase-label" id="phaseLabel">พร้อมเริ่ม</div>
+    <div class="mini-circle-wrap">
+      <div class="mini-circle" id="miniCircle"></div>
+    </div>
+  </div>
+
+  <div class="game-area idle" id="gameArea">
+    <div class="phase-pill" id="phasePill"></div>
+  </div>
+
+  <div class="summary" id="summaryBox">
+    <div class="summary-icon">✨</div>
+    <h2>เยี่ยมมาก!</h2>
+    <p>วันนี้คุณได้ฝึกหายใจไปพร้อมกับเล่นเกมแล้ว</p>
+    <p>สังเกตว่าตอนนี้รู้สึกผ่อนคลายขึ้นไหม?</p>
+    <div class="summary-stats">
+      <div>
+        <div class="summary-stat-num" id="sumCaught">0</div>
+        <div class="summary-stat-label">ฟองที่จับได้</div>
+      </div>
+      <div>
+        <div class="summary-stat-num" id="sumScore">0</div>
+        <div class="summary-stat-label">คะแนนรวม</div>
+      </div>
+      <div>
+        <div class="summary-stat-num" id="sumCombo">0</div>
+        <div class="summary-stat-label">ต่อเนื่องสูงสุด</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="controls">
+    <button class="btn btn-primary" id="playBtn" onclick="startGame()">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+      เริ่มเล่น
+    </button>
+    <button class="btn btn-ghost" id="stopBtn" onclick="finishGame()" style="display:none">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="3"/></svg>
+      จบเซสชัน
+    </button>
+  </div>
+</main>
+
+<script>
+const PATTERNS = {
+  calm: { name: 'ผ่อนคลาย', inhale: 4, exhale: 6 },
+  box:  { name: 'จังหวะเท่ากัน', inhale: 4, exhale: 4 },
+  slow: { name: 'ช้าลึก', inhale: 5, exhale: 7 }
+};
+
+let selectedPattern = 'calm';
+let playing = false;
+let phase = 'inhale';
+let breathTimer = null;
+let spawnTimer = null;
+let score = 0, combo = 0, bestCombo = 0, caught = 0;
+
+function setPattern(key) {
+  if (playing) return;
+  selectedPattern = key;
+  document.querySelectorAll('.pat-btn').forEach(b => b.classList.toggle('active', b.dataset.pattern === key));
+}
+
+function startGame() {
+  playing = true;
+  score = 0; combo = 0; bestCombo = 0; caught = 0;
+  updateScoreDisplay();
+  document.getElementById('summaryBox').style.display = 'none';
+  document.getElementById('gameArea').style.display = '';
+  document.getElementById('gameArea').classList.remove('idle');
+  document.getElementById('playBtn').style.display = 'none';
+  document.getElementById('stopBtn').style.display = '';
+  document.querySelectorAll('.pat-btn').forEach(b => b.disabled = true);
+
+  breathLoop();
+  spawnTimer = setInterval(spawnBubble, 900);
+}
+
+function finishGame() {
+  playing = false;
+  clearTimeout(breathTimer);
+  clearInterval(spawnTimer);
+  document.querySelectorAll('.bubble').forEach(b => b.remove());
+  document.getElementById('gameArea').classList.remove('phase-inhale', 'phase-exhale');
+  document.getElementById('gameArea').classList.add('idle');
+  document.getElementById('phasePill').classList.remove('show');
+  document.getElementById('phaseLabel').textContent = 'พร้อมเริ่ม';
+  document.getElementById('miniCircle').className = 'mini-circle';
+  document.getElementById('playBtn').style.display = '';
+  document.getElementById('playBtn').innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg> เล่นอีกครั้ง';
+  document.getElementById('stopBtn').style.display = 'none';
+  document.querySelectorAll('.pat-btn').forEach(b => b.disabled = false);
+
+  document.getElementById('sumCaught').textContent = caught;
+  document.getElementById('sumScore').textContent = score;
+  document.getElementById('sumCombo').textContent = bestCombo;
+  document.getElementById('summaryBox').style.display = 'block';
+}
+
+function breathLoop() {
+  if (!playing) return;
+  const pat = PATTERNS[selectedPattern];
+  const phases = [{ name: 'inhale', d: pat.inhale, label: '🫁 หายใจเข้า' }, { name: 'exhale', d: pat.exhale, label: '💨 หายใจออก' }];
+  let idx = 0;
+
+  function next() {
+    if (!playing) return;
+    const p = phases[idx % phases.length];
+    phase = p.name;
+
+    document.getElementById('phaseLabel').textContent = p.label;
+    const pill = document.getElementById('phasePill');
+    pill.textContent = p.label;
+    pill.classList.add('show');
+
+    const gameArea = document.getElementById('gameArea');
+    gameArea.classList.remove('phase-inhale', 'phase-exhale');
+    gameArea.classList.add('phase-' + p.name);
+
+    const circle = document.getElementById('miniCircle');
+    circle.className = 'mini-circle';
+    circle.style.setProperty('--dur', p.d + 's');
+    void circle.offsetWidth;
+    circle.classList.add(p.name);
+
+    idx++;
+    breathTimer = setTimeout(next, p.d * 1000);
+  }
+  next();
+}
+
+function spawnBubble() {
+  const gameArea = document.getElementById('gameArea');
+  if (gameArea.querySelectorAll('.bubble').length >= 6) return;
+
+  const bubble = document.createElement('button');
+  bubble.className = 'bubble';
+  bubble.setAttribute('aria-label', 'ฟองสบู่ แตะเพื่อเก็บคะแนน');
+  bubble.textContent = '🫧';
+  const left = 6 + Math.random() * 80;
+  const dur = 5 + Math.random() * 2.5;
+  bubble.style.left = left + '%';
+  bubble.style.setProperty('--dur', dur + 's');
+
+  bubble.addEventListener('click', () => catchBubble(bubble));
+  bubble.addEventListener('animationend', () => {
+    if (!bubble.dataset.caught) {
+      combo = 0;
+      updateScoreDisplay();
+    }
+    bubble.remove();
+  });
+
+  gameArea.appendChild(bubble);
+}
+
+function catchBubble(bubble) {
+  if (bubble.dataset.caught) return;
+  bubble.dataset.caught = '1';
+
+  const bonus = phase === 'inhale';
+  const points = bonus ? 20 : 10;
+  score += points;
+  combo++;
+  if (combo > bestCombo) bestCombo = combo;
+  caught++;
+  updateScoreDisplay();
+
+  const gameArea = document.getElementById('gameArea');
+  const rect = bubble.getBoundingClientRect();
+  const areaRect = gameArea.getBoundingClientRect();
+  const pop = document.createElement('div');
+  pop.className = 'score-pop' + (bonus ? ' bonus' : '');
+  pop.textContent = '+' + points + (bonus ? ' ตรงจังหวะ!' : '');
+  pop.style.left = (rect.left - areaRect.left + rect.width / 2) + 'px';
+  pop.style.top = (rect.top - areaRect.top) + 'px';
+  gameArea.appendChild(pop);
+  setTimeout(() => pop.remove(), 800);
+
+  if (combo > 0 && combo % 5 === 0) {
+    showToast('ทำได้ดีมาก! ต่อเนื่อง ' + combo + ' ครั้ง 🎉');
+  }
+
+  bubble.remove();
+}
+
+function showToast(text) {
+  const gameArea = document.getElementById('gameArea');
+  const toast = document.createElement('div');
+  toast.className = 'toast';
+  toast.textContent = text;
+  gameArea.appendChild(toast);
+  setTimeout(() => toast.remove(), 1800);
+}
+
+function updateScoreDisplay() {
+  document.getElementById('scoreNum').textContent = score;
+  document.getElementById('comboNum').textContent = combo;
+  document.getElementById('caughtNum').textContent = caught;
+}
+</script>
+</body>
+</html>

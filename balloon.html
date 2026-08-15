@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ลูกโป่งความกังวล — Live In Peace</title>
+<style>
+:root {
+  --bg: #f5fbf9;
+  --surface: #ffffff;
+  --primary: #3a9b8a;
+  --primary-dark: #2d7a6a;
+  --primary-light: #e8f7f4;
+  --blue: #5b8fd9;
+  --blue-dark: #3a6fbf;
+  --blue-light: #edf3fc;
+  --text: #1e3240;
+  --text-muted: #6b849a;
+  --border: #cde8e2;
+  --radius: 16px;
+  --radius-sm: 10px;
+  --shadow: 0 2px 16px rgba(58,155,138,0.10);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Leelawadee UI', 'Leelawadee', Tahoma, 'Lucida Sans Unicode', Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 17px;
+  line-height: 1.8;
+  min-height: 100vh;
+}
+.topbar {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 14px 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+.back-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--primary-dark);
+  text-decoration: none;
+  font-size: 16px;
+  font-weight: 700;
+  padding: 6px 12px;
+  border-radius: 20px;
+  background: var(--primary-light);
+  transition: background 0.2s;
+}
+.back-btn:hover { background: #d4f0ea; }
+.topbar-title { font-size: 17px; font-weight: 700; }
+.hero {
+  background: linear-gradient(135deg, var(--blue-dark) 0%, #7bb8ea 100%);
+  color: white;
+  padding: 32px 24px 40px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50px; right: -30px;
+  width: 160px; height: 160px;
+  background: rgba(255,255,255,0.10);
+  border-radius: 50%;
+}
+.hero-icon { font-size: 48px; margin-bottom: 10px; }
+.hero h1 { font-size: 24px; font-weight: 700; margin-bottom: 6px; }
+.hero p { font-size: 15px; opacity: 0.92; max-width: 360px; margin: 0 auto; }
+main { max-width: 560px; margin: 0 auto; padding: 24px 20px 60px; }
+
+/* Disclaimer */
+.disclaimer-card {
+  background: var(--primary-light);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 18px;
+  margin-bottom: 18px;
+  font-size: 14.5px;
+  color: var(--primary-dark);
+  line-height: 1.8;
+}
+
+/* Info box */
+.info-box {
+  background: var(--blue-light);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  font-size: 14.5px;
+  color: #2e5da8;
+  margin-bottom: 20px;
+  line-height: 1.8;
+}
+
+/* Sky area */
+.sky-area {
+  position: relative;
+  height: 420px;
+  border-radius: 24px;
+  overflow: hidden;
+  background: linear-gradient(180deg, #eaf5fc 0%, #cfe6f7 45%, #a9d4ef 100%);
+  box-shadow: var(--shadow);
+  border: 1.5px solid var(--border);
+  margin-bottom: 20px;
+}
+.sky-area::before, .sky-area::after {
+  content: '';
+  position: absolute;
+  background: radial-gradient(ellipse at center, rgba(255,255,255,0.9), rgba(255,255,255,0));
+  border-radius: 50%;
+  pointer-events: none;
+}
+.sky-area::before { width: 150px; height: 60px; top: 10%; left: 6%; }
+.sky-area::after { width: 120px; height: 50px; top: 20%; right: 10%; }
+
+.balloon {
+  position: absolute;
+  left: 50%;
+  bottom: -160px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  animation: floatUp var(--dur, 14s) ease-in forwards;
+}
+.balloon-shape {
+  width: 76px;
+  height: 92px;
+  border-radius: 50% 50% 48% 48% / 58% 58% 42% 42%;
+  box-shadow: inset -10px -12px 18px rgba(0,0,0,0.15), 0 4px 14px rgba(0,0,0,0.18);
+  flex-shrink: 0;
+}
+.balloon-string {
+  width: 1.5px;
+  height: 38px;
+  background: rgba(90,90,90,0.4);
+}
+.balloon-tag {
+  margin-top: 2px;
+  max-width: 170px;
+  background: rgba(255,255,255,0.96);
+  border: 1.5px solid rgba(0,0,0,0.06);
+  border-radius: 12px;
+  padding: 8px 12px;
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--text);
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  word-break: break-word;
+}
+@keyframes floatUp {
+  0%   { bottom: -160px; opacity: 0; transform: translateX(-50%) rotate(-2deg); }
+  8%   { opacity: 1; }
+  30%  { transform: translateX(-50%) translateX(16px) rotate(2deg); }
+  55%  { transform: translateX(-50%) translateX(-12px) rotate(-2deg); }
+  80%  { transform: translateX(-50%) translateX(10px) rotate(1deg); }
+  92%  { opacity: 1; }
+  100% { bottom: 112%; opacity: 0; transform: translateX(-50%) rotate(0deg); }
+}
+
+/* Input card */
+.input-card {
+  background: var(--surface);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 18px 20px;
+  border: 1.5px solid var(--border);
+  margin-bottom: 16px;
+}
+.input-label {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-muted);
+  margin-bottom: 10px;
+}
+textarea#thoughtInput {
+  width: 100%;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+  font-family: inherit;
+  font-size: 15px;
+  color: var(--text);
+  background: var(--bg);
+  resize: none;
+  outline: none;
+  transition: border-color 0.2s;
+  min-height: 60px;
+  overflow: hidden;
+  line-height: 1.7;
+  margin-bottom: 12px;
+}
+textarea#thoughtInput:focus { border-color: var(--blue); background: #fff; }
+textarea#thoughtInput::placeholder { color: #a8c0d9; }
+.btn {
+  border: none;
+  border-radius: 50px;
+  padding: 12px 24px;
+  font-size: 15.5px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  justify-content: center;
+  width: 100%;
+}
+.btn-primary { background: var(--blue); color: white; box-shadow: 0 4px 14px rgba(91,143,217,0.35); }
+.btn-primary:hover { background: var(--blue-dark); }
+.btn-primary:disabled { opacity: 0.4; cursor: not-allowed; box-shadow: none; }
+
+/* Counter */
+.counter-row {
+  text-align: center;
+  font-size: 14.5px;
+  color: var(--text-muted);
+  margin-bottom: 20px;
+}
+.counter-row span { color: var(--blue-dark); font-weight: 700; }
+
+/* Closing tip */
+.closing-tip {
+  text-align: center;
+  font-size: 14.5px;
+  color: var(--text-muted);
+  font-style: italic;
+  line-height: 1.8;
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a href="index.html" class="back-btn">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+    กลับ
+  </a>
+  <span class="topbar-title">ลูกโป่งความกังวล</span>
+</div>
+
+<div class="hero">
+  <div class="hero-icon">🎈</div>
+  <h1>ลูกโป่งความกังวล</h1>
+  <p>พิมพ์ความกังวล แล้วปล่อยให้ลอยจากไป เหมือนลูกโป่งลอยขึ้นฟ้า</p>
+</div>
+
+<main>
+  <div class="disclaimer-card">
+    <strong>ก่อนเริ่ม:</strong> ถ้าความคิดที่ผุดขึ้นมารุนแรงมาก หรือเกี่ยวกับการทำร้ายตัวเอง ให้หยุดพักและโทรสายด่วนสุขภาพจิต <strong>1323</strong> แบบฝึกนี้เหมาะสำหรับความกังวลทั่วไปในชีวิตประจำวัน
+  </div>
+
+  <div class="info-box">
+    🎈 พิมพ์ความคิดหรือความกังวลที่ผุดขึ้นมาลงในช่องด้านล่าง แล้วปล่อยมันขึ้นไปกับลูกโป่ง ไม่ต้องเถียงกับมัน ไม่ต้องผลักไส แค่สังเกตแล้วปล่อยให้ลอยไปเรื่อยๆ จนลับตา — ปล่อยได้เรื่อยๆ ไม่จำกัดจำนวน
+  </div>
+
+  <div class="sky-area" id="skyArea"></div>
+
+  <div class="input-card">
+    <div class="input-label">ตอนนี้มีความคิดอะไรผุดขึ้นมาบ้าง?</div>
+    <textarea id="thoughtInput" rows="2" placeholder="เช่น พรุ่งนี้ต้องพรีเซนต์งาน กลัวพูดผิด..." oninput="onThoughtInput(this)"></textarea>
+    <button class="btn btn-primary" id="releaseBtn" onclick="releaseBalloon()" disabled>🎈 ปล่อยลูกโป่ง</button>
+  </div>
+
+  <div class="counter-row">ปล่อยไปแล้ว <span id="balloonCount">0</span> ลูก</div>
+
+  <div class="closing-tip">ความคิดมาแล้วก็ไป เหมือนลูกโป่งที่ลอยขึ้นฟ้า<br>คุณไม่จำเป็นต้องยึดติดกับทุกความคิดที่ผ่านเข้ามาในหัว 🎈</div>
+</main>
+
+<script>
+const BALLOON_COLORS = ['#ef7c7c', '#f5a25c', '#e8c34e', '#6fc494', '#4fb8ae', '#6fa8ea', '#a68ce0', '#f08cc0'];
+let balloonCount = 0;
+
+function onThoughtInput(el) {
+  document.getElementById('releaseBtn').disabled = el.value.trim().length === 0;
+  el.style.height = 'auto';
+  el.style.height = el.scrollHeight + 'px';
+}
+
+function releaseBalloon() {
+  const input = document.getElementById('thoughtInput');
+  const text = input.value.trim();
+  if (!text) return;
+
+  const skyArea = document.getElementById('skyArea');
+
+  const balloon = document.createElement('div');
+  balloon.className = 'balloon';
+
+  const shape = document.createElement('div');
+  shape.className = 'balloon-shape';
+  shape.style.background = BALLOON_COLORS[Math.floor(Math.random() * BALLOON_COLORS.length)];
+
+  const string = document.createElement('div');
+  string.className = 'balloon-string';
+
+  const tag = document.createElement('div');
+  tag.className = 'balloon-tag';
+  tag.textContent = text;
+
+  balloon.appendChild(shape);
+  balloon.appendChild(string);
+  balloon.appendChild(tag);
+
+  const left = 18 + Math.random() * 56;
+  const dur = 12 + Math.min(text.length / 10, 5);
+  balloon.style.left = left + '%';
+  balloon.style.setProperty('--dur', dur + 's');
+
+  balloon.addEventListener('animationend', () => balloon.remove());
+  skyArea.appendChild(balloon);
+
+  balloonCount++;
+  document.getElementById('balloonCount').textContent = balloonCount;
+
+  input.value = '';
+  input.style.height = 'auto';
+  document.getElementById('releaseBtn').disabled = true;
+}
+</script>
+</body>
+</html>

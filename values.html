@@ -451,26 +451,46 @@ function clearAll() {
 }
 
 // ─── Canvas image export ──────────────────────────────────────────────────
-function saveAsImage() {
+async function saveAsImage() {
   if (selected.length === 0) return;
   const btn = document.getElementById('saveImgBtn');
+
+  // Some mobile WebKit browsers substitute a fallback system font for Thai
+  // glyphs the first time a canvas needs them, and that substitution can
+  // finish asynchronously — a measurement taken immediately after the very
+  // first fillText() can read back a too-narrow, not-yet-fully-painted
+  // canvas. Force an early throwaway draw and wait a couple of render
+  // frames so substitution has settled before anything gets measured.
+  const warm = document.createElement('canvas').getContext('2d');
+  warm.font = 'bold 15px "Leelawadee UI", Tahoma, sans-serif';
+  warm.fillText(selected.join(''), 0, 20);
+  if (document.fonts && document.fonts.ready) {
+    try { await document.fonts.ready; } catch (e) {}
+  }
+  await new Promise(requestAnimationFrame);
+  await new Promise(requestAnimationFrame);
+
   const dpr = window.devicePixelRatio || 1;
   const W = 720;
   const padX = 48;
   const maxW = W - padX * 2;
   const pillFont = '15px "Leelawadee UI", Tahoma, sans-serif';
+  const boldPillFont = 'bold ' + pillFont;
 
-  const measure = document.createElement('canvas').getContext('2d');
-  measure.font = pillFont;
-  const pillLines = wrapPills(measure, selected, maxW);
+  const canvas = document.createElement('canvas');
+  canvas.width = W;
+  canvas.height = 10;
+  const ctx = canvas.getContext('2d');
+
+  const pillLines = wrapPills(boldPillFont, selected, maxW, dpr);
 
   const reflectionText = reflection.trim();
   const hasReflection = reflectionText.length > 0;
   const reflBoxX = 34, reflBoxW = W - reflBoxX * 2;
   let reflectionLines = [];
   if (hasReflection) {
-    measure.font = '14px "Leelawadee UI", Tahoma, sans-serif';
-    reflectionLines = wrapByChar(measure, reflectionText, reflBoxW - 28);
+    ctx.font = '14px "Leelawadee UI", Tahoma, sans-serif';
+    reflectionLines = wrapByChar(ctx, reflectionText, reflBoxW - 28);
   }
 
   // ─── Layout (top to bottom) ───
@@ -493,19 +513,18 @@ function saveAsImage() {
   const msgTopY = pillsBottomY + 14;
   const H = msgTopY + 20 * 2 + 40;
 
-  const canvas = document.createElement('canvas');
+  // Resizing the canvas clears its state (font, any transform), so
+  // everything below re-sets ctx.font before each use anyway.
   canvas.width = W * dpr;
   canvas.height = H * dpr;
-  const ctx = canvas.getContext('2d');
   ctx.scale(dpr, dpr);
 
   ctx.fillStyle = '#f5fbf9';
   ctx.fillRect(0, 0, W, H);
 
-  ctx.textAlign = 'center';
   ctx.fillStyle = '#6f5fb0';
   ctx.font = 'bold 26px "Leelawadee UI", Tahoma, sans-serif';
-  ctx.fillText('🌟 การ์ดคุณค่าในตัวฉัน', W / 2, 46);
+  fillTextCentered(ctx, '🌟 การ์ดคุณค่าในตัวฉัน', W / 2, 46);
 
   ctx.strokeStyle = '#cde8e2';
   ctx.lineWidth = 1;
@@ -525,15 +544,13 @@ function saveAsImage() {
       ly += 20;
     });
 
-    ctx.textAlign = 'center';
     ctx.fillStyle = '#6b849a';
     ctx.font = 'italic 13px "Leelawadee UI", Tahoma, sans-serif';
-    ctx.fillText('แล้วฉันเลยพบคุณค่าในตัวฉัน — ฉันเป็นคนที่...', W / 2, connectorY);
+    fillTextCentered(ctx, 'แล้วฉันเลยพบคุณค่าในตัวฉัน — ฉันเป็นคนที่...', W / 2, connectorY);
   } else {
-    ctx.textAlign = 'center';
     ctx.fillStyle = '#6b849a';
     ctx.font = '15px "Leelawadee UI", Tahoma, sans-serif';
-    ctx.fillText('ฉันเป็นคนที่...', W / 2, subtitleY);
+    fillTextCentered(ctx, 'ฉันเป็นคนที่...', W / 2, subtitleY);
   }
 
   let py = pillsTopY;
@@ -543,9 +560,9 @@ function saveAsImage() {
       const cat = WORD_COLOR[p.text] || { bg: '#efebfb', border: '#d9cff0', color: '#6f5fb0' };
       roundRect(ctx, x, py, p.width, 34, 17, cat.bg, cat.border);
       ctx.fillStyle = cat.color;
-      ctx.textAlign = 'center';
       ctx.font = 'bold ' + pillFont;
-      ctx.fillText(p.text, x + p.width / 2, py + 22);
+      ctx.textAlign = 'left';
+      ctx.fillText(p.text, x + (p.width - p.textWidth) / 2, py + 22);
       x += p.width + 10;
     });
     py += pillLineH;
@@ -553,7 +570,6 @@ function saveAsImage() {
 
   ctx.fillStyle = '#4a3f80';
   ctx.font = 'italic 13.5px "Leelawadee UI", Tahoma, sans-serif';
-  ctx.textAlign = 'center';
   wrapText(ctx, 'คำเหล่านี้คือส่วนหนึ่งของคุณจริงๆ แม้บางวันจะรู้สึกไม่เหมือนแบบนี้', W / 2, msgTopY, W - 80, 20, 2);
   wrapText(ctx, 'ก็ไม่ได้แปลว่ามันไม่จริง กลับมาดูการ์ดนี้ได้ทุกเมื่อ 💜', W / 2, msgTopY + 20, W - 80, 20, 2);
 
@@ -561,34 +577,91 @@ function saveAsImage() {
   const dateStr = now.toLocaleDateString('th-TH', { year: 'numeric', month: 'long', day: 'numeric' });
   ctx.fillStyle = '#6b849a';
   ctx.font = '12px "Leelawadee UI", Tahoma, sans-serif';
-  ctx.fillText('บันทึกเมื่อ ' + dateStr, W / 2, H - 20);
+  fillTextCentered(ctx, 'บันทึกเมื่อ ' + dateStr, W / 2, H - 20);
 
   canvas.toBlob(function(blob) {
     const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
     const dateTag = now.toISOString().slice(0, 10);
-    a.download = 'คุณค่าในตัวฉัน_' + dateTag + '.png';
+    const filename = 'คุณค่าในตัวฉัน_' + dateTag + '.png';
+    const file = new File([blob], filename, { type: 'image/png' });
+
+    const doneUI = () => {
+      btn.textContent = 'บันทึกแล้ว ✓';
+      setTimeout(() => { btn.innerHTML = '📷 บันทึกเป็นรูป'; }, 2200);
+    };
+
+    // On mobile, a downloaded blob often just opens as a raw image in the
+    // browser (not fit to screen) instead of actually saving — Web Share
+    // hands it to the OS share sheet (Save to Photos) so the full image
+    // is viewed properly. Desktop / unsupported browsers fall back to <a download>.
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+      navigator.share({ files: [file], title: 'การ์ดคุณค่าในตัวฉัน' })
+        .then(doneUI)
+        .catch(() => {}); // user cancelled the share sheet — not an error
+      URL.revokeObjectURL(url);
+      return;
+    }
+
+    const a = document.createElement('a');
+    a.download = filename;
     a.href = url;
     a.click();
     setTimeout(() => URL.revokeObjectURL(url), 5000);
-
-    btn.textContent = 'บันทึกแล้ว ✓';
-    setTimeout(() => { btn.innerHTML = '📷 บันทึกเป็นรูป'; }, 2200);
+    doneUI();
   }, 'image/png');
 }
 
-function wrapPills(ctx, words, maxWidth) {
-  const padX = 18, gap = 10;
+// Some mobile browsers under-report measureText() width for Thai text
+// (stacked tone/vowel marks), so instead of trusting any reported metric,
+// paint the word onto a scratch canvas and find the real rightmost
+// non-transparent pixel. Glyph hinting/mark positioning can come out
+// slightly different at different physical pixel densities, so the scratch
+// canvas is rendered at the SAME devicePixelRatio scale as the real export
+// canvas, then converted back to logical units — measuring "as rendered."
+function actualTextWidth(font, text, dpr) {
+  const scratchW = text.length * 40 + 120;
+  const scratchH = 90;
+  const c = document.createElement('canvas');
+  c.width = scratchW * dpr;
+  c.height = scratchH * dpr;
+  const sctx = c.getContext('2d');
+  sctx.scale(dpr, dpr);
+  sctx.font = font;
+  sctx.textAlign = 'left';
+  sctx.textBaseline = 'alphabetic';
+  sctx.fillStyle = '#000';
+  const startX = 10;
+  sctx.fillText(text, startX, 55);
+  const data = sctx.getImageData(0, 0, c.width, c.height).data;
+  const pw = c.width;
+  let minX = -1, maxX = -1;
+  for (let x = 0; x < pw; x++) {
+    let hasPixel = false;
+    for (let y = 0; y < c.height; y++) {
+      if (data[(y * pw + x) * 4 + 3] > 10) { hasPixel = true; break; }
+    }
+    if (hasPixel) {
+      if (minX === -1) minX = x;
+      maxX = x;
+    }
+  }
+  if (minX === -1) return 0;
+  return (maxX - minX + 1) / dpr;
+}
+
+function wrapPills(font, words, maxWidth, dpr) {
+  const padX = 24, gap = 10;
   const lines = [];
   let current = { pills: [], totalWidth: 0 };
   words.forEach(word => {
-    const w = ctx.measureText(word).width + padX * 2;
+    const rawWidth = actualTextWidth(font, word, dpr);
+    const w = rawWidth * 1.08 + padX * 2;
     const addedWidth = current.pills.length > 0 ? w + gap : w;
     if (current.totalWidth + addedWidth > maxWidth && current.pills.length > 0) {
       lines.push(current);
       current = { pills: [], totalWidth: 0 };
     }
-    current.pills.push({ text: word, width: w });
+    current.pills.push({ text: word, width: w, textWidth: rawWidth });
     current.totalWidth += current.pills.length > 1 ? w + gap : w;
   });
   if (current.pills.length > 0) lines.push(current);
@@ -627,7 +700,10 @@ function roundRect(ctx, x, y, w, h, r, fillColor, strokeColor) {
   if (strokeColor) { ctx.strokeStyle = strokeColor; ctx.lineWidth = 1.5; ctx.stroke(); }
 }
 
-function wrapText(ctx, text, x, y, maxW, lineH, maxLines) {
+// cx is the horizontal CENTER each wrapped line should be centered on —
+// centering is computed manually (see fillTextCentered) rather than via
+// ctx.textAlign, which is not trusted for horizontal centering in this file.
+function wrapText(ctx, text, cx, y, maxW, lineH, maxLines) {
   if (!text) return;
   const tokens = text.split(' ');
   let line = '';
@@ -638,10 +714,10 @@ function wrapText(ctx, text, x, y, maxW, lineH, maxLines) {
     const m = ctx.measureText(testLine);
     if (m.width > maxW && line !== '') {
       if (lineCount >= (maxLines || 99) - 1) {
-        ctx.fillText(line, x, cy);
+        fillTextCentered(ctx, line, cx, cy);
         return;
       }
-      ctx.fillText(line, x, cy);
+      fillTextCentered(ctx, line, cx, cy);
       line = tokens[i];
       cy += lineH;
       lineCount++;
@@ -649,7 +725,17 @@ function wrapText(ctx, text, x, y, maxW, lineH, maxLines) {
       line = testLine;
     }
   }
-  if (line) ctx.fillText(line, x, cy);
+  if (line) fillTextCentered(ctx, line, cx, cy);
+}
+
+// Draws text horizontally centered on cx by manually measuring and using
+// textAlign='left' — ctx.font must already be set by the caller. We stopped
+// relying on ctx.textAlign='center' after observing it position text
+// consistently too far right on some mobile WebKit builds.
+function fillTextCentered(ctx, text, cx, y) {
+  const w = ctx.measureText(text).width;
+  ctx.textAlign = 'left';
+  ctx.fillText(text, cx - w / 2, y);
 }
 
 // Init

@@ -2,7 +2,7 @@
 // - fetch(): รับ interaction ทุกครั้งที่มีคนพิมพ์ slash command ใน Discord
 // - scheduled(): Cron Trigger โพสต์ข้อพระคัมภีร์ + บทเฝ้าเดี่ยวประจำวันอัตโนมัติ
 import { verifyKey, InteractionType, InteractionResponseType } from "discord-interactions";
-import { getRandomVerse, todayDateSeed } from "./lib/bible.js";
+import { getRandomVerse, getComfortVerse, todayDateSeed } from "./lib/bible.js";
 import { getTodayDevotional } from "./lib/odb.js";
 import { randomFortuneIntro, dailyIntro } from "./lib/flavorText.js";
 
@@ -22,12 +22,12 @@ function verseEmbed(v, title) {
 }
 
 async function handleVerse(interaction, env) {
-  const v = await getRandomVerse(null, env.GITHUB_TOKEN);
+  const v = await getRandomVerse();
   return verseEmbed(v, randomFortuneIntro());
 }
 
 async function handleVerseToday(interaction, env) {
-  const v = await getRandomVerse(todayDateSeed(), env.GITHUB_TOKEN);
+  const v = await getRandomVerse(todayDateSeed());
   return verseEmbed(v, dailyIntro());
 }
 
@@ -52,7 +52,7 @@ async function handlePray(interaction, env) {
   const requesterName =
     interaction.member?.user?.global_name || interaction.member?.user?.username || "เพื่อนคนหนึ่ง";
 
-  const v = await getRandomVerse(null, env.GITHUB_TOKEN);
+  const v = await getComfortVerse();
 
   return {
     embeds: [

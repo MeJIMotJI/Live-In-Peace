@@ -1,0 +1,142 @@
+// Cloudflare Worker: บอท Discord แบบ HTTP Interactions (ไม่มี process ค้าง ไม่ต้องพึ่ง Gateway)
+// - fetch(): รับ interaction ทุกครั้งที่มีคนพิมพ์ slash command ใน Discord
+// - scheduled(): Cron Trigger โพสต์ข้อพระคัมภีร์ + บทเฝ้าเดี่ยวประจำวันอัตโนมัติ
+import { verifyKey, InteractionType, InteractionResponseType } from "discord-interactions";
+import { getRandomVerse, todayDateSeed } from "./lib/bible.js";
+import { getTodayDevotional } from "./lib/odb.js";
+import { randomFortuneIntro, dailyIntro } from "./lib/flavorText.js";
+
+const DISCORD_API = "https://discord.com/api/v10";
+
+function verseEmbed(v, title) {
+  return {
+    embeds: [
+      {
+        color: 0x3a9b8a,
+        title,
+        description: `**${v.book} ${v.chapter}:${v.verse}**\n\n${v.text}`,
+        footer: { text: v.translation },
+      },
+    ],
+  };
+}
+
+async function handleVerse(env) {
+  const v = await getRandomVerse(null, env.GITHUB_TOKEN);
+  return verseEmbed(v, randomFortuneIntro());
+}
+
+async function handleVerseToday(env) {
+  const v = await getRandomVerse(todayDateSeed(), env.GITHUB_TOKEN);
+  return verseEmbed(v, dailyIntro());
+}
+
+async function handleMana() {
+  const devo = await getTodayDevotional();
+  return {
+    embeds: [
+      {
+        color: 0x3a9b8a,
+        title: `📖 บทเฝ้าเดี่ยววันนี้: ${devo.title}`,
+        url: devo.pageUrl,
+        description: "กดหัวข้อเพื่ออ่านฉบับเต็ม",
+        image: devo.imageUrl ? { url: devo.imageUrl } : undefined,
+        footer: { text: "พันธกิจมานาประจำวัน (Our Daily Bread Ministries)" },
+      },
+    ],
+  };
+}
+
+const HANDLERS = { verse: handleVerse, versetoday: handleVerseToday, mana: handleMana };
+
+async function editOriginalResponse(applicationId, interactionToken, payload) {
+  await fetch(`${DISCORD_API}/webhooks/${applicationId}/${interactionToken}/messages/@original`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  });
+}
+
+async function runDeferred(interaction, handler, env) {
+  try {
+    const payload = await handler(env);
+    await editOriginalResponse(env.DISCORD_APPLICATION_ID, interaction.token, payload);
+  } catch (err) {
+    console.error(err);
+    await editOriginalResponse(env.DISCORD_APPLICATION_ID, interaction.token, {
+      content: "ขอโทษนะ เกิดข้อผิดพลาด ลองใหม่อีกครั้งได้เลย 🙏",
+    });
+  }
+}
+
+async function postToChannel(channelId, botToken, payload) {
+  const res = await fetch(`${DISCORD_API}/channels/${channelId}/messages`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json", Authorization: `Bot ${botToken}` },
+    body: JSON.stringify(payload),
+  });
+  if (!res.ok) {
+    throw new Error(`โพสต์เข้าห้องไม่สำเร็จ (${res.status}): ${await res.text()}`);
+  }
+}
+
+export default {
+  async fetch(request, env, ctx) {
+    if (request.method !== "POST") {
+      return new Response("Live In Peace Discord bot is running.", { status: 200 });
+    }
+
+    const signature = request.headers.get("x-signature-ed25519");
+    const timestamp = request.headers.get("x-signature-timestamp");
+    const body = await request.text();
+
+    const isValid =
+      signature && timestamp && (await verifyKey(body, signature, timestamp, env.DISCORD_PUBLIC_KEY));
+    if (!isValid) {
+      return new Response("invalid request signature", { status: 401 });
+    }
+
+    const interaction = JSON.parse(body);
+
+    if (interaction.type === InteractionType.PING) {
+      return Response.json({ type: InteractionResponseType.PONG });
+    }
+
+    if (interaction.type === InteractionType.APPLICATION_COMMAND) {
+      const handler = HANDLERS[interaction.data.name];
+      if (!handler) {
+        return Response.json({
+          type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+          data: { content: "ไม่รู้จักคำสั่งนี้" },
+        });
+      }
+      // ตอบ "กำลังคิด..." ทันทีภายใน 3 วิ แล้วค่อยไปดึงข้อมูลจริง (bible.js/odb.js อาจใช้เวลาเกิน 3 วิ)
+      ctx.waitUntil(runDeferred(interaction, handler, env));
+      return Response.json({ type: InteractionResponseType.DEFERRED_CHANNEL_MESSAGE_WITH_SOURCE });
+    }
+
+    return new Response("unhandled interaction type", { status: 400 });
+  },
+
+  async scheduled(event, env, ctx) {
+    if (!env.DAILY_VERSE_CHANNEL_ID) return;
+
+    ctx.waitUntil(
+      (async () => {
+        try {
+          const payload = await handleVerseToday(env);
+          await postToChannel(env.DAILY_VERSE_CHANNEL_ID, env.DISCORD_TOKEN, payload);
+        } catch (err) {
+          console.error("โพสต์ข้อพระคัมภีร์ประจำวันไม่สำเร็จ:", err);
+        }
+
+        try {
+          const payload = await handleMana();
+          await postToChannel(env.DAILY_VERSE_CHANNEL_ID, env.DISCORD_TOKEN, payload);
+        } catch (err) {
+          console.error("โพสต์บทเฝ้าเดี่ยวไม่สำเร็จ:", err);
+        }
+      })(),
+    );
+  },
+};

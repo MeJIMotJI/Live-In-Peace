@@ -15,10 +15,10 @@ function cleanText(text) {
   return text.replace(ZERO_WIDTH_RE, "").trim();
 }
 
-async function ghFetch(path) {
+async function ghFetch(path, githubToken) {
   const headers = { "User-Agent": "live-in-peace-discord-bot" };
-  if (process.env.GITHUB_TOKEN) {
-    headers.Authorization = `Bearer ${process.env.GITHUB_TOKEN}`;
+  if (githubToken) {
+    headers.Authorization = `Bearer ${githubToken}`;
   }
   const res = await fetch(`${GITHUB_API}/${path}`, { headers });
   if (!res.ok) {
@@ -27,19 +27,20 @@ async function ghFetch(path) {
   return res.json();
 }
 
-async function loadBooks() {
+async function loadBooks(githubToken) {
   if (booksCache) return booksCache;
-  const entries = await ghFetch(`bibles/${TRANSLATION}/books`);
+  const entries = await ghFetch(`bibles/${TRANSLATION}/books`, githubToken);
   booksCache = entries
     .filter((e) => e.type === "dir")
     .map((e) => e.name);
   return booksCache;
 }
 
-async function getChaptersForBook(folder) {
+async function getChaptersForBook(folder, githubToken) {
   if (chaptersCache.has(folder)) return chaptersCache.get(folder);
   const entries = await ghFetch(
     `bibles/${TRANSLATION}/books/${encodeURIComponent(folder)}/chapters`,
+    githubToken,
   );
   const chapters = entries
     .filter((e) => e.type === "file" && e.name.endsWith(".json"))
@@ -87,14 +88,15 @@ function pick(rand, arr) {
 /**
  * สุ่มข้อพระคัมภีร์หนึ่งข้อ
  * @param {string|null} dateSeed ถ้าใส่ (เช่น "2026-08-22") จะได้ผลลัพธ์เดิมซ้ำในวันเดียวกันเสมอ
+ * @param {string|undefined} githubToken (ไม่บังคับ) เพิ่ม rate limit ตอนอ่าน GitHub API
  */
-async function getRandomVerse(dateSeed = null) {
+export async function getRandomVerse(dateSeed = null, githubToken = undefined) {
   const rand = dateSeed ? mulberry32(hashSeed(dateSeed)) : Math.random;
 
-  const books = await loadBooks();
+  const books = await loadBooks(githubToken);
   const book = pick(rand, books);
 
-  const chapters = await getChaptersForBook(book);
+  const chapters = await getChaptersForBook(book, githubToken);
   const chapter = pick(rand, chapters);
 
   const verses = await fetchChapter(book, chapter);
@@ -109,7 +111,7 @@ async function getRandomVerse(dateSeed = null) {
   };
 }
 
-function todayDateSeed() {
+export function todayDateSeed() {
   // ใช้เขตเวลาไทยเพื่อให้ "วันนี้" เปลี่ยนตอนเที่ยงคืนเมืองไทย ไม่ใช่ตาม server
   const now = new Date();
   const bangkok = new Date(now.toLocaleString("en-US", { timeZone: "Asia/Bangkok" }));
@@ -118,5 +120,3 @@ function todayDateSeed() {
   const d = String(bangkok.getDate()).padStart(2, "0");
   return `${y}-${m}-${d}`;
 }
-
-module.exports = { getRandomVerse, todayDateSeed };

@@ -8,12 +8,10 @@ const FORTUNE_INTROS = [
 
 const DAILY_INTROS = ["🌅 ข้อพระคัมภีร์ประจำวันนี้"];
 
-function randomFortuneIntro() {
+export function randomFortuneIntro() {
   return FORTUNE_INTROS[Math.floor(Math.random() * FORTUNE_INTROS.length)];
 }
 
-function dailyIntro() {
+export function dailyIntro() {
   return DAILY_INTROS[0];
 }
-
-module.exports = { randomFortuneIntro, dailyIntro };

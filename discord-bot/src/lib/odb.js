@@ -57,4 +57,4 @@ async function getTodayDevotional() {
   return data;
 }
 
-module.exports = { getTodayDevotional };
+export { getTodayDevotional };

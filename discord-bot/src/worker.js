@@ -21,17 +21,17 @@ function verseEmbed(v, title) {
   };
 }
 
-async function handleVerse(env) {
+async function handleVerse(interaction, env) {
   const v = await getRandomVerse(null, env.GITHUB_TOKEN);
   return verseEmbed(v, randomFortuneIntro());
 }
 
-async function handleVerseToday(env) {
+async function handleVerseToday(interaction, env) {
   const v = await getRandomVerse(todayDateSeed(), env.GITHUB_TOKEN);
   return verseEmbed(v, dailyIntro());
 }
 
-async function handleMana() {
+async function handleMana(interaction, env) {
   const devo = await getTodayDevotional();
   return {
     embeds: [
@@ -47,7 +47,27 @@ async function handleMana() {
   };
 }
 
-const HANDLERS = { verse: handleVerse, versetoday: handleVerseToday, mana: handleMana };
+async function handlePray(interaction, env) {
+  const request = interaction.data.options?.find((o) => o.name === "คำขอ")?.value ?? "";
+  const requesterName =
+    interaction.member?.user?.global_name || interaction.member?.user?.username || "เพื่อนคนหนึ่ง";
+
+  const v = await getRandomVerse(null, env.GITHUB_TOKEN);
+
+  return {
+    embeds: [
+      {
+        color: 0x3a9b8a,
+        title: `🙏 คำขออธิษฐานจาก ${requesterName}`,
+        description: request,
+        fields: [{ name: `${v.book} ${v.chapter}:${v.verse}`, value: v.text }],
+        footer: { text: "กด 🙏 ด้านล่างเพื่อบอกว่าคุณอธิษฐานเผื่อด้วยนะ" },
+      },
+    ],
+  };
+}
+
+const HANDLERS = { verse: handleVerse, versetoday: handleVerseToday, mana: handleMana, pray: handlePray };
 
 async function editOriginalResponse(applicationId, interactionToken, payload) {
   await fetch(`${DISCORD_API}/webhooks/${applicationId}/${interactionToken}/messages/@original`, {
@@ -57,10 +77,30 @@ async function editOriginalResponse(applicationId, interactionToken, payload) {
   });
 }
 
+async function getOriginalResponseMessage(applicationId, interactionToken) {
+  const res = await fetch(`${DISCORD_API}/webhooks/${applicationId}/${interactionToken}/messages/@original`);
+  if (!res.ok) return null;
+  return res.json();
+}
+
+async function addReaction(channelId, messageId, emoji, botToken) {
+  await fetch(
+    `${DISCORD_API}/channels/${channelId}/messages/${messageId}/reactions/${encodeURIComponent(emoji)}/@me`,
+    { method: "PUT", headers: { Authorization: `Bot ${botToken}` } },
+  );
+}
+
 async function runDeferred(interaction, handler, env) {
   try {
-    const payload = await handler(env);
+    const payload = await handler(interaction, env);
     await editOriginalResponse(env.DISCORD_APPLICATION_ID, interaction.token, payload);
+
+    if (interaction.data.name === "pray") {
+      const message = await getOriginalResponseMessage(env.DISCORD_APPLICATION_ID, interaction.token);
+      if (message) {
+        await addReaction(message.channel_id, message.id, "🙏", env.DISCORD_TOKEN);
+      }
+    }
   } catch (err) {
     console.error(err);
     await editOriginalResponse(env.DISCORD_APPLICATION_ID, interaction.token, {
@@ -124,14 +164,14 @@ export default {
     ctx.waitUntil(
       (async () => {
         try {
-          const payload = await handleVerseToday(env);
+          const payload = await handleVerseToday(null, env);
           await postToChannel(env.DAILY_VERSE_CHANNEL_ID, env.DISCORD_TOKEN, payload);
         } catch (err) {
           console.error("โพสต์ข้อพระคัมภีร์ประจำวันไม่สำเร็จ:", err);
         }
 
         try {
-          const payload = await handleMana();
+          const payload = await handleMana(null, env);
           await postToChannel(env.DAILY_VERSE_CHANNEL_ID, env.DISCORD_TOKEN, payload);
         } catch (err) {
           console.error("โพสต์บทเฝ้าเดี่ยวไม่สำเร็จ:", err);

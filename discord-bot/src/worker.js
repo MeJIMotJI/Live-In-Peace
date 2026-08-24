@@ -1,12 +1,15 @@
 // Cloudflare Worker: บอท Discord แบบ HTTP Interactions (ไม่มี process ค้าง ไม่ต้องพึ่ง Gateway)
 // - fetch(): รับ interaction ทุกครั้งที่มีคนพิมพ์ slash command ใน Discord
-// - scheduled(): Cron Trigger โพสต์ข้อพระคัมภีร์ + บทเฝ้าเดี่ยวประจำวันอัตโนมัติ
+// - scheduled(): Cron Trigger 2 ตัว — โพสต์บทเฝ้าเดี่ยวทุกวัน + เช็ค/แชร์บทความ Mustard Seed ทุกสัปดาห์
 import { verifyKey, InteractionType, InteractionResponseType } from "discord-interactions";
 import { getRandomVerse, getComfortVerse, todayDateSeed } from "./lib/bible.js";
 import { getTodayDevotional } from "./lib/odb.js";
+import { getWeeklyMustardSeedPost, getRandomMustardSeedPost } from "./lib/mustardseed.js";
 import { randomFortuneIntro, dailyIntro } from "./lib/flavorText.js";
 
 const DISCORD_API = "https://discord.com/api/v10";
+// ต้องตรงกับ triggers.crons ตัวที่สองใน wrangler.jsonc (ตัวเดียวที่ไม่ใช่ "ทุกวัน")
+const WEEKLY_CRON = "0 23 * * 1";
 
 function verseEmbed(v, title) {
   return {
@@ -47,6 +50,25 @@ async function handleMana(interaction, env) {
   };
 }
 
+function mustardSeedEmbed(article, headerText) {
+  return {
+    embeds: [
+      {
+        color: 0x5b8fd9,
+        title: `${headerText}: ${article.title}`,
+        url: article.link,
+        description: article.summary || "กดหัวข้อเพื่ออ่านฉบับเต็ม",
+        footer: { text: "Mustard Seed Community" },
+      },
+    ],
+  };
+}
+
+async function handleRead(interaction, env) {
+  const article = await getRandomMustardSeedPost();
+  return mustardSeedEmbed(article, "🌱 สุ่มบทความจาก Mustard Seed");
+}
+
 async function handlePray(interaction, env) {
   const request = interaction.data.options?.find((o) => o.name === "คำขอ")?.value ?? "";
   const requesterName =
@@ -67,7 +89,7 @@ async function handlePray(interaction, env) {
   };
 }
 
-const HANDLERS = { verse: handleVerse, versetoday: handleVerseToday, mana: handleMana, pray: handlePray };
+const HANDLERS = { verse: handleVerse, versetoday: handleVerseToday, read: handleRead, pray: handlePray };
 
 async function editOriginalResponse(applicationId, interactionToken, payload) {
   await fetch(`${DISCORD_API}/webhooks/${applicationId}/${interactionToken}/messages/@original`, {
@@ -161,15 +183,30 @@ export default {
   async scheduled(event, env, ctx) {
     if (!env.DAILY_VERSE_CHANNEL_ID) return;
 
+    if (event.cron === WEEKLY_CRON) {
+      ctx.waitUntil(
+        (async () => {
+          try {
+            const weekly = await getWeeklyMustardSeedPost();
+            if (!weekly) return;
+            const headerText = weekly.isNew
+              ? "📰 บทความใหม่จาก Mustard Seed สัปดาห์นี้"
+              : "🌱 บทความจาก Mustard Seed";
+            await postToChannel(
+              env.DAILY_VERSE_CHANNEL_ID,
+              env.DISCORD_TOKEN,
+              mustardSeedEmbed(weekly.article, headerText),
+            );
+          } catch (err) {
+            console.error("โพสต์บทความ Mustard Seed ไม่สำเร็จ:", err);
+          }
+        })(),
+      );
+      return;
+    }
+
     ctx.waitUntil(
       (async () => {
-        try {
-          const payload = await handleVerseToday(null, env);
-          await postToChannel(env.DAILY_VERSE_CHANNEL_ID, env.DISCORD_TOKEN, payload);
-        } catch (err) {
-          console.error("โพสต์ข้อพระคัมภีร์ประจำวันไม่สำเร็จ:", err);
-        }
-
         try {
           const payload = await handleMana(null, env);
           await postToChannel(env.DAILY_VERSE_CHANNEL_ID, env.DISCORD_TOKEN, payload);

@@ -1,0 +1,14 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "live-in-peace-bot",
+  "main": "src/worker.js",
+  "compatibility_date": "2026-08-22",
+  "observability": {
+    "enabled": true
+  },
+  "triggers": {
+    // "0 23 * * *" เวลา UTC = 06:00 น. เวลาไทย (UTC+7) ทุกวัน — โพสต์บทเฝ้าเดี่ยว (มานาประจำวัน)
+    // "0 23 * * 1" เวลา UTC = 06:00 น. เวลาไทย ทุกวันจันทร์ — เช็ค/แชร์บทความ Mustard Seed Community
+    "crons": ["0 23 * * *", "0 23 * * 1"]
+  }
+}

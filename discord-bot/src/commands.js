@@ -1,0 +1,19 @@
+// รายการ slash command — ใช้ทั้งตอนลงทะเบียนกับ Discord (deploy-commands.js)
+// และตอน worker.js เช็คว่าคำสั่งที่เรียกเข้ามาคือชื่ออะไร
+export const COMMANDS = [
+  { name: "verse", description: "สุ่มข้อพระคัมภีร์หนึ่งข้อ" },
+  { name: "versetoday", description: "ข้อพระคัมภีร์ประจำวันนี้ (ข้อเดียวกันทั้งวัน)" },
+  { name: "read", description: "สุ่มบทความจาก Mustard Seed Community มาให้อ่าน" },
+  {
+    name: "pray",
+    description: "ฝากคำขออธิษฐานให้เพื่อนในเซิร์ฟช่วยอธิษฐานเผื่อ",
+    options: [
+      {
+        type: 3, // STRING
+        name: "คำขอ",
+        description: "อยากให้เพื่อนอธิษฐานเผื่อเรื่องอะไร",
+        required: true,
+      },
+    ],
+  },
+];

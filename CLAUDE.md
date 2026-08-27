@@ -216,11 +216,16 @@ line-height: 1.8–1.9;
 | game.html | ✅ v1 | จับฟองลมหายใจ — bubble-catch mini-game synced to 3 breathing patterns, bonus score on inhale, no fail state; แยกหมวด "เล่นเกม" ใน index.html |
 | balloon.html | ✅ v1 | ลูกโป่งความกังวล (เดิมชื่อ "ใบไม้บนลำธาร" เปลี่ยน theme) — พิมพ์ความกังวลแล้วปล่อยเป็นลูกโป่งสีสุ่ม 8 สี ลอยขึ้นฟ้าพร้อมป้ายข้อความห้อยเชือก ไม่มีคะแนน/เป้าหมาย มี disclaimer สายด่วน 1323 |
 
+### Site-wide Features
+| ฟีเจอร์ | สถานะ | หมายเหตุ |
+|------|--------|----------|
+| Dark mode | ✅ v1 | ทั้ง 14 หน้า — ปุ่มสลับ 🌙/☀️ ลอยมุมขวาบน, จำค่าใน localStorage (`lip-theme`), ไม่มี FOUC. บล็อก `<style>`+`<script>` เหมือนกันทุกไฟล์ (แทรกก่อน `</head>`) + dark override เฉพาะหน้าสำหรับ accent/กล่องสีพิเศษ |
+
 ### Open Items
 - [ ] Researcher review: ตรวจสอบความถูกต้องเนื้อหาทุกหน้า
 - [ ] Checker review: ตรวจภาษาไทยทุกหน้า (ทำแล้วเฉพาะ inner.html)
 - [ ] Disease pages ที่ยังไม่มี: GAD, PTSD
-- [ ] User customization: font size, dark mode
+- [ ] User customization: font size (dark mode ✅ เสร็จแล้ว)
 
 ---
 

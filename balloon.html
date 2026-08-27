@@ -327,6 +327,21 @@ function releaseBalloon() {
   input.style.height = 'auto';
   document.getElementById('releaseBtn').disabled = true;
 }
+
+// A worry sent over from worry.html ("ปล่อยกับลูกโป่ง") is handed off via
+// localStorage rather than the URL, so the text never lands in browser history.
+(function receiveIncomingWorry() {
+  let incoming = null;
+  try {
+    incoming = localStorage.getItem('lip_balloon_incoming');
+    if (incoming) localStorage.removeItem('lip_balloon_incoming');
+  } catch (e) {}
+  if (!incoming) return;
+  const input = document.getElementById('thoughtInput');
+  input.value = incoming;
+  onThoughtInput(input);
+  setTimeout(releaseBalloon, 700);
+})();
 </script>
 </body>
 </html>

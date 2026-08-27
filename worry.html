@@ -302,6 +302,8 @@ textarea.ta::placeholder { color: #a8c0d9; }
 }
 .link-btn:hover { color: var(--text); }
 .link-btn.discard:hover { color: var(--danger); }
+.link-btn.balloon { color: var(--blue-dark); font-weight: 700; }
+.link-btn.balloon:hover { color: var(--blue); }
 
 /* Footer actions */
 .foot-actions { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-top: 6px; }
@@ -550,13 +552,7 @@ function renderBox(kind) {
         render();
       });
 
-      const balloonLink = document.createElement('a');
-      balloonLink.className = 'mini-btn';
-      balloonLink.href = 'balloon.html';
-      balloonLink.textContent = '🎈 ปล่อยกับลูกโป่ง';
-
       actions.appendChild(parkBtn);
-      actions.appendChild(balloonLink);
       item.appendChild(actions);
 
       if (w.parked) {
@@ -577,16 +573,28 @@ function renderBox(kind) {
       save();
       render();
     });
-    const discardBtn = document.createElement('button');
-    discardBtn.className = 'link-btn discard';
-    discardBtn.textContent = '✕ ปัดทิ้ง';
-    discardBtn.addEventListener('click', function () {
-      worries = worries.filter(x => x.id !== w.id);
-      save();
-      render();
-    });
+    const lastBtn = document.createElement('button');
+    if (kind === 'manage') {
+      lastBtn.className = 'link-btn discard';
+      lastBtn.textContent = '✕ ปัดทิ้ง';
+      lastBtn.addEventListener('click', function () {
+        worries = worries.filter(x => x.id !== w.id);
+        save();
+        render();
+      });
+    } else {
+      lastBtn.className = 'link-btn balloon';
+      lastBtn.textContent = '🎈 ปล่อยกับลูกโป่ง';
+      lastBtn.addEventListener('click', function () {
+        try { localStorage.setItem('lip_balloon_incoming', w.text); } catch (e) {}
+        window.open('balloon.html', '_blank');
+        worries = worries.filter(x => x.id !== w.id);
+        save();
+        render();
+      });
+    }
     foot.appendChild(moveBtn);
-    foot.appendChild(discardBtn);
+    foot.appendChild(lastBtn);
     item.appendChild(foot);
 
     box.appendChild(item);

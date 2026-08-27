@@ -274,6 +274,8 @@ textarea.ta::placeholder { color: #a8c0d9; }
 }
 .mini-btn:hover { background: var(--cant-light); }
 .mini-btn.on { background: var(--cant); border-color: var(--cant); color: #fff; }
+.mini-btn.balloon { color: var(--blue-dark); border-color: #bcd4f2; }
+.mini-btn.balloon:hover { background: var(--blue-light); }
 .parked-note {
   margin-top: 10px;
   background: var(--cant-light);
@@ -303,8 +305,6 @@ textarea.ta::placeholder { color: #a8c0d9; }
 }
 .link-btn:hover { color: var(--text); }
 .link-btn.discard:hover { color: var(--danger); }
-.link-btn.balloon { color: var(--blue-dark); font-weight: 700; }
-.link-btn.balloon:hover { color: var(--blue); }
 
 /* Footer actions */
 .foot-actions { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-top: 6px; }
@@ -604,7 +604,18 @@ function renderBox(kind) {
         render();
       });
 
+      const balloonBtn = document.createElement('button');
+      balloonBtn.className = 'mini-btn balloon';
+      balloonBtn.textContent = '🎈 ปล่อยกับลูกโป่ง';
+      balloonBtn.addEventListener('click', function () {
+        floatWorryBalloon(w.text, item);
+        worries = worries.filter(x => x.id !== w.id);
+        save();
+        render();
+      });
+
       actions.appendChild(parkBtn);
+      actions.appendChild(balloonBtn);
       item.appendChild(actions);
 
       if (w.parked) {
@@ -625,27 +636,18 @@ function renderBox(kind) {
       save();
       render();
     });
-    const lastBtn = document.createElement('button');
-    if (kind === 'manage') {
-      lastBtn.className = 'link-btn discard';
-      lastBtn.textContent = '✕ ปัดทิ้ง';
-      lastBtn.addEventListener('click', function () {
-        worries = worries.filter(x => x.id !== w.id);
-        save();
-        render();
-      });
-    } else {
-      lastBtn.className = 'link-btn balloon';
-      lastBtn.textContent = '🎈 ปล่อยกับลูกโป่ง';
-      lastBtn.addEventListener('click', function () {
-        floatWorryBalloon(w.text, item);
-        worries = worries.filter(x => x.id !== w.id);
-        save();
-        render();
-      });
-    }
     foot.appendChild(moveBtn);
-    foot.appendChild(lastBtn);
+    if (kind === 'manage') {
+      const discardBtn = document.createElement('button');
+      discardBtn.className = 'link-btn discard';
+      discardBtn.textContent = '✕ ปัดทิ้ง';
+      discardBtn.addEventListener('click', function () {
+        worries = worries.filter(x => x.id !== w.id);
+        save();
+        render();
+      });
+      foot.appendChild(discardBtn);
+    }
     item.appendChild(foot);
 
     box.appendChild(item);

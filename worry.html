@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>แยกความกังวล — Live In Peace</title>
+<style>
+:root {
+  --bg: #f5fbf9;
+  --surface: #ffffff;
+  --primary: #3a9b8a;
+  --primary-dark: #2d7a6a;
+  --primary-light: #e8f7f4;
+  --blue: #5b8fd9;
+  --blue-dark: #3a6fbf;
+  --blue-light: #edf3fc;
+  --text: #1e3240;
+  --text-muted: #6b849a;
+  --border: #cde8e2;
+  --manage: #4caf87;
+  --manage-dark: #2f8f68;
+  --manage-light: #e7f6ef;
+  --manage-border: #bfe6d3;
+  --cant: #7d9ab8;
+  --cant-dark: #5b7797;
+  --cant-light: #eef3f8;
+  --cant-border: #d3e0ec;
+  --danger: #e07b8a;
+  --radius: 16px;
+  --radius-sm: 10px;
+  --shadow: 0 2px 16px rgba(58,155,138,0.10);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Leelawadee UI', 'Leelawadee', Tahoma, 'Lucida Sans Unicode', Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 17px;
+  line-height: 1.8;
+  min-height: 100vh;
+}
+.topbar {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 14px 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+.back-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--blue-dark);
+  text-decoration: none;
+  font-size: 16px;
+  font-weight: 700;
+  padding: 6px 12px;
+  border-radius: 20px;
+  background: var(--blue-light);
+  transition: background 0.2s;
+}
+.back-btn:hover { background: #e0ecfa; }
+.topbar-title { font-size: 17px; font-weight: 700; }
+.hero {
+  background: linear-gradient(135deg, var(--blue-dark) 0%, #7bb8ea 100%);
+  color: white;
+  padding: 32px 24px 40px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50px; right: -30px;
+  width: 160px; height: 160px;
+  background: rgba(255,255,255,0.10);
+  border-radius: 50%;
+}
+.hero-icon { font-size: 48px; margin-bottom: 10px; }
+.hero h1 { font-size: 24px; font-weight: 700; margin-bottom: 6px; }
+.hero p { font-size: 15px; opacity: 0.92; max-width: 380px; margin: 0 auto; }
+main { max-width: 520px; margin: 0 auto; padding: 24px 20px 80px; }
+
+.disclaimer-card {
+  background: var(--primary-light);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 18px;
+  margin-bottom: 18px;
+  font-size: 14px;
+  color: var(--primary-dark);
+  line-height: 1.8;
+}
+.info-box {
+  background: var(--blue-light);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  font-size: 14.5px;
+  color: #2e5da8;
+  margin-bottom: 22px;
+  line-height: 1.8;
+}
+
+/* Input card */
+.input-card {
+  background: var(--surface);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 18px 20px;
+  border: 1.5px solid var(--border);
+  margin-bottom: 22px;
+}
+.input-label { font-size: 14px; font-weight: 700; color: var(--text-muted); margin-bottom: 10px; }
+textarea.ta {
+  width: 100%;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+  font-family: inherit;
+  font-size: 15px;
+  color: var(--text);
+  background: var(--bg);
+  resize: none;
+  outline: none;
+  transition: border-color 0.2s;
+  line-height: 1.7;
+  overflow: hidden;
+}
+textarea.ta:focus { border-color: var(--blue); background: #fff; }
+textarea.ta::placeholder { color: #a8c0d9; }
+#worryInput { min-height: 60px; margin-bottom: 12px; }
+
+.btn {
+  border: none;
+  border-radius: 50px;
+  padding: 12px 22px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  justify-content: center;
+}
+.btn-block { width: 100%; }
+.btn-primary { background: var(--blue); color: #fff; box-shadow: 0 4px 14px rgba(91,143,217,0.32); }
+.btn-primary:hover { background: var(--blue-dark); }
+.btn-primary:disabled { opacity: 0.4; cursor: not-allowed; box-shadow: none; }
+.btn-ghost { background: var(--blue-light); color: var(--blue-dark); }
+.btn-ghost:hover { background: #e0ecfa; }
+
+/* Sorting stage */
+.stage-wrap { margin-bottom: 24px; }
+.stage-head {
+  font-size: 14px;
+  color: var(--text-muted);
+  text-align: center;
+  margin-bottom: 10px;
+  line-height: 1.7;
+}
+.stage-head b { color: var(--blue-dark); }
+.hint-up {
+  border: 2px dashed var(--cant-border);
+  border-radius: var(--radius);
+  padding: 10px;
+  text-align: center;
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--cant-dark);
+  background: var(--cant-light);
+  transition: all 0.15s;
+}
+.hint-up.active { border-color: var(--cant); background: #e2ecf5; transform: scale(1.02); }
+.card-slot {
+  position: relative;
+  min-height: 132px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px 0;
+}
+.active-card {
+  width: 100%;
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: 0 6px 22px rgba(58,111,191,0.18);
+  padding: 20px 18px;
+  font-size: 16px;
+  line-height: 1.7;
+  text-align: center;
+  color: var(--text);
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+  word-break: break-word;
+}
+.active-card:active { cursor: grabbing; }
+.active-card .grip {
+  display: block;
+  width: 36px;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--border);
+  margin: 0 auto 12px;
+}
+.drop-manage {
+  border: 2px dashed var(--manage-border);
+  border-radius: var(--radius);
+  padding: 14px 10px;
+  text-align: center;
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--manage-dark);
+  background: var(--manage-light);
+  transition: all 0.15s;
+}
+.drop-manage.active { border-color: var(--manage); background: #dcf1e7; transform: scale(1.02); }
+.sort-btns { display: flex; gap: 10px; margin-top: 12px; }
+.sort-btns .btn { flex: 1; padding: 12px 10px; font-size: 14px; }
+.btn-manage { background: var(--manage-light); color: var(--manage-dark); border: 1.5px solid var(--manage-border); }
+.btn-manage:hover { background: #dcf1e7; }
+.btn-cant { background: var(--cant-light); color: var(--cant-dark); border: 1.5px solid var(--cant-border); }
+.btn-cant:hover { background: #e2ecf5; }
+.queue-left { text-align: center; font-size: 13px; color: var(--text-muted); margin-top: 10px; }
+
+/* Boxes */
+.box { border-radius: var(--radius); padding: 16px 16px 18px; margin-bottom: 18px; border: 1.5px solid; }
+.box-manage { background: var(--manage-light); border-color: var(--manage-border); }
+.box-cant { background: var(--cant-light); border-color: var(--cant-border); }
+.box-title { font-size: 15.5px; font-weight: 700; margin-bottom: 4px; }
+.box-manage .box-title { color: var(--manage-dark); }
+.box-cant .box-title { color: var(--cant-dark); }
+.box-sub { font-size: 13px; color: var(--text-muted); margin-bottom: 14px; line-height: 1.7; }
+
+.item {
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 14px 14px 12px;
+  margin-bottom: 12px;
+}
+.item:last-child { margin-bottom: 0; }
+.item-text { font-size: 15px; font-weight: 700; line-height: 1.6; margin-bottom: 10px; word-break: break-word; }
+
+.plan-grid { display: flex; flex-direction: column; gap: 8px; }
+.plan-field label { font-size: 12.5px; font-weight: 700; color: var(--manage-dark); display: block; margin-bottom: 3px; }
+.plan-field textarea.ta { font-size: 14px; min-height: 38px; padding: 8px 10px; }
+
+.cant-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.mini-btn {
+  border: 1.5px solid var(--cant-border);
+  background: var(--surface);
+  color: var(--cant-dark);
+  border-radius: 50px;
+  padding: 8px 14px;
+  font-size: 13px;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  transition: all 0.15s;
+}
+.mini-btn:hover { background: var(--cant-light); }
+.mini-btn.on { background: var(--cant); border-color: var(--cant); color: #fff; }
+.parked-note {
+  margin-top: 10px;
+  background: var(--cant-light);
+  border-left: 3px solid var(--cant);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+  font-size: 13px;
+  color: var(--cant-dark);
+  line-height: 1.7;
+}
+.item-foot {
+  display: flex;
+  gap: 14px;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border);
+}
+.link-btn {
+  background: none;
+  border: none;
+  font-family: inherit;
+  font-size: 12.5px;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 2px 0;
+}
+.link-btn:hover { color: var(--text); }
+.link-btn.discard:hover { color: var(--danger); }
+
+/* Footer actions */
+.foot-actions { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-top: 6px; }
+.closing-tip {
+  text-align: center;
+  font-size: 13.5px;
+  color: var(--text-muted);
+  font-style: italic;
+  line-height: 1.8;
+  margin-top: 22px;
+}
+.empty-hint { font-size: 13.5px; color: var(--text-muted); text-align: center; padding: 6px 0; }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a href="index.html" class="back-btn">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+    กลับ
+  </a>
+  <span class="topbar-title">แยกความกังวล</span>
+</div>
+
+<div class="hero">
+  <div class="hero-icon">🗂️</div>
+  <h1>แยกความกังวล</h1>
+  <p>เรื่องไหนทำอะไรได้ เรื่องไหนค่อยๆ ฝึกวางลง ลองแยกดูทีละเรื่อง</p>
+</div>
+
+<main>
+  <div class="disclaimer-card">
+    <strong>ก่อนเริ่ม:</strong> ถ้าความกังวลรุนแรงมาก รบกวนการใช้ชีวิตหรือการนอน หรือมีความคิดทำร้ายตัวเอง ให้หยุดพักและโทรสายด่วนสุขภาพจิต <strong>1323</strong> (ตลอด 24 ชั่วโมง) แบบฝึกนี้ช่วยจัดระเบียบความคิด แต่ไม่ทดแทนการรักษา
+  </div>
+
+  <div class="info-box">
+    ความกังวลมี 2 แบบ — แบบที่ <b>มีอะไรให้ลงมือทำได้จริง</b> กับแบบที่เป็นเรื่องสมมติหรือ <b>อยู่นอกเหนือการควบคุม</b> ของเรา<br>
+    ลองพิมพ์เรื่องที่กังวลลงไปทีละเรื่อง แล้วแยกดูว่ามันเป็นแบบไหน
+  </div>
+
+  <div class="input-card">
+    <div class="input-label">ตอนนี้กังวลเรื่องอะไรอยู่?</div>
+    <textarea id="worryInput" class="ta" rows="2" placeholder="เช่น กลัวว่างานที่ส่งไปจะไม่ผ่าน / กลัวว่าพ่อจะป่วยหนักขึ้น..."></textarea>
+    <button class="btn btn-primary btn-block" id="addBtn" disabled>+ เพิ่มเข้ากองที่รอแยก</button>
+  </div>
+
+  <div id="stageWrap"></div>
+
+  <div id="boxManageWrap"></div>
+  <div id="boxCantWrap"></div>
+
+  <div id="footActions" class="foot-actions"></div>
+
+  <div class="closing-tip" id="closingTip"></div>
+</main>
+
+<script>
+const FIELDS = [
+  ['who', 'ใคร (ใครเกี่ยวข้องบ้าง / เราต้องคุยกับใคร)'],
+  ['what', 'ทำอะไร (สิ่งที่จะลงมือทำจริงๆ)'],
+  ['where', 'ที่ไหน'],
+  ['when', 'เมื่อไหร่ (วัน เวลา ที่จะทำ)'],
+  ['how', 'อย่างไร (ทำยังไง ใช้อะไรบ้าง)'],
+  ['first', 'ก้าวแรกที่เล็กที่สุด (ทำได้ภายในวันนี้)']
+];
+const STORE_KEY = 'lip_worry_draft';
+
+let worries = [];
+
+function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2, 6); }
+function save() { try { localStorage.setItem(STORE_KEY, JSON.stringify({ worries })); } catch (e) {} }
+function load() {
+  try {
+    const raw = localStorage.getItem(STORE_KEY);
+    if (!raw) return;
+    const d = JSON.parse(raw);
+    if (Array.isArray(d.worries)) worries = d.worries;
+  } catch (e) {}
+}
+
+function autosize(el) { el.style.height = 'auto'; el.style.height = el.scrollHeight + 'px'; }
+function nextInQueue() { return worries.find(w => w.status === 'queue'); }
+
+/* ---------- add ---------- */
+const worryInput = document.getElementById('worryInput');
+const addBtn = document.getElementById('addBtn');
+worryInput.addEventListener('input', function () {
+  addBtn.disabled = this.value.trim().length === 0;
+  autosize(this);
+});
+addBtn.addEventListener('click', function () {
+  const t = worryInput.value.trim();
+  if (!t) return;
+  worries.push({ id: uid(), text: t, status: 'queue', plan: {}, parked: false });
+  worryInput.value = '';
+  worryInput.style.height = 'auto';
+  addBtn.disabled = true;
+  save();
+  render();
+});
+
+/* ---------- sorting ---------- */
+function sortCurrent(status) {
+  const w = nextInQueue();
+  if (!w) return;
+  w.status = status;
+  save();
+  render();
+}
+
+function attachDrag(card) {
+  let startY = 0, dy = 0, dragging = false;
+  const dropManage = document.getElementById('dropManage');
+  const hintUp = document.getElementById('hintUp');
+
+  card.addEventListener('pointerdown', function (e) {
+    dragging = true;
+    startY = e.clientY;
+    dy = 0;
+    card.setPointerCapture(e.pointerId);
+    card.style.transition = 'none';
+  });
+  card.addEventListener('pointermove', function (e) {
+    if (!dragging) return;
+    dy = e.clientY - startY;
+    card.style.transform = 'translateY(' + dy + 'px) rotate(' + (dy * 0.02) + 'deg)';
+    if (dropManage) dropManage.classList.toggle('active', dy > 60);
+    if (hintUp) hintUp.classList.toggle('active', dy < -60);
+  });
+  function end() {
+    if (!dragging) return;
+    dragging = false;
+    if (dropManage) dropManage.classList.remove('active');
+    if (hintUp) hintUp.classList.remove('active');
+    card.style.transition = 'transform 0.28s ease, opacity 0.28s ease';
+    if (dy > 80) {
+      card.style.transform = 'translateY(360px)';
+      card.style.opacity = '0';
+      setTimeout(function () { sortCurrent('manage'); }, 240);
+    } else if (dy < -80) {
+      card.style.transform = 'translateY(-360px)';
+      card.style.opacity = '0';
+      setTimeout(function () { sortCurrent('cant'); }, 240);
+    } else {
+      card.style.transform = '';
+    }
+  }
+  card.addEventListener('pointerup', end);
+  card.addEventListener('pointercancel', end);
+}
+
+/* ---------- render ---------- */
+function render() {
+  renderStage();
+  renderBox('manage');
+  renderBox('cant');
+  renderFoot();
+}
+
+function renderStage() {
+  const wrap = document.getElementById('stageWrap');
+  const w = nextInQueue();
+  if (!w) { wrap.innerHTML = ''; return; }
+  const remaining = worries.filter(x => x.status === 'queue').length;
+
+  wrap.innerHTML =
+    '<div class="stage-wrap">' +
+      '<div class="stage-head">ลากการ์ด <b>ลงกล่องด้านล่าง</b> = จัดการได้ &nbsp;·&nbsp; <b>ปัดขึ้นข้างบน</b> = จัดการไม่ได้<br>(หรือกดปุ่มก็ได้)</div>' +
+      '<div class="hint-up" id="hintUp">↑ จัดการไม่ได้ / อยู่นอกการควบคุม</div>' +
+      '<div class="card-slot"><div class="active-card" id="activeCard"><span class="grip"></span><span id="activeText"></span></div></div>' +
+      '<div class="drop-manage" id="dropManage">↓ จัดการได้ — มีอะไรให้ลงมือทำ</div>' +
+      '<div class="sort-btns">' +
+        '<button class="btn btn-cant" id="btnCant">↑ จัดการไม่ได้</button>' +
+        '<button class="btn btn-manage" id="btnManage">↓ จัดการได้</button>' +
+      '</div>' +
+      '<div class="queue-left">' + (remaining > 1 ? 'อีก ' + (remaining - 1) + ' เรื่องรอแยก' : 'เรื่องสุดท้ายในกอง') + '</div>' +
+    '</div>';
+
+  document.getElementById('activeText').textContent = w.text;
+  document.getElementById('btnManage').addEventListener('click', function () { sortCurrent('manage'); });
+  document.getElementById('btnCant').addEventListener('click', function () { sortCurrent('cant'); });
+  attachDrag(document.getElementById('activeCard'));
+}
+
+function renderBox(kind) {
+  const wrap = document.getElementById(kind === 'manage' ? 'boxManageWrap' : 'boxCantWrap');
+  const list = worries.filter(w => w.status === kind);
+  if (list.length === 0) { wrap.innerHTML = ''; return; }
+
+  const box = document.createElement('div');
+  box.className = 'box ' + (kind === 'manage' ? 'box-manage' : 'box-cant');
+
+  if (kind === 'manage') {
+    box.innerHTML =
+      '<div class="box-title">✅ จัดการได้ — เปลี่ยนเป็นแผนลงมือทำ</div>' +
+      '<div class="box-sub">ตอบให้ได้ว่า ใคร ทำอะไร ที่ไหน เมื่อไหร่ อย่างไร — ไม่ต้องครบทุกช่องก็ได้ ที่สำคัญคือ "ก้าวแรก"</div>';
+  } else {
+    box.innerHTML =
+      '<div class="box-title">🍃 จัดการไม่ได้ — ฝึกวางลง</div>' +
+      '<div class="box-sub">เลือกได้ว่าจะวางเรื่องนี้ไว้ก่อนแล้วไปทำเรื่องที่จัดการได้ หรือปล่อยมันไปกับลูกโป่ง</div>';
+  }
+
+  list.forEach(function (w) {
+    const item = document.createElement('div');
+    item.className = 'item';
+
+    const txt = document.createElement('div');
+    txt.className = 'item-text';
+    txt.textContent = w.text;
+    item.appendChild(txt);
+
+    if (kind === 'manage') {
+      const grid = document.createElement('div');
+      grid.className = 'plan-grid';
+      FIELDS.forEach(function (f) {
+        const key = f[0], labelText = f[1];
+        const field = document.createElement('div');
+        field.className = 'plan-field';
+        const label = document.createElement('label');
+        label.textContent = labelText;
+        const ta = document.createElement('textarea');
+        ta.className = 'ta';
+        ta.rows = 1;
+        ta.value = w.plan[key] || '';
+        ta.addEventListener('input', function () {
+          w.plan[key] = ta.value;
+          autosize(ta);
+          save();
+        });
+        field.appendChild(label);
+        field.appendChild(ta);
+        grid.appendChild(field);
+        requestAnimationFrame(function () { autosize(ta); });
+      });
+      item.appendChild(grid);
+    } else {
+      const actions = document.createElement('div');
+      actions.className = 'cant-actions';
+
+      const parkBtn = document.createElement('button');
+      parkBtn.className = 'mini-btn' + (w.parked ? ' on' : '');
+      parkBtn.textContent = w.parked ? '✓ วางไว้ก่อนแล้ว' : '🅿️ วางไว้ก่อน';
+      parkBtn.addEventListener('click', function () {
+        w.parked = !w.parked;
+        save();
+        render();
+      });
+
+      const balloonLink = document.createElement('a');
+      balloonLink.className = 'mini-btn';
+      balloonLink.href = 'balloon.html';
+      balloonLink.textContent = '🎈 ปล่อยกับลูกโป่ง';
+
+      actions.appendChild(parkBtn);
+      actions.appendChild(balloonLink);
+      item.appendChild(actions);
+
+      if (w.parked) {
+        const note = document.createElement('div');
+        note.className = 'parked-note';
+        note.textContent = 'เรื่องนี้อยู่นอกมือเราตอนนี้ เราเลือกวางมันลงก่อน ถ้ามันวนกลับมา บอกตัวเองว่า "เดี๋ยวค่อยคิด" แล้วกลับไปทำเรื่องที่จัดการได้';
+        item.appendChild(note);
+      }
+    }
+
+    const foot = document.createElement('div');
+    foot.className = 'item-foot';
+    const moveBtn = document.createElement('button');
+    moveBtn.className = 'link-btn';
+    moveBtn.textContent = kind === 'manage' ? '⇄ ย้ายไปกล่องจัดการไม่ได้' : '⇄ ย้ายไปกล่องจัดการได้';
+    moveBtn.addEventListener('click', function () {
+      w.status = kind === 'manage' ? 'cant' : 'manage';
+      save();
+      render();
+    });
+    const discardBtn = document.createElement('button');
+    discardBtn.className = 'link-btn discard';
+    discardBtn.textContent = '✕ ปัดทิ้ง';
+    discardBtn.addEventListener('click', function () {
+      worries = worries.filter(x => x.id !== w.id);
+      save();
+      render();
+    });
+    foot.appendChild(moveBtn);
+    foot.appendChild(discardBtn);
+    item.appendChild(foot);
+
+    box.appendChild(item);
+  });
+
+  wrap.innerHTML = '';
+  wrap.appendChild(box);
+}
+
+function renderFoot() {
+  const wrap = document.getElementById('footActions');
+  const tip = document.getElementById('closingTip');
+  const sorted = worries.filter(w => w.status === 'manage' || w.status === 'cant');
+  if (sorted.length === 0 && worries.length === 0) {
+    wrap.innerHTML = '';
+    tip.textContent = '';
+    return;
+  }
+  wrap.innerHTML =
+    '<button class="btn btn-primary" id="saveImgBtn"' + (sorted.length === 0 ? ' disabled' : '') + '>📷 บันทึกเป็นรูป</button>' +
+    '<button class="btn btn-ghost" id="clearBtn">🔄 ล้างและเริ่มใหม่</button>';
+  tip.textContent = 'ไม่มีคำตอบผิด บางเรื่องก็ก้ำกึ่ง แยกแบบที่รู้สึกว่าจริงกับเราตอนนี้ แล้วปรับใหม่ได้เสมอ';
+
+  document.getElementById('clearBtn').addEventListener('click', function () {
+    if (worries.length && !confirm('ล้างทุกเรื่องที่บันทึกไว้ใช่ไหม?')) return;
+    worries = [];
+    try { localStorage.removeItem(STORE_KEY); } catch (e) {}
+    render();
+  });
+  const sBtn = document.getElementById('saveImgBtn');
+  if (sBtn && !sBtn.disabled) sBtn.addEventListener('click', saveImage);
+}
+
+/* ---------- image export ---------- */
+async function saveImage() {
+  const manage = worries.filter(w => w.status === 'manage');
+  const cant = worries.filter(w => w.status === 'cant');
+  if (!manage.length && !cant.length) return;
+  const btn = document.getElementById('saveImgBtn');
+
+  const warm = document.createElement('canvas').getContext('2d');
+  warm.font = 'bold 16px "Leelawadee UI", Tahoma, sans-serif';
+  warm.fillText('เตรียมฟอนต์ กขคง', 0, 20);
+  if (document.fonts && document.fonts.ready) { try { await document.fonts.ready; } catch (e) {} }
+  await new Promise(requestAnimationFrame);
+  await new Promise(requestAnimationFrame);
+
+  const dpr = window.devicePixelRatio || 1;
+  const W = 720, padX = 44, maxW = W - padX * 2;
+  const canvas = document.createElement('canvas');
+  const ctx = canvas.getContext('2d');
+
+  const F = {
+    title: 'bold 26px "Leelawadee UI", Tahoma, sans-serif',
+    h2: 'bold 19px "Leelawadee UI", Tahoma, sans-serif',
+    worry: 'bold 16px "Leelawadee UI", Tahoma, sans-serif',
+    body: '15px "Leelawadee UI", Tahoma, sans-serif',
+    small: '13px "Leelawadee UI", Tahoma, sans-serif',
+    italic: 'italic 13px "Leelawadee UI", Tahoma, sans-serif'
+  };
+
+  const blocks = [];
+  function push(t, f, c, mt, x) { blocks.push({ t: t, f: f, c: c, mt: mt || 0, x: x || padX }); }
+  function pushWrapped(text, f, c, mtFirst, x) {
+    ctx.font = f;
+    wrapByChar(ctx, text, W - (x || padX) - padX).forEach(function (ln, i) {
+      push(ln, f, c, i === 0 ? mtFirst : 3, x);
+    });
+  }
+
+  push('🗂️ แยกความกังวลของฉัน', F.title, '#3a6fbf', 0);
+  const dateStr = new Date().toLocaleDateString('th-TH', { year: 'numeric', month: 'long', day: 'numeric' });
+  push('บันทึกเมื่อ ' + dateStr, F.small, '#6b849a', 10);
+
+  push('✅ จัดการได้ (' + manage.length + ')', F.h2, '#2f8f68', 30);
+  if (!manage.length) push('— ยังไม่มี —', F.italic, '#6b849a', 10);
+  manage.forEach(function (w) {
+    pushWrapped('• ' + w.text, F.worry, '#1e3240', 18);
+    FIELDS.forEach(function (f) {
+      const v = (w.plan[f[0]] || '').trim();
+      if (!v) return;
+      const shortLabel = f[1].split(' (')[0];
+      pushWrapped(shortLabel + ' — ' + v, F.body, '#42586a', 6, padX + 20);
+    });
+  });
+
+  push('🍃 จัดการไม่ได้ (' + cant.length + ')', F.h2, '#5b7797', 30);
+  if (!cant.length) push('— ยังไม่มี —', F.italic, '#6b849a', 10);
+  cant.forEach(function (w) {
+    pushWrapped('• ' + w.text, F.worry, '#1e3240', 18);
+    if (w.parked) push('วางไว้ก่อน แล้วไปทำเรื่องที่จัดการได้', F.italic, '#5b7797', 5, padX + 20);
+  });
+
+  pushWrapped('เรื่องที่ทำอะไรได้ — ลงมือทีละก้าว   เรื่องที่ทำอะไรไม่ได้ — ฝึกวางลง', F.italic, '#6b849a', 34);
+
+  let y = 44;
+  blocks.forEach(function (b) {
+    y += b.mt;
+    b.y = y;
+    y += (b.f === F.title ? 20 : b.f === F.h2 ? 16 : 22);
+  });
+  const H = y + 34;
+
+  canvas.width = W * dpr;
+  canvas.height = H * dpr;
+  ctx.scale(dpr, dpr);
+  ctx.fillStyle = '#f5fbf9';
+  ctx.fillRect(0, 0, W, H);
+  ctx.textAlign = 'left';
+  ctx.textBaseline = 'alphabetic';
+  blocks.forEach(function (b) {
+    ctx.font = b.f;
+    ctx.fillStyle = b.c;
+    ctx.fillText(b.t, b.x, b.y);
+  });
+
+  canvas.toBlob(function (blob) {
+    const url = URL.createObjectURL(blob);
+    const dateTag = new Date().toISOString().slice(0, 10);
+    const filename = 'แยกความกังวล_' + dateTag + '.png';
+    const file = new File([blob], filename, { type: 'image/png' });
+    const doneUI = function () {
+      btn.textContent = 'บันทึกแล้ว ✓';
+      setTimeout(function () { btn.textContent = '📷 บันทึกเป็นรูป'; }, 2200);
+    };
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+      navigator.share({ files: [file], title: 'แยกความกังวลของฉัน' }).then(doneUI).catch(function () {});
+      URL.revokeObjectURL(url);
+      return;
+    }
+    const a = document.createElement('a');
+    a.download = filename;
+    a.href = url;
+    a.click();
+    setTimeout(function () { URL.revokeObjectURL(url); }, 5000);
+    doneUI();
+  }, 'image/png');
+}
+
+function wrapByChar(ctx, text, maxW) {
+  const lines = [];
+  let line = '';
+  for (const ch of text) {
+    const test = line + ch;
+    if (ctx.measureText(test).width > maxW && line) {
+      lines.push(line);
+      line = ch;
+    } else {
+      line = test;
+    }
+  }
+  if (line) lines.push(line);
+  return lines;
+}
+
+/* ---------- init ---------- */
+load();
+render();
+</script>
+</body>
+</html>

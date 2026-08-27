@@ -274,6 +274,8 @@ textarea.ta::placeholder { color: #a8c0d9; }
 }
 .mini-btn:hover { background: var(--cant-light); }
 .mini-btn.on { background: var(--cant); border-color: var(--cant); color: #fff; }
+.mini-btn.balloon { color: var(--blue-dark); border-color: #bcd4f2; }
+.mini-btn.balloon:hover { background: var(--blue-light); }
 .parked-note {
   margin-top: 10px;
   background: var(--cant-light);
@@ -299,6 +301,7 @@ textarea.ta::placeholder { color: #a8c0d9; }
   color: var(--text-muted);
   cursor: pointer;
   padding: 2px 0;
+  text-decoration: none;
 }
 .link-btn:hover { color: var(--text); }
 .link-btn.discard:hover { color: var(--danger); }
@@ -314,6 +317,55 @@ textarea.ta::placeholder { color: #a8c0d9; }
   margin-top: 22px;
 }
 .empty-hint { font-size: 13.5px; color: var(--text-muted); text-align: center; padding: 6px 0; }
+
+/* Released-worry balloon (floats up the whole viewport) */
+.balloon-sky {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 50;
+}
+.float-balloon {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  animation: worryFloatAway var(--dur, 8s) ease-in forwards;
+}
+.float-balloon-shape {
+  width: 68px;
+  height: 82px;
+  border-radius: 50% 50% 48% 48% / 58% 58% 42% 42%;
+  box-shadow: inset -9px -11px 16px rgba(0,0,0,0.15), 0 4px 14px rgba(0,0,0,0.18);
+  flex-shrink: 0;
+}
+.float-balloon-string { width: 1.5px; height: 34px; background: rgba(90,90,90,0.4); }
+.float-balloon-tag {
+  margin-top: 2px;
+  max-width: 180px;
+  background: rgba(255,255,255,0.96);
+  border: 1.5px solid rgba(0,0,0,0.06);
+  border-radius: 12px;
+  padding: 8px 12px;
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--text);
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  word-break: break-word;
+}
+@keyframes worryFloatAway {
+  0%   { transform: translate(-50%, 0) rotate(-3deg); opacity: 0; }
+  8%   { opacity: 1; }
+  40%  { transform: translate(calc(-50% + 24px), -38vh) rotate(3deg); }
+  70%  { transform: translate(calc(-50% - 18px), -70vh) rotate(-2deg); }
+  92%  { opacity: 1; }
+  100% { transform: translate(calc(-50% + 8px), calc(-100vh - 280px)) rotate(1deg); opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .float-balloon { animation-duration: 2.5s; }
+}
 </style>
 </head>
 <body>
@@ -357,6 +409,8 @@ textarea.ta::placeholder { color: #a8c0d9; }
 
   <div class="closing-tip" id="closingTip"></div>
 </main>
+
+<div class="balloon-sky" id="balloonSky" aria-hidden="true"></div>
 
 <script>
 const FIELDS = [
@@ -550,13 +604,18 @@ function renderBox(kind) {
         render();
       });
 
-      const balloonLink = document.createElement('a');
-      balloonLink.className = 'mini-btn';
-      balloonLink.href = 'balloon.html';
-      balloonLink.textContent = '🎈 ปล่อยกับลูกโป่ง';
+      const balloonBtn = document.createElement('button');
+      balloonBtn.className = 'mini-btn balloon';
+      balloonBtn.textContent = '🎈 ปล่อยกับลูกโป่ง';
+      balloonBtn.addEventListener('click', function () {
+        floatWorryBalloon(w.text, item);
+        worries = worries.filter(x => x.id !== w.id);
+        save();
+        render();
+      });
 
       actions.appendChild(parkBtn);
-      actions.appendChild(balloonLink);
+      actions.appendChild(balloonBtn);
       item.appendChild(actions);
 
       if (w.parked) {
@@ -577,16 +636,18 @@ function renderBox(kind) {
       save();
       render();
     });
-    const discardBtn = document.createElement('button');
-    discardBtn.className = 'link-btn discard';
-    discardBtn.textContent = '✕ ปัดทิ้ง';
-    discardBtn.addEventListener('click', function () {
-      worries = worries.filter(x => x.id !== w.id);
-      save();
-      render();
-    });
     foot.appendChild(moveBtn);
-    foot.appendChild(discardBtn);
+    if (kind === 'manage') {
+      const discardBtn = document.createElement('button');
+      discardBtn.className = 'link-btn discard';
+      discardBtn.textContent = '✕ ปัดทิ้ง';
+      discardBtn.addEventListener('click', function () {
+        worries = worries.filter(x => x.id !== w.id);
+        save();
+        render();
+      });
+      foot.appendChild(discardBtn);
+    }
     item.appendChild(foot);
 
     box.appendChild(item);
@@ -594,6 +655,48 @@ function renderBox(kind) {
 
   wrap.innerHTML = '';
   wrap.appendChild(box);
+}
+
+/* ---------- release-a-worry balloon (in-page) ---------- */
+const BALLOON_COLORS = ['#ef7c7c', '#f5a25c', '#e8c34e', '#6fc494', '#4fb8ae', '#6fa8ea', '#a68ce0', '#f08cc0'];
+
+function floatWorryBalloon(text, originEl) {
+  const sky = document.getElementById('balloonSky');
+  if (!sky) return;
+
+  // start where the card currently sits on screen, but kept fully on-screen
+  let startX = window.innerWidth / 2;
+  let startY = window.innerHeight * 0.6;
+  if (originEl) {
+    const r = originEl.getBoundingClientRect();
+    startX = r.left + r.width / 2;
+    startY = r.top + 20;
+  }
+  startX = Math.max(90, Math.min(startX, window.innerWidth - 90));
+  startY = Math.max(90, Math.min(startY, window.innerHeight - 130));
+
+  const balloon = document.createElement('div');
+  balloon.className = 'float-balloon';
+  balloon.style.left = startX + 'px';
+  balloon.style.top = startY + 'px';
+  balloon.style.setProperty('--dur', (7.5 + Math.min(text.length / 12, 4)) + 's');
+
+  const shape = document.createElement('div');
+  shape.className = 'float-balloon-shape';
+  shape.style.background = BALLOON_COLORS[Math.floor(Math.random() * BALLOON_COLORS.length)];
+
+  const string = document.createElement('div');
+  string.className = 'float-balloon-string';
+
+  const tag = document.createElement('div');
+  tag.className = 'float-balloon-tag';
+  tag.textContent = text;
+
+  balloon.appendChild(shape);
+  balloon.appendChild(string);
+  balloon.appendChild(tag);
+  balloon.addEventListener('animationend', function () { balloon.remove(); });
+  sky.appendChild(balloon);
 }
 
 function renderFoot() {
@@ -716,24 +819,11 @@ async function saveImage() {
     const url = URL.createObjectURL(blob);
     const dateTag = new Date().toISOString().slice(0, 10);
     const filename = 'แยกความกังวล_' + dateTag + '.png';
-    const file = new File([blob], filename, { type: 'image/png' });
-    const doneUI = function () {
-      btn.textContent = 'บันทึกแล้ว ✓';
-      setTimeout(function () { btn.textContent = '📷 บันทึกเป็นรูป'; }, 2200);
-    };
 
-    // On phones a plain download usually just opens the raw image in a new
-    // tab instead of saving it, so hand the file to the OS share sheet
-    // (Save to Photos). On desktop the share sheet is unwanted — Windows/Mac
-    // now report canShare({files}) as true too — so restrict sharing to
-    // touch devices and let everything else download normally.
-    const isTouchDevice = window.matchMedia('(hover: none) and (pointer: coarse)').matches;
-    if (isTouchDevice && navigator.canShare && navigator.canShare({ files: [file] })) {
-      navigator.share({ files: [file], title: 'แยกความกังวลของฉัน' }).then(doneUI).catch(function () {});
-      URL.revokeObjectURL(url);
-      return;
-    }
-
+    // Always download the file — predictable on every platform. (An earlier
+    // version routed to navigator.share() on "touch" devices, but desktop
+    // Chrome reports touch/share capability too and would pop the OS share
+    // sheet instead of saving.)
     const a = document.createElement('a');
     a.download = filename;
     a.href = url;
@@ -742,7 +832,9 @@ async function saveImage() {
     a.click();
     document.body.removeChild(a);
     setTimeout(function () { URL.revokeObjectURL(url); }, 5000);
-    doneUI();
+
+    btn.textContent = 'บันทึกแล้ว ✓';
+    setTimeout(function () { btn.textContent = '📷 บันทึกเป็นรูป'; }, 2200);
   }, 'image/png');
 }
 

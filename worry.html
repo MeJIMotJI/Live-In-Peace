@@ -299,6 +299,7 @@ textarea.ta::placeholder { color: #a8c0d9; }
   color: var(--text-muted);
   cursor: pointer;
   padding: 2px 0;
+  text-decoration: none;
 }
 .link-btn:hover { color: var(--text); }
 .link-btn.discard:hover { color: var(--danger); }
@@ -573,8 +574,9 @@ function renderBox(kind) {
       save();
       render();
     });
-    const lastBtn = document.createElement('button');
+    let lastBtn;
     if (kind === 'manage') {
+      lastBtn = document.createElement('button');
       lastBtn.className = 'link-btn discard';
       lastBtn.textContent = '✕ ปัดทิ้ง';
       lastBtn.addEventListener('click', function () {
@@ -583,14 +585,22 @@ function renderBox(kind) {
         render();
       });
     } else {
+      // A real anchor with target="_blank" — window.open() from a file://
+      // page is blocked as a popup by Chrome, an anchor click is not.
+      lastBtn = document.createElement('a');
       lastBtn.className = 'link-btn balloon';
       lastBtn.textContent = '🎈 ปล่อยกับลูกโป่ง';
+      lastBtn.href = 'balloon.html';
+      lastBtn.target = '_blank';
+      lastBtn.rel = 'noopener';
       lastBtn.addEventListener('click', function () {
         try { localStorage.setItem('lip_balloon_incoming', w.text); } catch (e) {}
-        window.open('balloon.html', '_blank');
-        worries = worries.filter(x => x.id !== w.id);
-        save();
-        render();
+        // let the new tab open first, then drop the card from this page
+        setTimeout(function () {
+          worries = worries.filter(x => x.id !== w.id);
+          save();
+          render();
+        }, 50);
       });
     }
     foot.appendChild(moveBtn);

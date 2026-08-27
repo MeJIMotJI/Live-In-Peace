@@ -219,7 +219,7 @@ line-height: 1.8–1.9;
 ### Site-wide Features
 | ฟีเจอร์ | สถานะ | หมายเหตุ |
 |------|--------|----------|
-| Dark mode | ✅ v1 | ทั้ง 14 หน้า — ปุ่มสลับ 🌙/☀️ ลอยมุมขวาบน, จำค่าใน localStorage (`lip-theme`), ไม่มี FOUC. บล็อก `<style>`+`<script>` เหมือนกันทุกไฟล์ (แทรกก่อน `</head>`) + dark override เฉพาะหน้าสำหรับ accent/กล่องสีพิเศษ |
+| Dark mode | ✅ v1 | ทั้ง 15 หน้า (รวม worry.html) — ปุ่มสลับ 🌙/☀️ ลอยมุมขวาบน, จำค่าใน localStorage (`lip-theme`), ไม่มี FOUC. บล็อก `<style>`+`<script>` เหมือนกันทุกไฟล์ (แทรกก่อน `</head>`) + dark override เฉพาะหน้าสำหรับ accent/กล่องสีพิเศษ |
 
 ### Open Items
 - [ ] Researcher review: ตรวจสอบความถูกต้องเนื้อหาทุกหน้า

@@ -208,7 +208,7 @@ line-height: 1.8–1.9;
 | grounding.html | ✅ v1 | 5-4-3-2-1 interactive steps |
 | inner.html | ✅ v1 | CBT 5-component self-observation journal; Satir Iceberg thought boxes; body two-level picker; canvas PNG export |
 | values.html | ✅ v1 | การ์ดคุณค่าในตัวฉัน — values card-sort (8 หมวด × 12 คำ = 96 คำ), เลือกคำใส่ตะกร้า, ช่องเขียนสะท้อนสั้นๆ "วันนี้ฉัน...", การ์ดสรุปอยู่บนสุดของหน้า สี pill ตามหมวดคำ, export PNG (canvas), บันทึก draft ผ่าน localStorage |
-| worry.html | ✅ v1 draft | แยกความกังวล (Worry Tree, CBT/GAD) — พิมพ์ความกังวลทีละเรื่อง, ลากการ์ดลง = "จัดการได้" / ปัดขึ้น = "จัดการไม่ได้" (Pointer Events + ปุ่มสำรอง); กล่องจัดการได้ = ช่อง 5W1H + "ก้าวแรก"; กล่องจัดการไม่ได้ = "วางไว้ก่อน" (worry postponement) หรือลิงก์ balloon.html; ย้าย/ปัดทิ้งการ์ดได้, autosave localStorage, export PNG (canvas). ยังไม่ผ่าน Checker |
+| worry.html | ✅ v1 draft | แยกความกังวล (Worry Tree, CBT/GAD) — พิมพ์ความกังวลทีละเรื่อง, ลากการ์ดลง = "จัดการได้" / ปัดขึ้น = "จัดการไม่ได้" (Pointer Events + ปุ่มสำรอง); กล่องจัดการได้ = ช่อง 5W1H + "ก้าวแรก"; กล่องจัดการไม่ได้ = "วางไว้ก่อน" (worry postponement) หรือ "ปล่อยกับลูกโป่ง" (ข้อความลอยเป็นลูกโป่งขึ้นฟ้าในหน้านี้เลย + การ์ดหายไป); ย้าย/ปัดทิ้งการ์ดได้, autosave localStorage, export PNG (canvas ดาวน์โหลดเสมอ). ยังไม่ผ่าน Checker |
 
 ### Game Pages
 | ไฟล์ | สถานะ | หมายเหตุ |

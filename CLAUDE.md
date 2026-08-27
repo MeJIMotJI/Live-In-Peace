@@ -66,6 +66,7 @@ Live-In-Peace/
 ├── grounding.html            ← Exercise: เทคนิค 5-4-3-2-1
 ├── inner.html                ← Exercise: ฝึกสังเกตโลกภายใน (CBT 5-component journal)
 ├── values.html               ← Exercise: การ์ดคุณค่าในตัวฉัน (values card-sort, canvas PNG export)
+├── worry.html                ← Exercise: แยกความกังวล (Worry Tree — drag/swipe sort จัดการได้/ไม่ได้, 5W1H plan, PNG export)
 ├── game.html                 ← Game: จับฟองลมหายใจ (breathing-rhythm mini-game, no fail state)
 └── balloon.html              ← Game: ลูกโป่งความกังวล (release-a-worry exercise, balloons float away)
 ```
@@ -207,6 +208,7 @@ line-height: 1.8–1.9;
 | grounding.html | ✅ v1 | 5-4-3-2-1 interactive steps |
 | inner.html | ✅ v1 | CBT 5-component self-observation journal; Satir Iceberg thought boxes; body two-level picker; canvas PNG export |
 | values.html | ✅ v1 | การ์ดคุณค่าในตัวฉัน — values card-sort (8 หมวด × 12 คำ = 96 คำ), เลือกคำใส่ตะกร้า, ช่องเขียนสะท้อนสั้นๆ "วันนี้ฉัน...", การ์ดสรุปอยู่บนสุดของหน้า สี pill ตามหมวดคำ, export PNG (canvas), บันทึก draft ผ่าน localStorage |
+| worry.html | ✅ v1 draft | แยกความกังวล (Worry Tree, CBT/GAD) — พิมพ์ความกังวลทีละเรื่อง, ลากการ์ดลง = "จัดการได้" / ปัดขึ้น = "จัดการไม่ได้" (Pointer Events + ปุ่มสำรอง); กล่องจัดการได้ = ช่อง 5W1H + "ก้าวแรก"; กล่องจัดการไม่ได้ = "วางไว้ก่อน" (worry postponement) หรือลิงก์ balloon.html; ย้าย/ปัดทิ้งการ์ดได้, autosave localStorage, export PNG (canvas). ยังไม่ผ่าน Checker |
 
 ### Game Pages
 | ไฟล์ | สถานะ | หมายเหตุ |

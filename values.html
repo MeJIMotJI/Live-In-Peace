@@ -563,8 +563,15 @@ async function saveAsImage() {
   if (document.fonts && document.fonts.ready) {
     try { await document.fonts.ready; } catch (e) {}
   }
-  await new Promise(requestAnimationFrame);
-  await new Promise(requestAnimationFrame);
+  // Race each rAF wait with a timeout so a backgrounded tab (rAF paused)
+  // still completes the export.
+  const nextFrame = () => new Promise(res => {
+    let done = false;
+    requestAnimationFrame(() => { done = true; res(); });
+    setTimeout(() => { if (!done) res(); }, 200);
+  });
+  await nextFrame();
+  await nextFrame();
 
   const dpr = window.devicePixelRatio || 1;
   const W = 720;
@@ -686,11 +693,14 @@ async function saveAsImage() {
       setTimeout(() => { btn.innerHTML = '📷 บันทึกเป็นรูป'; }, 2200);
     };
 
-    // On mobile, a downloaded blob often just opens as a raw image in the
+    // On phones a downloaded blob often just opens as a raw image in the
     // browser (not fit to screen) instead of actually saving — Web Share
     // hands it to the OS share sheet (Save to Photos) so the full image
-    // is viewed properly. Desktop / unsupported browsers fall back to <a download>.
-    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+    // is viewed properly. Desktop Chrome now reports canShare({files}) as
+    // true too, so restrict the share path to touch devices; everything
+    // else falls back to a normal <a download>.
+    const isTouchDevice = window.matchMedia('(hover: none) and (pointer: coarse)').matches;
+    if (isTouchDevice && navigator.canShare && navigator.canShare({ files: [file] })) {
       navigator.share({ files: [file], title: 'การ์ดคุณค่าในตัวฉัน' })
         .then(doneUI)
         .catch(() => {}); // user cancelled the share sheet — not an error
@@ -701,7 +711,10 @@ async function saveAsImage() {
     const a = document.createElement('a');
     a.download = filename;
     a.href = url;
+    a.rel = 'noopener';
+    document.body.appendChild(a);
     a.click();
+    document.body.removeChild(a);
     setTimeout(() => URL.revokeObjectURL(url), 5000);
     doneUI();
   }, 'image/png');

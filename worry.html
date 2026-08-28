@@ -316,7 +316,6 @@ textarea.ta::placeholder { color: #a8c0d9; }
   line-height: 1.8;
   margin-top: 22px;
 }
-.empty-hint { font-size: 13.5px; color: var(--text-muted); text-align: center; padding: 6px 0; }
 
 /* Released-worry balloon (floats up the whole viewport) */
 .balloon-sky {
@@ -435,8 +434,10 @@ textarea.ta::placeholder { color: #a8c0d9; }
   --danger: #e58b98;
 }
 :root[data-theme="dark"] .info-box { color: var(--blue-dark); }
-:root[data-theme="dark"] .hint-up.active { background: #24313f; }
-:root[data-theme="dark"] .drop-manage.active { background: #1c3a32; }
+:root[data-theme="dark"] .hint-up.active,
+:root[data-theme="dark"] .btn-cant:hover { background: #24313f; }
+:root[data-theme="dark"] .drop-manage.active,
+:root[data-theme="dark"] .btn-manage:hover { background: #1c3a32; }
 :root[data-theme="dark"] .mini-btn.balloon { border-color: var(--blue-dark); }
 :root[data-theme="dark"] .mini-btn.on { background: #3f5f7d; border-color: #3f5f7d; color: #eef3f8; }
 :root[data-theme="dark"] .active-card { box-shadow: 0 6px 22px rgba(0,0,0,0.5); }
@@ -532,6 +533,7 @@ const FIELDS = [
   ['first', 'ก้าวแรกที่เล็กที่สุด (ทำได้ภายในวันนี้)']
 ];
 const STORE_KEY = 'lip_worry_draft';
+const BALLOON_COLORS = ['#ef7c7c', '#f5a25c', '#e8c34e', '#6fc494', '#4fb8ae', '#6fa8ea', '#a68ce0', '#f08cc0'];
 
 let worries = [];
 
@@ -768,8 +770,6 @@ function renderBox(kind) {
 }
 
 /* ---------- release-a-worry balloon (in-page) ---------- */
-const BALLOON_COLORS = ['#ef7c7c', '#f5a25c', '#e8c34e', '#6fc494', '#4fb8ae', '#6fa8ea', '#a68ce0', '#f08cc0'];
-
 function floatWorryBalloon(text, originEl) {
   const sky = document.getElementById('balloonSky');
   if (!sky) return;
@@ -857,7 +857,7 @@ async function saveImage() {
   await nextFrame();
 
   const dpr = window.devicePixelRatio || 1;
-  const W = 720, padX = 44, maxW = W - padX * 2;
+  const W = 720, padX = 44;
   const canvas = document.createElement('canvas');
   const ctx = canvas.getContext('2d');
 

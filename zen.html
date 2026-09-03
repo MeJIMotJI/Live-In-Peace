@@ -150,6 +150,11 @@ main { max-width: 560px; margin: 0 auto; padding: 22px 20px 60px; }
 .chip.ghost { background: transparent; }
 .chip.danger[aria-pressed="true"],
 .chip.danger:active { background: #fdecec; border-color: #e58a8a; color: #b45252; }
+.ctx-label { font-size: 13px; color: var(--text-muted); font-weight: 700; margin-right: 2px; }
+#ctxRow[hidden] { display: none; }
+#sizeSlider { width: 160px; max-width: 55vw; accent-color: var(--primary); cursor: pointer; vertical-align: middle; }
+#rakeChips { display: inline-flex; gap: 8px; }
+#rakeChips[hidden] { display: none; }
 
 .hint {
   font-size: 13px;
@@ -261,7 +266,7 @@ main { max-width: 560px; margin: 0 auto; padding: 22px 20px 60px; }
 <div class="hero">
   <div class="hero-icon">🏯</div>
   <h1>สวนหินเซน</h1>
-  <p>ลากนิ้วคราดทราย วางหินและใบไม้ตามใจ ไม่มีถูกผิด ไม่มีเป้าหมาย แค่ได้อยู่กับมือและลมหายใจ</p>
+  <p>ลากนิ้วคราดทราย วางหิน ต้นไม้ และของอื่นๆ ตามใจ ไม่มีถูกผิด ไม่มีเป้าหมาย แค่ได้อยู่กับมือและลมหายใจ</p>
 </div>
 
 <main>
@@ -270,7 +275,7 @@ main { max-width: 560px; margin: 0 auto; padding: 22px 20px 60px; }
   </div>
 
   <div class="info-box">
-    🏯 <strong>วิธีเล่น:</strong> เลือก “คราด” แล้วลากนิ้วบนทรายเพื่อวาดร่องเส้น เลือกหิน มอส หรือใบไม้แล้วแตะเพื่อวาง ลากของที่วางแล้วเพื่อย้าย หรือลากออกนอกถาดเพื่อเอาออก ไม่ต้องรีบ ค่อยๆ ทำไปเรื่อยๆ
+    🏯 <strong>วิธีเล่น:</strong> เลือก “คราด” แล้วลากนิ้วบนทรายเพื่อวาดร่องเส้น เลือกของที่อยากวางแล้วแตะบนทราย ลากของเพื่อย้าย แตะเบาๆ เพื่อเลือกแล้วปรับขนาดด้วยแถบเลื่อน หรือลากออกนอกถาดเพื่อเอาออก ไม่ต้องรีบ ค่อยๆ ทำไปเรื่อยๆ
   </div>
 
   <div class="garden-wrap">
@@ -280,19 +285,25 @@ main { max-width: 560px; margin: 0 auto; padding: 22px 20px 60px; }
   <div class="tool-card">
     <div class="tool-row" id="toolRow">
       <button class="chip" data-tool="rake" type="button" aria-pressed="true">🧹 คราด</button>
-      <button class="chip" data-tool="rock-lg" type="button" aria-pressed="false">🪨 หินก้อนใหญ่</button>
-      <button class="chip" data-tool="rock-sm" type="button" aria-pressed="false">🪨 หินก้อนเล็ก</button>
+      <button class="chip" data-tool="rock" type="button" aria-pressed="false">🪨 หิน</button>
       <button class="chip" data-tool="moss" type="button" aria-pressed="false">🌿 มอส</button>
       <button class="chip" data-tool="leaf" type="button" aria-pressed="false">🍃 ใบไม้</button>
+      <button class="chip" data-tool="flower" type="button" aria-pressed="false">🌸 ดอกไม้</button>
+      <button class="chip" data-tool="grass" type="button" aria-pressed="false">🌾 พุ่มหญ้า</button>
+      <button class="chip" data-tool="twig" type="button" aria-pressed="false">🪵 กิ่งไม้</button>
+      <button class="chip" data-tool="lantern" type="button" aria-pressed="false">🏮 โคมหิน</button>
     </div>
-    <div class="tool-row" id="rakeSizeRow">
-      <span class="hint" style="margin:0 4px 0 0">ขนาดคราด</span>
-      <button class="chip" data-rake="fine" type="button" aria-pressed="false">ละเอียด</button>
-      <button class="chip" data-rake="medium" type="button" aria-pressed="true">กลาง</button>
-      <button class="chip" data-rake="wide" type="button" aria-pressed="false">กว้าง</button>
-      <button class="chip ghost" id="soundToggle" type="button" aria-pressed="false">🔉 เสียงคราด</button>
+    <div class="tool-row" id="ctxRow">
+      <span class="ctx-label" id="ctxLabel">ขนาดคราด</span>
+      <span id="rakeChips">
+        <button class="chip" data-rake="fine" type="button" aria-pressed="false">ละเอียด</button>
+        <button class="chip" data-rake="medium" type="button" aria-pressed="true">กลาง</button>
+        <button class="chip" data-rake="wide" type="button" aria-pressed="false">กว้าง</button>
+      </span>
+      <input type="range" id="sizeSlider" min="0.5" max="2.4" step="0.05" value="1" aria-label="ปรับขนาด" hidden>
     </div>
     <div class="tool-row">
+      <button class="chip ghost" id="soundToggle" type="button" aria-pressed="false">🔉 เสียงคราด</button>
       <button class="chip ghost" id="undoBtn" type="button">↩️ ย้อนกลับ</button>
       <button class="chip ghost danger" id="resetBtn" type="button">🧽 เกลี่ยใหม่ทั้งหมด</button>
       <button class="chip ghost" id="saveBtn" type="button">📷 บันทึกเป็นรูป</button>
@@ -340,6 +351,8 @@ main { max-width: 560px; margin: 0 auto; padding: 22px 20px 60px; }
   var tool = 'rake';
   var rakeSize = 'medium';
   var soundOn = false;
+  var placeScale = 1;
+  var selectedItem = null;
 
   var strokes = [];   // { rake, pts: [[nx,ny],...] }
   var items = [];      // { id, type, nx, ny, rot, scale, seed }
@@ -366,7 +379,11 @@ main { max-width: 560px; margin: 0 auto; padding: 22px 20px 60px; }
         if (Array.isArray(d.strokes)) strokes = d.strokes;
         if (Array.isArray(d.items)) {
           items = d.items;
-          items.forEach(function (it) { if (it.id >= nextId) nextId = it.id + 1; });
+          items.forEach(function (it) {
+            if (it.type === 'rock-lg') { it.type = 'rock'; it.scale = (it.scale || 1) * 1.5; }
+            else if (it.type === 'rock-sm') { it.type = 'rock'; it.scale = (it.scale || 1) * 0.8; }
+            if (it.id >= nextId) nextId = it.id + 1;
+          });
         }
       }
     } catch (e) {}
@@ -467,11 +484,11 @@ main { max-width: 560px; margin: 0 auto; padding: 22px 20px 60px; }
     };
   }
 
+  var ITEM_BASE = { rock: 21, moss: 20, leaf: 16, flower: 15, grass: 22, twig: 24, lantern: 24 };
   function itemRadius(it) {
-    var base = it.type === 'rock-lg' ? 27 : it.type === 'rock-sm' ? 13
-             : it.type === 'moss' ? 20 : 16;
-    return base * S * (it.scale || 1);
+    return (ITEM_BASE[it.type] || 18) * S * (it.scale || 1);
   }
+  var HIT_MULT = { leaf: 1.3, twig: 1.6, grass: 1.4, lantern: 1.7 };
 
   function blob(g, r, rand, wob) {
     var pts = 11, path = [];
@@ -501,7 +518,7 @@ main { max-width: 560px; margin: 0 auto; padding: 22px 20px 60px; }
     g.shadowBlur = 9 * S;
     g.shadowOffsetY = 3 * S;
 
-    if (it.type === 'rock-lg' || it.type === 'rock-sm') {
+    if (it.type === 'rock') {
       blob(g, r, mulberry32(it.seed), 0.16);
       var gr = g.createLinearGradient(-r, -r, r, r);
       if (dark) { gr.addColorStop(0, '#6b7076'); gr.addColorStop(1, '#3c4045'); }
@@ -512,6 +529,77 @@ main { max-width: 560px; margin: 0 auto; padding: 22px 20px 60px; }
       blob(g, r * 0.62, mulberry32(it.seed + 9), 0.2);
       g.fillStyle = dark ? 'rgba(255,255,255,0.07)' : 'rgba(255,255,255,0.22)';
       g.translate(-r * 0.18, -r * 0.18);
+      g.fill();
+    } else if (it.type === 'flower') {
+      var fc = [['#f6a8c8', '#e87ba8'], ['#fff0bf', '#f3d370'], ['#d9c6f2', '#b79ae0'],
+               ['#ffd7c0', '#f5b08e'], ['#ffffff', '#e6e6e6']][it.seed % 5];
+      var np = 5 + (it.seed % 3);
+      for (var fp = 0; fp < np; fp++) {
+        g.save();
+        g.rotate(fp / np * Math.PI * 2);
+        var fg = g.createLinearGradient(0, -r, 0, 0);
+        fg.addColorStop(0, fc[0]); fg.addColorStop(1, fc[1]);
+        g.fillStyle = fg;
+        g.beginPath();
+        g.ellipse(0, -r * 0.58, r * 0.4, r * 0.72, 0, 0, Math.PI * 2);
+        g.fill();
+        g.restore();
+      }
+      g.shadowColor = 'transparent';
+      g.beginPath();
+      g.arc(0, 0, r * 0.34, 0, Math.PI * 2);
+      g.fillStyle = dark ? '#c9a94a' : '#eac457';
+      g.fill();
+    } else if (it.type === 'grass') {
+      var gb = 6 + (it.seed % 4), pcg = mulberry32(it.seed + 5);
+      g.lineCap = 'round';
+      for (var gi = 0; gi < gb; gi++) {
+        var sprd = (gi / (gb - 1) - 0.5) * 2;
+        g.strokeStyle = (gi % 2)
+          ? (dark ? '#4f7a45' : '#6fae5c')
+          : (dark ? '#3c5f38' : '#548a45');
+        g.lineWidth = Math.max(1, 2.1 * S);
+        g.beginPath();
+        g.moveTo(sprd * r * 0.12, r * 0.7);
+        g.quadraticCurveTo(sprd * r * 0.5, -r * 0.1, sprd * r * 0.95, -r * (0.7 + pcg() * 0.4));
+        g.stroke();
+      }
+    } else if (it.type === 'twig') {
+      g.strokeStyle = dark ? '#7a6250' : '#8a6b4f';
+      g.lineCap = 'round';
+      g.lineWidth = Math.max(1.4, 2.8 * S);
+      g.beginPath();
+      g.moveTo(-r * 1.15, r * 0.22);
+      g.quadraticCurveTo(-r * 0.2, -r * 0.32, r * 1.15, -r * 0.06);
+      g.stroke();
+      g.shadowColor = 'transparent';
+      g.lineWidth = Math.max(1, 1.9 * S);
+      [[-0.3, 0.02, -0.52, -0.5], [0.4, -0.16, 0.66, -0.56], [0.05, -0.16, 0.12, -0.62]].forEach(function (b) {
+        g.beginPath();
+        g.moveTo(b[0] * r, b[1] * r);
+        g.quadraticCurveTo((b[0] + b[2]) / 2 * r, (b[1] + b[3]) / 2 * r - r * 0.12, b[2] * r, b[3] * r);
+        g.stroke();
+      });
+    } else if (it.type === 'lantern') {
+      var u = r;
+      var sg = g.createLinearGradient(-u, 0, u, 0);
+      if (dark) { sg.addColorStop(0, '#5a6064'); sg.addColorStop(1, '#3a3e42'); }
+      else { sg.addColorStop(0, '#cbc6bd'); sg.addColorStop(1, '#94908a'); }
+      g.fillStyle = sg;
+      g.fillRect(-0.85 * u, 1.0 * u, 1.7 * u, 0.4 * u);      // base
+      g.shadowColor = 'transparent';
+      g.fillRect(-0.26 * u, 0.15 * u, 0.52 * u, 0.9 * u);    // pillar
+      g.fillRect(-0.62 * u, -0.15 * u, 1.24 * u, 0.34 * u);  // platform
+      g.fillRect(-0.5 * u, -0.95 * u, 1.0 * u, 0.82 * u);    // light box
+      g.fillStyle = dark ? 'rgba(255,214,150,0.9)' : 'rgba(255,236,185,0.95)';
+      g.fillRect(-0.2 * u, -0.82 * u, 0.4 * u, 0.5 * u);     // glow window
+      g.fillStyle = sg;
+      g.beginPath();                                          // roof
+      g.moveTo(-0.72 * u, -0.95 * u); g.lineTo(0.72 * u, -0.95 * u);
+      g.lineTo(0.44 * u, -1.35 * u); g.lineTo(-0.44 * u, -1.35 * u);
+      g.closePath(); g.fill();
+      g.beginPath();
+      g.arc(0, -1.45 * u, 0.15 * u, 0, Math.PI * 2);          // finial
       g.fill();
     } else if (it.type === 'moss') {
       blob(g, r, mulberry32(it.seed), 0.24);
@@ -565,11 +653,22 @@ main { max-width: 560px; margin: 0 auto; padding: 22px 20px 60px; }
     for (var i = 0; i < items.length; i++) {
       drawItem(ctx, items[i], (dragItem && dragItem === items[i]) ? 0.88 : 1);
     }
+    if (selectedItem && items.indexOf(selectedItem) >= 0) {
+      var sr = itemRadius(selectedItem) * (HIT_MULT[selectedItem.type] || 1.15) + 5;
+      ctx.save();
+      ctx.strokeStyle = isDark() ? 'rgba(130,216,199,0.95)' : 'rgba(45,122,106,0.9)';
+      ctx.lineWidth = 2;
+      ctx.setLineDash([5, 4]);
+      ctx.beginPath();
+      ctx.arc(selectedItem.nx * W, selectedItem.ny * H, sr, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.restore();
+    }
   }
 
   // ---------- pointer ----------
   var raking = false, curStroke = null, lastPt = null;
-  var dragItem = null, dragOffset = null, dragMoved = false;
+  var dragItem = null, dragOffset = null, dragMoved = false, placedThisGesture = false;
 
   function pos(e) {
     var rect = canvas.getBoundingClientRect();
@@ -584,15 +683,29 @@ main { max-width: 560px; margin: 0 auto; padding: 22px 20px 60px; }
   function hitItem(x, y) {
     for (var i = items.length - 1; i >= 0; i--) {
       var it = items[i];
-      var r = itemRadius(it) * (it.type === 'leaf' ? 1.3 : 1.15);
+      var r = itemRadius(it) * (HIT_MULT[it.type] || 1.15);
       if ((x - it.nx * W) * (x - it.nx * W) + (y - it.ny * H) * (y - it.ny * H) <= r * r) return it;
     }
     return null;
   }
 
+  function selectItem(it) {
+    selectedItem = it;
+    updateCtxRow();
+    if (it) sizeSlider.value = it.scale || 1;
+    render();
+  }
+  function deselect() {
+    if (!selectedItem) return;
+    selectedItem = null;
+    updateCtxRow();
+    render();
+  }
+
   canvas.addEventListener('pointerdown', function (e) {
     canvas.setPointerCapture && canvas.setPointerCapture(e.pointerId);
     var p = pos(e);
+    placedThisGesture = false;
     var hit = hitItem(p.x, p.y);
     if (hit) {
       dragItem = hit; dragMoved = false;
@@ -603,18 +716,21 @@ main { max-width: 560px; margin: 0 auto; padding: 22px 20px 60px; }
       return;
     }
     if (tool === 'rake') {
+      deselect();
       raking = true;
       curStroke = { rake: rakeSize, pts: [[p.x / W, p.y / H]] };
       lastPt = { x: p.x, y: p.y };
     } else {
+      var spin = (tool === 'leaf' || tool === 'twig') ? 2.6 : (tool === 'lantern' ? 0.3 : 1.0);
       var it = {
         id: nextId++, type: tool, nx: p.x / W, ny: p.y / H,
-        rot: (Math.random() - 0.5) * (tool === 'leaf' ? 2.4 : 0.9),
-        scale: 0.9 + Math.random() * 0.28, seed: (Math.random() * 1e9) | 0
+        rot: (Math.random() - 0.5) * spin,
+        scale: placeScale, seed: (Math.random() * 1e9) | 0
       };
       items.push(it);
       history.push({ type: 'add', id: it.id });
       dragItem = it; dragMoved = false; dragOffset = { x: 0, y: 0 };
+      placedThisGesture = true;
       render(); save();
     }
   });
@@ -650,10 +766,17 @@ main { max-width: 560px; margin: 0 auto; padding: 22px 20px 60px; }
           items.splice(idx, 1);
           history.push({ type: 'remove', item: copy });
           removed = true;
+          if (selectedItem === dragItem) selectedItem = null;
         }
+      } else if (placedThisGesture) {
+        selectItem(dragItem);
+      } else if (!dragMoved) {
+        selectItem(dragItem === selectedItem ? null : dragItem);
       }
       delete dragItem._out;
       dragItem = null; dragOffset = null;
+      placedThisGesture = false;
+      updateCtxRow();
       render(); save();
       if (removed) showToast('เอาออกแล้ว');
       return;
@@ -684,14 +807,25 @@ main { max-width: 560px; margin: 0 auto; padding: 22px 20px 60px; }
       items.push(h.item);
       if (h.item.id >= nextId) nextId = h.item.id + 1;
     }
+    if (selectedItem && items.indexOf(selectedItem) < 0) selectedItem = null;
+    updateCtxRow();
     render(); save();
   }
 
   function resetGarden() {
     if (!window.confirm('เกลี่ยทรายให้เรียบและเอาของออกทั้งหมด?')) return;
-    strokes = []; items = []; history = []; nextId = 1;
+    clearTimeout(saveTimer);
+    strokes.length = 0;
+    items.length = 0;
+    history.length = 0;
+    nextId = 1;
+    selectedItem = null;
+    dragItem = null;
+    raking = false;
+    curStroke = null;
     try { localStorage.removeItem('lip-zen'); } catch (e) {}
-    rebuildSand(); render();
+    updateCtxRow();
+    layout();
     showToast('เกลี่ยทรายใหม่แล้ว');
   }
 
@@ -773,23 +907,42 @@ main { max-width: 560px; margin: 0 auto; padding: 22px 20px 60px; }
 
   // ---------- controls ----------
   var toolRow = document.getElementById('toolRow');
+  var rakeChips = document.getElementById('rakeChips');
+  var sizeSlider = document.getElementById('sizeSlider');
+  var ctxLabel = document.getElementById('ctxLabel');
+
+  function updateCtxRow() {
+    var showSlider = !!selectedItem || tool !== 'rake';
+    rakeChips.hidden = showSlider;
+    sizeSlider.hidden = !showSlider;
+    ctxLabel.textContent = selectedItem ? 'ขนาดชิ้นที่เลือก'
+      : (tool === 'rake' ? 'ขนาดคราด' : 'ขนาดของที่วาง');
+    if (!selectedItem && tool !== 'rake') sizeSlider.value = placeScale;
+  }
+
   toolRow.addEventListener('click', function (e) {
     var b = e.target.closest('.chip'); if (!b) return;
     tool = b.dataset.tool;
     [].forEach.call(toolRow.querySelectorAll('.chip'), function (c) {
       c.setAttribute('aria-pressed', c === b ? 'true' : 'false');
     });
-    document.getElementById('rakeSizeRow').style.opacity = tool === 'rake' ? '1' : '0.5';
+    deselect();
+    updateCtxRow();
     canvas.style.cursor = tool === 'rake' ? 'crosshair' : 'copy';
   });
 
-  var rakeSizeRow = document.getElementById('rakeSizeRow');
-  rakeSizeRow.addEventListener('click', function (e) {
+  rakeChips.addEventListener('click', function (e) {
     var b = e.target.closest('.chip[data-rake]'); if (!b) return;
     rakeSize = b.dataset.rake;
-    [].forEach.call(rakeSizeRow.querySelectorAll('.chip[data-rake]'), function (c) {
+    [].forEach.call(rakeChips.querySelectorAll('.chip[data-rake]'), function (c) {
       c.setAttribute('aria-pressed', c === b ? 'true' : 'false');
     });
+  });
+
+  sizeSlider.addEventListener('input', function () {
+    var v = parseFloat(sizeSlider.value) || 1;
+    if (selectedItem) { selectedItem.scale = v; render(); save(); }
+    else { placeScale = v; }
   });
 
   var soundToggle = document.getElementById('soundToggle');
@@ -816,6 +969,7 @@ main { max-width: 560px; margin: 0 auto; padding: 22px 20px 60px; }
 
   // ---------- boot ----------
   load();
+  updateCtxRow();
   layout();
   setTimeout(function () {
     layout();

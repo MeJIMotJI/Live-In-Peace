@@ -69,7 +69,8 @@ Live-In-Peace/
 ├── worry.html                ← Exercise: แยกความกังวล (Worry Tree — drag/swipe sort จัดการได้/ไม่ได้, 5W1H plan, PNG export)
 ├── game.html                 ← Game: จับฟองลมหายใจ (breathing-rhythm mini-game, no fail state)
 ├── balloon.html              ← Game: ลูกโป่งความกังวล (release-a-worry exercise, balloons float away)
-└── jar.html                  ← Game: ขวดใจสงบ (calm-down glitter jar — canvas particle sim, shake + settle, breathing guide)
+├── jar.html                  ← Game: ขวดใจสงบ (calm-down glitter jar — canvas particle sim, shake + settle, breathing guide)
+└── zen.html                  ← Game: สวนหินเซน (zen sand garden — canvas rake grooves + placeable stones/moss/leaves, PNG export)
 ```
 
 ---
@@ -216,6 +217,7 @@ line-height: 1.8–1.9;
 |------|--------|----------|
 | game.html | ✅ v1 | จับฟองลมหายใจ — bubble-catch mini-game synced to 3 breathing patterns, bonus score on inhale, no fail state; แยกหมวด "เล่นเกม" ใน index.html |
 | balloon.html | ✅ v1 | ลูกโป่งความกังวล (เดิมชื่อ "ใบไม้บนลำธาร" เปลี่ยน theme) — พิมพ์ความกังวลแล้วปล่อยเป็นลูกโป่งสีสุ่ม 8 สี ลอยขึ้นฟ้าพร้อมป้ายข้อความห้อยเชือก ไม่มีคะแนน/เป้าหมาย มี disclaimer สายด่วน 1323 |
+| zen.html | ✅ v1 draft | สวนหินเซน (Zen Sand Garden) — canvas: ลากคราดทรายเกิดร่องเส้นขนาน (คราด 3 ขนาด ละเอียด/กลาง/กว้าง มีเงา+ไฮไลต์ให้เป็นร่องจริง), วางหินใหญ่/หินเล็ก/มอส/ใบไม้ (แตะวาง, ลากย้าย, ลากออกนอกถาด=ลบ), undo (stroke+วาง+ลบ), เกลี่ยใหม่ทั้งหมด (confirm), เสียงคราดนุ่มๆ (Web Audio brown noise + lowpass, toggle, default off), export PNG (ดาวน์โหลดเสมอ ตาม [[reference_canvas_png_export_pattern]]); autosave `lip-zen` (strokes normalized + items) — เปิดมาเจอสวนเดิมจนกด reset; dark mode = สวนกลางคืน (MutationObserver รีเฟรชทราย); loop เป็น event-driven ไม่ใช่ rAF. อ้างอิง mindfulness + งานวิจัย art-making ลด cortisol (Kaimal 2016) + Attention Restoration Theory. ยังไม่ผ่าน Checker เต็ม |
 | jar.html | ✅ v1 draft | ขวดใจสงบ (Calm-Down / Mind Jar) — canvas particle sim ~120 กลิตเตอร์; ลากที่ขวด/ปุ่ม "เขย่าขวด"/device motion (optional, iOS permission + ปุ่มสำรอง) → กลิตเตอร์ฟุ้งแล้วค่อยๆ ตกตะกอน ~60 วิ, ไม่มีตัวเลขนับถอยหลัง; วงกลมนำหายใจ 4-1-6 (toggle), เสียงระฆังตอนนิ่ง (Web Audio, toggle, default off), เลือกสีน้ำ 5 พรีเซ็ต + เลือกสีเองอิสระ (`<input type="color">`), ข้อความให้กำลังใจหมุน; loop ขับด้วย setInterval (ไม่ใช่ rAF); autosave settings localStorage `lip-jar-settings`; อ้างอิง กรมสุขภาพจิต + urge surfing / mind jar. ยังไม่ผ่าน Checker |
 
 ### Site-wide Features

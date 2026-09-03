@@ -1,0 +1,9 @@
+.git
+src
+wrangler.jsonc
+CLAUDE.md
+agents
+discord-bot
+.claude
+.wrangler
+.gitignore

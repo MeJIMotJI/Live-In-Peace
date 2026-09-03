@@ -148,6 +148,18 @@ footer {
   font-size: 14px;
   border-top: 1px solid var(--border);
 }
+.visit-stats {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px 10px;
+  margin-bottom: 10px;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+.visit-stats strong { color: var(--primary-dark); font-weight: 700; }
+.visit-stats .sep { opacity: 0.45; }
 @media (max-width: 400px) {
   .card-grid { grid-template-columns: 1fr; }
   header h1 { font-size: 26px; }
@@ -245,6 +257,7 @@ footer {
   });
 })();
 </script>
+<script src="/counter.js" defer></script>
 </head>
 <body>
 
@@ -339,6 +352,11 @@ footer {
 </main>
 
 <footer>
+  <div class="visit-stats" id="visit-stats">
+    <span><strong id="stat-visitors">–</strong>&nbsp;ผู้เข้าใช้</span>
+    <span class="sep">·</span>
+    <span><strong id="stat-views">–</strong>&nbsp;ครั้งที่เปิดอ่าน</span>
+  </div>
   Live In Peace &nbsp;·&nbsp; เพื่อสุขภาพจิตที่ดีกว่า
 </footer>
 

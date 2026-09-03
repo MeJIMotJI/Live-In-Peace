@@ -48,6 +48,10 @@ Claude Code ทำหน้าที่เป็น **PM** และ coordinate 
 ```
 Live-In-Peace/
 ├── CLAUDE.md                 ← This file (auto-loaded by Claude Code)
+├── wrangler.jsonc            ← Cloudflare Worker config (static assets + Counter Durable Object)
+├── .assetsignore            ← กันไฟล์ที่ไม่ใช่หน้าเว็บออกจาก public (src, agents, CLAUDE.md, discord-bot)
+├── src/index.js             ← Worker: เสิร์ฟ assets + /api/hit, /api/stats (ตัวนับผู้เข้าใช้)
+├── counter.js               ← Client: ยิง /api/hit ทุกหน้า + เติมยอดใน footer ของ index
 ├── agents/
 │   ├── researcher.md         ← Researcher system prompt + trusted sources
 │   ├── builder.md            ← Builder design system + tech rules
@@ -220,6 +224,7 @@ line-height: 1.8–1.9;
 | ฟีเจอร์ | สถานะ | หมายเหตุ |
 |------|--------|----------|
 | Dark mode | ✅ v1 | ทั้ง 15 หน้า (รวม worry.html) — ปุ่มสลับ 🌙/☀️ ลอยมุมขวาบน, จำค่าใน localStorage (`lip-theme`), ไม่มี FOUC. บล็อก `<style>`+`<script>` เหมือนกันทุกไฟล์ (แทรกก่อน `</head>`) + dark override เฉพาะหน้าสำหรับ accent/กล่องสีพิเศษ |
+| Visitor counter | ✅ v1 | นับผู้เข้าใช้ทั้งเว็บ — Cloudflare Worker (`src/index.js`) + Durable Object `Counter` (SQLite, singleton `global`) เก็บ `views` (page views รวม ทุกหน้า) กับ `visitors` (unique 1/เครื่อง/วัน ตัดจาก localStorage `lip-visit-day`). `counter.js` โหลดใน 15 หน้า (`<script src="/counter.js" defer>` ก่อน `</head>`) ยิง `POST /api/hit {unique}`; index.html แสดงยอดใน footer (`#stat-views` / `#stat-visitors`). `GET /api/stats` อ่านอย่างเดียว ไม่บวก. `.assetsignore` กัน src/agents/CLAUDE.md/discord-bot ออกจาก public. Deploy: `wrangler deploy` (ใช้ wrangler ใน `discord-bot/node_modules`) |
 
 ### Open Items
 - [ ] Researcher review: ตรวจสอบความถูกต้องเนื้อหาทุกหน้า

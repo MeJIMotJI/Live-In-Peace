@@ -1,0 +1,5 @@
+# Wrangler reads .assetsignore with split("\n") — a CRLF working copy would
+# append \r to every pattern and silently stop excluding files. Force LF.
+.assetsignore text eol=lf
+_headers text eol=lf
+_redirects text eol=lf

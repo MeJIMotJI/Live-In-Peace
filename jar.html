@@ -354,7 +354,7 @@ main { max-width: 520px; margin: 0 auto; padding: 22px 20px 60px; }
   </div>
 
   <div class="info-box">
-    🫙 <strong>วิธีใช้:</strong> ลากนิ้วบนขวดเพื่อเขย่า (หรือกดปุ่ม “เขย่าขวด”) จากนั้นนั่งดูกลิตเตอร์ค่อย ๆ ตกลงก้นขวดจนน้ำใส ระหว่างรอ ลองหายใจเข้าช้า ๆ แล้วปล่อยออกยาว ๆ พอกลิตเตอร์นิ่ง มักจะรู้สึกว่าใจนิ่งขึ้นนิดหนึ่ง
+    🫙 <strong>วิธีใช้:</strong> ลากนิ้วบนขวดเพื่อเขย่า (หรือกดปุ่ม “เขย่าขวด”) จากนั้นนั่งดูกลิตเตอร์ค่อยๆ ตกลงก้นขวดจนน้ำใส ระหว่างรอ ลองหายใจเข้าช้าๆ แล้วปล่อยออกยาวๆ พอกลิตเตอร์นิ่ง มักจะรู้สึกว่าใจนิ่งขึ้นนิดหนึ่ง
   </div>
 
   <div class="jar-wrap">
@@ -375,7 +375,7 @@ main { max-width: 520px; margin: 0 auto; padding: 22px 20px 60px; }
 
   <div class="tool-card">
     <div class="tool-line">
-      <button class="chip" id="breathToggle" type="button" aria-pressed="true">🫧 ลมหายใจนำ</button>
+      <button class="chip" id="breathToggle" type="button" aria-pressed="true">🫧 ลมหายใจนำทาง</button>
       <button class="chip" id="soundToggle" type="button" aria-pressed="false">🔔 เสียงตอนนิ่ง</button>
       <button class="chip" id="motionToggle" type="button" aria-pressed="false" hidden>📳 เขย่าจากมือถือ</button>
     </div>
@@ -384,11 +384,11 @@ main { max-width: 520px; margin: 0 auto; padding: 22px 20px 60px; }
     </div>
   </div>
 
-  <div class="waiting-msg" id="waitingMsg">อารมณ์ที่พุ่งขึ้นแรง ๆ มักจะค่อย ๆ เบาลงเองภายในไม่กี่นาที</div>
+  <div class="waiting-msg" id="waitingMsg">อารมณ์ที่พุ่งขึ้นแรงๆ มักจะค่อยๆ เบาลงเองภายในไม่กี่นาที</div>
 
   <div class="foot-note">
-    ขวดกลิตเตอร์ (mind jar) เป็นเครื่องมือฝึกสติที่ช่วย “เว้นระยะ” ก่อนตัดสินใจตอนอารมณ์พุ่ง<br>
-    อ้างอิงแนวคิดจากกรมสุขภาพจิต (การติดเบรกอารมณ์ · หายใจคลายเครียด) และเทคนิค urge surfing / mindful games
+    ขวดกลิตเตอร์เป็นเครื่องมือฝึกสติที่ช่วยให้เรา “เว้นระยะ” ก่อนตัดสินใจตอนอารมณ์พุ่ง<br>
+    แนวคิดนี้อ้างอิงจากกรมสุขภาพจิต (การติดเบรกอารมณ์ และการหายใจคลายเครียด) ร่วมกับหลักการฝึกสติ เพื่อรอให้แรงกระตุ้นทางอารมณ์ค่อยๆ ลดลงเอง
   </div>
 </main>
 
@@ -401,11 +401,11 @@ main { max-width: 520px; margin: 0 auto; padding: 22px 20px 60px; }
 
   // ---------- settings (persisted) ----------
   var WATER_COLORS = [
-    { key: 'blue',   hex: '#5b8fd9' },
-    { key: 'teal',   hex: '#3a9b8a' },
-    { key: 'lav',    hex: '#8b78c8' },
-    { key: 'indigo', hex: '#4f6bbf' },
-    { key: 'jade',   hex: '#57b0a0' }
+    { key: 'seagreen', hex: '#4bb98a' },
+    { key: 'cyan',     hex: '#33aec6' },
+    { key: 'blue',     hex: '#5b8fd9' },
+    { key: 'indigo',   hex: '#3f4fae' },
+    { key: 'violet',   hex: '#9878d4' }
   ];
   var settings = { color: 'blue', custom: '#7a6cc4', breath: true, sound: false };
   try {
@@ -633,13 +633,13 @@ main { max-width: 520px; margin: 0 auto; padding: 22px 20px 60px; }
   var stateLabel = document.getElementById('stateLabel');
   var waitingMsg = document.getElementById('waitingMsg');
   var WAITING = [
-    'อารมณ์ที่พุ่งขึ้นแรง ๆ มักจะค่อย ๆ เบาลงเองภายในไม่กี่นาที',
+    'อารมณ์ที่พุ่งขึ้นแรงๆ มักจะค่อยๆ เบาลงเองภายในไม่กี่นาที',
     'ยังไม่ต้องรีบตัดสินใจอะไรตอนนี้ก็ได้ รอให้ใจนิ่งลงก่อน',
-    'ลองหายใจเข้าช้า ๆ แล้วปล่อยออกยาว ๆ ไปพร้อมกับกลิตเตอร์',
-    'สังเกตความรู้สึกในตัวเฉย ๆ ไม่ต้องผลักไส ไม่ต้องไล่ตาม',
+    'ลองหายใจเข้าช้าๆ แล้วปล่อยออกยาวๆ ไปพร้อมกับกลิตเตอร์',
+    'สังเกตความรู้สึกในตัวเฉยๆ ไม่ต้องผลักไส ไม่ต้องไล่ตาม',
     'ไม่เป็นไรถ้ายังไม่หายทั้งหมด แค่เบาลงสักนิดก็พอแล้ว'
   ];
-  var SETTLED_MSG = 'กลิตเตอร์นิ่งแล้ว ลองสังเกตว่าตอนนี้ใจเบาลงกว่าตอนเริ่มไหม ถ้ายังไม่ไหว เขย่าอีกครั้งก็ได้';
+  var SETTLED_MSG = 'กลิตเตอร์นิ่งแล้ว ลองสังเกตว่าตอนนี้ใจเบาลงกว่าตอนเริ่มไหม ถ้ายังรู้สึกไม่นิ่ง เขย่าอีกครั้งก็ได้';
   var waitIdx = 0, waitTimer = null;
 
   function setMsg(text) {
@@ -664,7 +664,7 @@ main { max-width: 520px; margin: 0 auto; padding: 22px 20px 60px; }
     }
     var c = clarity();
     if (turb > 0.35 || c < 0.35) stateLabel.textContent = 'กำลังหมุนวน… อยู่กับมันไปก่อน';
-    else if (c < 0.8) stateLabel.textContent = 'ค่อย ๆ ตกตะกอน…';
+    else if (c < 0.8) stateLabel.textContent = 'ค่อยๆ ตกตะกอน…';
     else stateLabel.textContent = 'เกือบนิ่งแล้ว…';
   }
 

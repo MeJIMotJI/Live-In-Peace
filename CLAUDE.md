@@ -155,7 +155,7 @@ PM: รายงาน "เสร็จแล้ว ✓"
 - เสนอ research ให้ approve ก่อน build
 - Mobile-first ทุกหน้า
 - ภาษาไทย: informal, อบอุ่น, ไม่ stigmatize
-- Evidence-based เท่านั้น — ต้องระบุแหล่งอ้างอิง
+- Evidence-based เท่านั้น — Researcher ต้องใช้แหล่งอ้างอิงที่เชื่อถือได้ในการ **หาข้อมูล/ตรวจสอบ** (ระบุใน outline ตอนขอ approve)
 - ทำงานแบบ offline-capable (ไม่พึ่ง internet หลัง load)
 
 ### ห้ามทำ ❌
@@ -164,6 +164,7 @@ PM: รายงาน "เสร็จแล้ว ✓"
 - ใช้ภาษา stigmatize: "บ้า", "จิตฟั่นเฟือน", "อ่อนแอ", "แกล้งทำ"
 - แต่งข้อมูลทางการแพทย์
 - mix ภาษาอังกฤษใน UI (นอกจาก medical term ที่ยอมรับกันทั่วไป)
+- **ใส่การอ้างอิงในหน้าเว็บ** — ห้ามมีชื่องานวิจัย / ชื่อหน่วยงาน / "งานวิจัยพบว่า..." / references section ในหน้าที่ผู้ใช้เห็น (แหล่งอ้างอิงใช้แค่ตอนหาข้อมูล เขียนเนื้อหาเป็นภาษาเข้าใจง่ายพอ)
 - **`wrangler deploy` จาก branch ที่ไม่ใช่ `main` ที่ update แล้ว** — ทั้งเว็บ deploy ไป Cloudflare Worker `live-in-peace` ตัวเดียว ใคร deploy หลังสุดทับหมด (เคยทำ visitor counter หายทั้งเว็บมาแล้ว)
 
 ### 🚀 Deployment
@@ -229,8 +230,8 @@ line-height: 1.8–1.9;
 |------|--------|----------|
 | game.html | ✅ v1 | จับฟองลมหายใจ — bubble-catch mini-game synced to 3 breathing patterns, bonus score on inhale, no fail state; แยกหมวด "เล่นเกม" ใน index.html |
 | balloon.html | ✅ v1 | ลูกโป่งความกังวล (เดิมชื่อ "ใบไม้บนลำธาร" เปลี่ยน theme) — พิมพ์ความกังวลแล้วปล่อยเป็นลูกโป่งสีสุ่ม 8 สี ลอยขึ้นฟ้าพร้อมป้ายข้อความห้อยเชือก ไม่มีคะแนน/เป้าหมาย มี disclaimer สายด่วน 1323 |
-| zen.html | ✅ v1 draft | สวนหินเซน (Zen Sand Garden) — canvas: ลากคราดทราย (7 tines, ความถี่ร่องปรับด้วย slider 0.4–2), ร่องมีเงา+ไฮไลต์; วางของ 6 แบบ: หิน/มอส/ใบไม้/ดอกไม้/พุ่มหญ้า/กิ่งไม้ แต่ละแบบมี variant 3–5 (แตะซ้ำที่ชิ้นที่เลือก = เปลี่ยน variant); แตะวาง, ลากย้าย, แตะครั้งเดียว=เลือก (วงประ) แล้ว slider 0.5–2.4 ปรับขนาดชิ้นนั้น, ปุ่ม "ลบชิ้นนี้" หรือลากออกนอกถาด=ลบ; undo (stroke+วาง+ลบ), เกลี่ยใหม่ทั้งหมด (confirm → layout() ล้างจริง + clearTimeout กัน pending save เขียนกลับ), เสียงคราดนุ่มๆ (Web Audio brown noise + lowpass, toggle, default off), export PNG (ดาวน์โหลดเสมอ [[reference_canvas_png_export_pattern]]); autosave `lip-zen` (strokes normalized {w,pts} + items {variant}; migrate rock-lg/rock-sm/lantern→rock, stroke.rake→w) — เปิดมาเจอสวนเดิมจนกด reset; dark mode = สวนกลางคืน (MutationObserver); event-driven ไม่ใช่ rAF. อ้างอิง mindfulness + art-making ลด cortisol (Kaimal 2016) + Attention Restoration Theory. ✅ ผ่าน Checker (แก้ ctxLabel เริ่มต้น ขนาดคราด→ความถี่ร่องคราด, aria-label slider) |
-| jar.html | ✅ v1 draft | ขวดใจสงบ (Calm-Down / Mind Jar) — canvas particle sim ~120 กลิตเตอร์; ลากที่ขวด/ปุ่ม "เขย่าขวด"/device motion (optional, iOS permission + ปุ่มสำรอง) → กลิตเตอร์ฟุ้งแล้วค่อยๆ ตกตะกอน ~60 วิ, ไม่มีตัวเลขนับถอยหลัง; วงกลมนำหายใจ 4-1-6 (toggle), เสียงระฆังตอนนิ่ง (Web Audio, toggle, default off), เลือกสีน้ำ 5 พรีเซ็ต + เลือกสีเองอิสระ (`<input type="color">`), ข้อความให้กำลังใจหมุน; loop ขับด้วย setInterval (ไม่ใช่ rAF); autosave settings localStorage `lip-jar-settings`; อ้างอิง กรมสุขภาพจิต + urge surfing / mind jar. ✅ ผ่าน Checker (ภาษาสะอาด ไม่ต้องแก้; รอ Researcher ยืนยันการอ้างอิงกรมสุขภาพจิต) |
+| zen.html | ✅ v1 draft | สวนหินเซน (Zen Sand Garden) — canvas: ลากคราดทราย (7 tines, ความถี่ร่องปรับด้วย slider 0.4–2), ร่องมีเงา+ไฮไลต์; วางของ 6 แบบ: หิน/มอส/ใบไม้/ดอกไม้/พุ่มหญ้า/กิ่งไม้ แต่ละแบบมี variant 3–5 (แตะซ้ำที่ชิ้นที่เลือก = เปลี่ยน variant); แตะวาง, ลากย้าย, แตะครั้งเดียว=เลือก (วงประ) แล้ว slider 0.5–2.4 ปรับขนาดชิ้นนั้น, ปุ่ม "ลบชิ้นนี้" หรือลากออกนอกถาด=ลบ; undo (stroke+วาง+ลบ), เกลี่ยใหม่ทั้งหมด (confirm → layout() ล้างจริง + clearTimeout กัน pending save เขียนกลับ), เสียงคราดนุ่มๆ (Web Audio brown noise + lowpass, toggle, default off), export PNG (ดาวน์โหลดเสมอ [[reference_canvas_png_export_pattern]]); autosave `lip-zen` (strokes normalized {w,pts} + items {variant}; migrate rock-lg/rock-sm/lantern→rock, stroke.rake→w) — เปิดมาเจอสวนเดิมจนกด reset; dark mode = สวนกลางคืน (MutationObserver); event-driven ไม่ใช่ rAF. foot-note พูดถึง mindfulness แบบทั่วไป **ไม่อ้างอิงงานวิจัย/หน่วยงาน** (ตัดออกตามที่ user ขอ). ✅ ผ่าน Checker |
+| jar.html | ✅ v1 draft | ขวดใจสงบ (Calm-Down / Mind Jar) — canvas particle sim ~120 กลิตเตอร์; ลากที่ขวด/ปุ่ม "เขย่าขวด"/device motion (optional, iOS permission + ปุ่มสำรอง) → กลิตเตอร์ฟุ้งแล้วค่อยๆ ตกตะกอน ~60 วิ, ไม่มีตัวเลขนับถอยหลัง; วงกลมนำหายใจ 4-1-6 (toggle), เสียงระฆังตอนนิ่ง (Web Audio, toggle, default off), เลือกสีน้ำ 5 พรีเซ็ต + เลือกสีเองอิสระ (`<input type="color">`), ข้อความให้กำลังใจหมุน; loop ขับด้วย setInterval (ไม่ใช่ rAF); autosave settings localStorage `lip-jar-settings`; แนวคิด urge surfing / mind jar. foot-note **ไม่อ้างอิงหน่วยงาน/งานวิจัย** (ตัดออกตามที่ user ขอ). ✅ ผ่าน Checker |
 
 ### Site-wide Features
 | ฟีเจอร์ | สถานะ | หมายเหตุ |

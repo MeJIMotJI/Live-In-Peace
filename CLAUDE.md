@@ -72,7 +72,9 @@ Live-In-Peace/
 ├── values.html               ← Exercise: การ์ดคุณค่าในตัวฉัน (values card-sort, canvas PNG export)
 ├── worry.html                ← Exercise: แยกความกังวล (Worry Tree — drag/swipe sort จัดการได้/ไม่ได้, 5W1H plan, PNG export)
 ├── game.html                 ← Game: จับฟองลมหายใจ (breathing-rhythm mini-game, no fail state)
-└── balloon.html              ← Game: ลูกโป่งความกังวล (release-a-worry exercise, balloons float away)
+├── balloon.html              ← Game: ลูกโป่งความกังวล (release-a-worry exercise, balloons float away)
+├── jar.html                  ← Game: ขวดใจสงบ (calm-down glitter jar — canvas particle sim, shake + settle, breathing guide)
+└── zen.html                  ← Game: สวนหินเซน (zen sand garden — canvas rake grooves + placeable stones/moss/leaves, PNG export)
 ```
 
 ---
@@ -219,12 +221,14 @@ line-height: 1.8–1.9;
 |------|--------|----------|
 | game.html | ✅ v1 | จับฟองลมหายใจ — bubble-catch mini-game synced to 3 breathing patterns, bonus score on inhale, no fail state; แยกหมวด "เล่นเกม" ใน index.html |
 | balloon.html | ✅ v1 | ลูกโป่งความกังวล (เดิมชื่อ "ใบไม้บนลำธาร" เปลี่ยน theme) — พิมพ์ความกังวลแล้วปล่อยเป็นลูกโป่งสีสุ่ม 8 สี ลอยขึ้นฟ้าพร้อมป้ายข้อความห้อยเชือก ไม่มีคะแนน/เป้าหมาย มี disclaimer สายด่วน 1323 |
+| zen.html | ✅ v1 draft | สวนหินเซน (Zen Sand Garden) — canvas: ลากคราดทราย (7 tines, ความถี่ร่องปรับด้วย slider 0.4–2), ร่องมีเงา+ไฮไลต์; วางของ 6 แบบ: หิน/มอส/ใบไม้/ดอกไม้/พุ่มหญ้า/กิ่งไม้ แต่ละแบบมี variant 3–5 (แตะซ้ำที่ชิ้นที่เลือก = เปลี่ยน variant); แตะวาง, ลากย้าย, แตะครั้งเดียว=เลือก (วงประ) แล้ว slider 0.5–2.4 ปรับขนาดชิ้นนั้น, ปุ่ม "ลบชิ้นนี้" หรือลากออกนอกถาด=ลบ; undo (stroke+วาง+ลบ), เกลี่ยใหม่ทั้งหมด (confirm → layout() ล้างจริง + clearTimeout กัน pending save เขียนกลับ), เสียงคราดนุ่มๆ (Web Audio brown noise + lowpass, toggle, default off), export PNG (ดาวน์โหลดเสมอ [[reference_canvas_png_export_pattern]]); autosave `lip-zen` (strokes normalized {w,pts} + items {variant}; migrate rock-lg/rock-sm/lantern→rock, stroke.rake→w) — เปิดมาเจอสวนเดิมจนกด reset; dark mode = สวนกลางคืน (MutationObserver); event-driven ไม่ใช่ rAF. อ้างอิง mindfulness + art-making ลด cortisol (Kaimal 2016) + Attention Restoration Theory. ยังไม่ผ่าน Checker เต็ม |
+| jar.html | ✅ v1 draft | ขวดใจสงบ (Calm-Down / Mind Jar) — canvas particle sim ~120 กลิตเตอร์; ลากที่ขวด/ปุ่ม "เขย่าขวด"/device motion (optional, iOS permission + ปุ่มสำรอง) → กลิตเตอร์ฟุ้งแล้วค่อยๆ ตกตะกอน ~60 วิ, ไม่มีตัวเลขนับถอยหลัง; วงกลมนำหายใจ 4-1-6 (toggle), เสียงระฆังตอนนิ่ง (Web Audio, toggle, default off), เลือกสีน้ำ 5 พรีเซ็ต + เลือกสีเองอิสระ (`<input type="color">`), ข้อความให้กำลังใจหมุน; loop ขับด้วย setInterval (ไม่ใช่ rAF); autosave settings localStorage `lip-jar-settings`; อ้างอิง กรมสุขภาพจิต + urge surfing / mind jar. ยังไม่ผ่าน Checker |
 
 ### Site-wide Features
 | ฟีเจอร์ | สถานะ | หมายเหตุ |
 |------|--------|----------|
 | Dark mode | ✅ v1 | ทั้ง 15 หน้า (รวม worry.html) — ปุ่มสลับ 🌙/☀️ ลอยมุมขวาบน, จำค่าใน localStorage (`lip-theme`), ไม่มี FOUC. บล็อก `<style>`+`<script>` เหมือนกันทุกไฟล์ (แทรกก่อน `</head>`) + dark override เฉพาะหน้าสำหรับ accent/กล่องสีพิเศษ |
-| Visitor counter | ✅ v1 | นับผู้เข้าใช้ทั้งเว็บ — Cloudflare Worker (`src/index.js`) + Durable Object `Counter` (SQLite, singleton `global`) เก็บ `views` (page views รวม ทุกหน้า) กับ `visitors` (unique 1/เครื่อง ครั้งแรกที่เข้าเว็บ ตัดจาก localStorage `lip-visited`). `counter.js` โหลดใน 15 หน้า (`<script src="/counter.js" defer>` ก่อน `</head>`) ยิง `POST /api/hit {unique}`; index.html แสดงยอดใน footer (`#stat-views` / `#stat-visitors`). `GET /api/stats` อ่านอย่างเดียว ไม่บวก. `.assetsignore` กัน src/agents/CLAUDE.md/discord-bot ออกจาก public. Deploy: `wrangler deploy` (ใช้ wrangler ใน `discord-bot/node_modules`) |
+| Visitor counter | ✅ v1 | นับผู้เข้าใช้ทั้งเว็บ — Cloudflare Worker (`src/index.js`) + Durable Object `Counter` (SQLite, singleton `global`) เก็บ `views` (page views รวม ทุกหน้า) กับ `visitors` (unique 1/เครื่อง ครั้งแรกที่เข้าเว็บ ตัดจาก localStorage `lip-visited`). `counter.js` โหลดในทุกหน้า (`<script src="/counter.js" defer>` ก่อน `</head>`) ยิง `POST /api/hit {unique}`; index.html แสดงยอดใน footer (`#stat-views` / `#stat-visitors`). `GET /api/stats` อ่านอย่างเดียว ไม่บวก. `.assetsignore` กัน src/agents/CLAUDE.md/discord-bot ออกจาก public. Deploy: `wrangler deploy` (ใช้ wrangler ใน `discord-bot/node_modules`) |
 
 ### Open Items
 - [ ] Researcher review: ตรวจสอบความถูกต้องเนื้อหาทุกหน้า

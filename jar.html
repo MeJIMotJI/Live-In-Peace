@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ขวดใจสงบ — Live In Peace</title>
+<style>
+:root {
+  --bg: #f5fbf9;
+  --surface: #ffffff;
+  --primary: #3a9b8a;
+  --primary-dark: #2d7a6a;
+  --primary-light: #e8f7f4;
+  --blue: #5b8fd9;
+  --blue-dark: #3a6fbf;
+  --blue-light: #edf3fc;
+  --text: #1e3240;
+  --text-muted: #6b849a;
+  --border: #cde8e2;
+  --radius: 16px;
+  --radius-sm: 10px;
+  --shadow: 0 2px 16px rgba(58,155,138,0.10);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Leelawadee UI', 'Leelawadee', Tahoma, 'Lucida Sans Unicode', Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 17px;
+  line-height: 1.8;
+  min-height: 100vh;
+}
+.topbar {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 14px 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+.back-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--blue-dark);
+  text-decoration: none;
+  font-size: 16px;
+  font-weight: 700;
+  padding: 6px 12px;
+  border-radius: 20px;
+  background: var(--blue-light);
+  transition: background 0.2s;
+}
+.back-btn:hover { background: #dfeafb; }
+.topbar-title { font-size: 17px; font-weight: 700; }
+.hero {
+  background: linear-gradient(135deg, var(--blue-dark) 0%, #6aa6d8 100%);
+  color: white;
+  padding: 30px 24px 36px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50px; right: -30px;
+  width: 150px; height: 150px;
+  background: rgba(255,255,255,0.10);
+  border-radius: 50%;
+}
+.hero-icon { font-size: 46px; margin-bottom: 8px; }
+.hero h1 { font-size: 24px; font-weight: 700; margin-bottom: 6px; }
+.hero p { font-size: 15px; opacity: 0.92; max-width: 360px; margin: 0 auto; }
+main { max-width: 520px; margin: 0 auto; padding: 22px 20px 60px; }
+
+.disclaimer-card {
+  background: var(--primary-light);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 15px 18px;
+  margin-bottom: 16px;
+  font-size: 14.5px;
+  color: var(--primary-dark);
+  line-height: 1.8;
+}
+.info-box {
+  background: var(--blue-light);
+  border-radius: var(--radius);
+  padding: 15px 18px;
+  font-size: 14.5px;
+  color: var(--blue-dark);
+  margin-bottom: 18px;
+  line-height: 1.8;
+}
+
+/* Jar */
+.jar-wrap {
+  position: relative;
+  width: 100%;
+  max-width: 340px;
+  margin: 0 auto 6px;
+}
+#jarCanvas {
+  display: block;
+  width: 100%;
+  height: auto;
+  touch-action: none;
+  cursor: grab;
+  border-radius: 18px;
+}
+#jarCanvas:active { cursor: grabbing; }
+.breath-orb {
+  position: absolute;
+  left: 50%; top: 56%;
+  width: 96px; height: 96px;
+  margin-left: -48px; margin-top: -48px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 40% 35%, rgba(255,255,255,0.55), rgba(255,255,255,0.12));
+  border: 1.5px solid rgba(255,255,255,0.5);
+  pointer-events: none;
+  transform: scale(0.55);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+.breath-orb.inhale { animation: orbIn var(--dur, 4s) ease-in forwards; }
+.breath-orb.exhale { animation: orbOut var(--dur, 6s) ease-out forwards; }
+@keyframes orbIn  { from { transform: scale(0.55); } to { transform: scale(1); } }
+@keyframes orbOut { from { transform: scale(1); } to { transform: scale(0.55); } }
+.breath-label {
+  position: absolute;
+  left: 0; right: 0; top: 34%;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 700;
+  color: rgba(255,255,255,0.95);
+  text-shadow: 0 1px 6px rgba(0,0,0,0.25);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.state-label {
+  text-align: center;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--blue-dark);
+  min-height: 24px;
+  margin-bottom: 10px;
+}
+
+/* Controls */
+.btn-row { display: flex; gap: 10px; justify-content: center; margin-bottom: 16px; }
+.btn {
+  border: none;
+  border-radius: 50px;
+  padding: 12px 26px;
+  font-size: 15.5px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  justify-content: center;
+}
+.btn-primary { background: var(--blue); color: white; box-shadow: 0 4px 14px rgba(91,143,217,0.35); }
+.btn-primary:hover { background: var(--blue-dark); }
+.btn-ghost { background: var(--blue-light); color: var(--blue-dark); }
+.btn-ghost:hover { background: #dfeafb; }
+
+/* Tool row: toggles + swatches */
+.tool-card {
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 14px 16px;
+  margin-bottom: 18px;
+}
+.tool-line {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
+}
+.tool-line + .tool-line { margin-top: 12px; }
+.chip {
+  border: 1.5px solid var(--border);
+  background: var(--bg);
+  color: var(--text-muted);
+  border-radius: 50px;
+  padding: 7px 14px;
+  font-size: 13.5px;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.chip[aria-pressed="true"] {
+  background: var(--primary-light);
+  border-color: var(--primary);
+  color: var(--primary-dark);
+}
+.swatch-label { font-size: 13px; color: var(--text-muted); font-weight: 700; margin-right: 2px; }
+.swatch {
+  width: 26px; height: 26px;
+  border-radius: 50%;
+  border: 2px solid var(--surface);
+  box-shadow: 0 0 0 1.5px var(--border);
+  cursor: pointer;
+  padding: 0;
+  transition: transform 0.15s;
+}
+.swatch:hover { transform: scale(1.12); }
+.swatch.active { box-shadow: 0 0 0 2.5px var(--primary); transform: scale(1.12); }
+.swatch-custom {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background:
+    conic-gradient(from 0deg, #e57c7c, #e8c34e, #6fc494, #4fb8ae, #6fa8ea, #a68ce0, #e57c7c);
+}
+.swatch-custom::after {
+  content: '✏️';
+  font-size: 12px;
+  filter: drop-shadow(0 0 2px rgba(255,255,255,0.9));
+}
+.swatch-custom input {
+  position: absolute;
+  inset: 0;
+  width: 100%; height: 100%;
+  opacity: 0;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+.waiting-msg {
+  background: var(--primary-light);
+  border-radius: var(--radius);
+  padding: 14px 18px;
+  font-size: 14.5px;
+  color: var(--primary-dark);
+  text-align: center;
+  line-height: 1.75;
+  margin-bottom: 18px;
+  min-height: 62px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.4s ease;
+}
+
+.foot-note {
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.7;
+  text-align: center;
+  border-top: 1px solid var(--border);
+  padding-top: 16px;
+}
+.foot-note strong { color: var(--blue-dark); }
+</style>
+<style>
+/* ===== Dark mode (Live In Peace) ===== */
+:root[data-theme="dark"] {
+  --bg: #0e1719;
+  --surface: #17262a;
+  --primary: #4db6a4;
+  --primary-dark: #82d8c7;
+  --primary-light: #1c332f;
+  --blue: #7aa9e6;
+  --blue-dark: #a6c8f2;
+  --blue-light: #1a2a3d;
+  --text: #e7f0f2;
+  --text-muted: #9db2bb;
+  --border: #2c4247;
+  --shadow: 0 2px 16px rgba(0,0,0,0.45);
+}
+:root[data-theme="dark"] body { background: var(--bg); color: var(--text); }
+:root[data-theme="dark"] .hero { filter: brightness(0.82) saturate(0.9); }
+:root[data-theme="dark"] .btn-primary:hover { background: var(--blue); filter: brightness(1.12); }
+:root[data-theme="dark"] .back-btn:hover,
+:root[data-theme="dark"] .btn-ghost:hover { background: var(--primary-light); }
+/* floating toggle button */
+.theme-toggle {
+  position: fixed; top: 12px; right: 12px; z-index: 9999;
+  width: 42px; height: 42px; border-radius: 50%;
+  border: 1.5px solid var(--border); background: var(--surface); color: var(--text);
+  font-size: 19px; line-height: 1; cursor: pointer;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.18);
+  display: flex; align-items: center; justify-content: center;
+  transition: transform 0.15s ease, background 0.2s ease;
+}
+.theme-toggle:hover { transform: scale(1.08); }
+:root[data-theme="dark"] .theme-toggle { box-shadow: 0 2px 12px rgba(0,0,0,0.5); }
+@media (max-width: 400px) {
+  .theme-toggle { width: 38px; height: 38px; font-size: 17px; top: 8px; right: 8px; }
+}
+</style>
+<script>
+(function () {
+  try { if (localStorage.getItem('lip-theme') === 'dark') document.documentElement.dataset.theme = 'dark'; } catch (e) {}
+  function isDark() { return document.documentElement.dataset.theme === 'dark'; }
+  document.addEventListener('DOMContentLoaded', function () {
+    var b = document.createElement('button');
+    b.className = 'theme-toggle';
+    b.type = 'button';
+    b.setAttribute('aria-label', 'สลับโหมดมืดหรือสว่าง');
+    b.textContent = isDark() ? '☀️' : '🌙';
+    b.addEventListener('click', function () {
+      var dark = !isDark();
+      if (dark) document.documentElement.dataset.theme = 'dark';
+      else document.documentElement.removeAttribute('data-theme');
+      try { localStorage.setItem('lip-theme', dark ? 'dark' : 'light'); } catch (e) {}
+      b.textContent = dark ? '☀️' : '🌙';
+    });
+    document.body.appendChild(b);
+  });
+})();
+</script>
+<style>
+:root[data-theme="dark"] .hero { background: linear-gradient(135deg, #24486e 0%, #2f6491 100%); }
+</style>
+<script src="/counter.js" defer></script>
+</head>
+<body>
+
+<div class="topbar">
+  <a href="index.html" class="back-btn">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+    กลับ
+  </a>
+  <span class="topbar-title">ขวดใจสงบ</span>
+</div>
+
+<div class="hero">
+  <div class="hero-icon">🫙</div>
+  <h1>ขวดใจสงบ</h1>
+  <p>เวลาใจฟุ้ง โกรธ หรือกังวลจนแน่น ลองเขย่าขวดนี้ แล้วอยู่กับมันจนกลิตเตอร์ตกตะกอน</p>
+</div>
+
+<main>
+  <div class="disclaimer-card">
+    <strong>ก่อนเริ่ม:</strong> ขวดนี้เป็นเครื่องมือช่วยให้ใจสงบลงชั่วคราว ไม่ใช่การรักษา ถ้ารู้สึกเครียดหรือเศร้าบ่อยจนกระทบชีวิตประจำวัน ควรปรึกษาผู้เชี่ยวชาญ และถ้ามีความคิดทำร้ายตัวเอง โทรสายด่วนสุขภาพจิต <strong>1323</strong> ได้ตลอด 24 ชั่วโมง
+  </div>
+
+  <div class="info-box">
+    🫙 <strong>วิธีใช้:</strong> ลากนิ้วบนขวดเพื่อเขย่า (หรือกดปุ่ม “เขย่าขวด”) จากนั้นนั่งดูกลิตเตอร์ค่อยๆ ตกลงก้นขวดจนน้ำใส ระหว่างรอ ลองหายใจเข้าช้าๆ แล้วปล่อยออกยาวๆ พอกลิตเตอร์นิ่ง มักจะรู้สึกว่าใจนิ่งขึ้นนิดหนึ่ง
+  </div>
+
+  <div class="jar-wrap">
+    <canvas id="jarCanvas" width="340" height="430" aria-label="ขวดกลิตเตอร์ ลากเพื่อเขย่า"></canvas>
+    <div class="breath-label" id="breathLabel">หายใจเข้า…</div>
+    <div class="breath-orb" id="breathOrb"></div>
+  </div>
+
+  <div class="state-label" id="stateLabel">พร้อมแล้ว — ลากที่ขวดหรือกดปุ่มเพื่อเขย่า</div>
+
+  <div class="btn-row">
+    <button class="btn btn-primary" id="shakeBtn" type="button">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l3 8 4-16 3 8h4"/></svg>
+      เขย่าขวด
+    </button>
+    <button class="btn btn-ghost" id="calmBtn" type="button">วางให้นิ่ง</button>
+  </div>
+
+  <div class="tool-card">
+    <div class="tool-line">
+      <button class="chip" id="breathToggle" type="button" aria-pressed="true">🫧 ลมหายใจนำทาง</button>
+      <button class="chip" id="soundToggle" type="button" aria-pressed="false">🔔 เสียงตอนนิ่ง</button>
+      <button class="chip" id="motionToggle" type="button" aria-pressed="false" hidden>📳 สะบัดเครื่องเพื่อเขย่า</button>
+    </div>
+    <div class="tool-line" id="swatchLine">
+      <span class="swatch-label">สีน้ำ</span>
+    </div>
+  </div>
+
+  <div class="waiting-msg" id="waitingMsg">อารมณ์ที่พุ่งขึ้นแรงๆ มักจะค่อยๆ เบาลงเองภายในไม่กี่นาที</div>
+
+  <div class="foot-note">
+    ขวดกลิตเตอร์เป็นเครื่องมือฝึกสติที่ช่วยให้เรา “เว้นระยะ” ก่อนตัดสินใจตอนอารมณ์พุ่ง<br>
+    แนวคิดนี้อ้างอิงจากกรมสุขภาพจิต (การติดเบรกอารมณ์ และการหายใจคลายเครียด) ร่วมกับหลักการฝึกสติ เพื่อรอให้แรงกระตุ้นทางอารมณ์ค่อยๆ ลดลงเอง
+  </div>
+</main>
+
+<script>
+(function () {
+  'use strict';
+
+  var canvas = document.getElementById('jarCanvas');
+  var ctx = canvas.getContext('2d');
+
+  // ---------- settings (persisted) ----------
+  var WATER_COLORS = [
+    { key: 'seagreen', hex: '#4bb98a' },
+    { key: 'cyan',     hex: '#33aec6' },
+    { key: 'blue',     hex: '#5b8fd9' },
+    { key: 'indigo',   hex: '#3f4fae' },
+    { key: 'violet',   hex: '#9878d4' }
+  ];
+  var settings = { color: 'blue', custom: '#7a6cc4', breath: true, sound: false };
+  try {
+    var saved = JSON.parse(localStorage.getItem('lip-jar-settings') || '{}');
+    if (saved && typeof saved === 'object') {
+      if (saved.color) settings.color = saved.color;
+      if (/^#[0-9a-fA-F]{6}$/.test(saved.custom || '')) settings.custom = saved.custom;
+      if (typeof saved.breath === 'boolean') settings.breath = saved.breath;
+      if (typeof saved.sound === 'boolean') settings.sound = saved.sound;
+    }
+  } catch (e) {}
+  function saveSettings() {
+    try { localStorage.setItem('lip-jar-settings', JSON.stringify(settings)); } catch (e) {}
+  }
+  function isCustom() { return /^#[0-9a-fA-F]{6}$/.test(settings.color); }
+  function waterHex() {
+    if (isCustom()) return settings.color;
+    for (var i = 0; i < WATER_COLORS.length; i++) if (WATER_COLORS[i].key === settings.color) return WATER_COLORS[i].hex;
+    return WATER_COLORS[0].hex;
+  }
+
+  function isDark() { return document.documentElement.dataset.theme === 'dark'; }
+
+  // ---------- geometry ----------
+  var W = 340, H = 430, DPR = 1;
+  var body = {}, iw = {}, waterTop = 0;
+
+  function layout() {
+    var cssW = Math.min(340, canvas.parentElement.clientWidth || 340);
+    var cssH = Math.round(cssW * 430 / 340);
+    W = cssW; H = cssH;
+    DPR = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
+    canvas.width = Math.round(W * DPR);
+    canvas.height = Math.round(H * DPR);
+    canvas.style.height = cssH + 'px';
+    ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+
+    body = { x0: W * 0.13, x1: W * 0.87, y0: H * 0.17, y1: H * 0.965 };
+    body.r = Math.min(30, (body.x1 - body.x0) * 0.16);
+    var wall = 5;
+    iw = { x0: body.x0 + wall, x1: body.x1 - wall, y0: body.y0 + wall, y1: body.y1 - wall };
+    waterTop = H * 0.20;
+  }
+
+  // ---------- particles ----------
+  var N = 120;
+  var parts = [];
+  function initParts() {
+    parts = [];
+    for (var i = 0; i < N; i++) {
+      parts.push({
+        x: iw.x0 + Math.random() * (iw.x1 - iw.x0),
+        y: iw.y1 - Math.random() * (iw.y1 - waterTop) * 0.25,
+        vx: 0, vy: 0,
+        len: 2.0 + Math.random() * 2.6,
+        rot: Math.random() * Math.PI,
+        rv: (Math.random() - 0.5) * 0.2,
+        gold: Math.random() < 0.72,
+        sh: 0.5 + Math.random() * 0.5
+      });
+    }
+  }
+
+  var turb = 0;          // turbulence 0..~1.6, decays over time
+  var settled = false;
+  var chimePlayed = false;
+
+  var GRAV = 0.013;
+  var DRAG = 0.94;
+  var TURB_DECAY = 0.9992;
+
+  function addShake(amount) {
+    turb = Math.min(1.7, turb + amount);
+    settled = false;
+    chimePlayed = false;
+    for (var i = 0; i < parts.length; i++) {
+      parts[i].vx = (Math.random() - 0.5) * 15 * amount;
+      parts[i].vy = (Math.random() - 0.5) * 15 * amount - 4;
+    }
+    startWaitingRotation();
+    setMsg(WAITING[waitIdx]);
+  }
+
+  function slosh(dx) {
+    turb = Math.min(1.6, turb + Math.min(0.05, Math.abs(dx) * 0.004));
+    settled = false;
+    chimePlayed = false;
+    for (var i = 0; i < parts.length; i++) {
+      parts[i].vx += dx * 0.05 * (0.5 + Math.random());
+      parts[i].vy -= Math.random() * 0.4;
+    }
+  }
+
+  function calmNow() {
+    turb = 0;
+    for (var i = 0; i < parts.length; i++) {
+      parts[i].vx *= 0.1; parts[i].vy = Math.abs(parts[i].vy) * 0.3 + 0.2;
+    }
+  }
+
+  function step() {
+    var swirl = turb * 1.7;
+    var gEff = GRAV * (1 - Math.min(1, turb) * 0.65);
+    var r;
+    for (var i = 0; i < parts.length; i++) {
+      var p = parts[i];
+      p.vx += (Math.random() - 0.5) * swirl;
+      p.vy += (Math.random() - 0.5) * swirl + gEff;
+      p.vx *= DRAG; p.vy *= DRAG;
+      p.x += p.vx; p.y += p.vy;
+      p.rot += p.rv * (0.3 + Math.abs(p.vx) + Math.abs(p.vy));
+      r = p.len;
+      if (p.x < iw.x0 + r) { p.x = iw.x0 + r; p.vx *= -0.4; }
+      if (p.x > iw.x1 - r) { p.x = iw.x1 - r; p.vx *= -0.4; }
+      if (p.y < waterTop + r) { p.y = waterTop + r; p.vy *= -0.3; }
+      if (p.y > iw.y1 - r) { p.y = iw.y1 - r; p.vy *= -0.22; p.vx *= 0.75; }
+    }
+    turb *= TURB_DECAY;
+    if (turb < 0.0015) turb = 0;
+  }
+
+  function clarity() {
+    var suspended = 0;
+    for (var i = 0; i < parts.length; i++) {
+      var p = parts[i];
+      var spd = Math.abs(p.vx) + Math.abs(p.vy);
+      if (p.y < iw.y1 - 44 || spd > 0.28) suspended++;
+    }
+    return 1 - suspended / parts.length;
+  }
+
+  // ---------- drawing ----------
+  function roundRectPath(x0, y0, x1, y1, r) {
+    ctx.beginPath();
+    ctx.moveTo(x0 + r, y0);
+    ctx.lineTo(x1 - r, y0);
+    ctx.arcTo(x1, y0, x1, y0 + r, r);
+    ctx.lineTo(x1, y1 - r);
+    ctx.arcTo(x1, y1, x1 - r, y1, r);
+    ctx.lineTo(x0 + r, y1);
+    ctx.arcTo(x0, y1, x0, y1 - r, r);
+    ctx.lineTo(x0, y0 + r);
+    ctx.arcTo(x0, y0, x0 + r, y0, r);
+    ctx.closePath();
+  }
+
+  function hexToRgb(h) {
+    var n = parseInt(h.slice(1), 16);
+    return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
+  }
+
+  function draw() {
+    var dark = isDark();
+    ctx.clearRect(0, 0, W, H);
+    var wc = hexToRgb(waterHex());
+
+    // water body
+    roundRectPath(iw.x0, waterTop, iw.x1, iw.y1, body.r * 0.7);
+    ctx.save();
+    ctx.fillStyle = 'rgba(' + wc[0] + ',' + wc[1] + ',' + wc[2] + ',' + (dark ? 0.32 : 0.24) + ')';
+    ctx.fill();
+    ctx.clip();
+
+    // suspended-glitter cloudiness
+    var murk = Math.min(1, turb) * 0.34;
+    if (murk > 0.01) {
+      ctx.fillStyle = 'rgba(' + Math.round(wc[0] * 0.4 + 255 * 0.6) + ',' +
+        Math.round(wc[1] * 0.4 + 255 * 0.6) + ',' +
+        Math.round(wc[2] * 0.4 + 255 * 0.6) + ',' + murk + ')';
+      ctx.fillRect(iw.x0, waterTop, iw.x1 - iw.x0, iw.y1 - waterTop);
+    }
+
+    // glitter
+    for (var i = 0; i < parts.length; i++) {
+      var p = parts[i];
+      var shimmer = 0.7 + 0.3 * Math.sin(p.rot * 2 + p.sh * 6);
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.rot);
+      if (p.gold) ctx.fillStyle = 'rgba(245,216,150,' + shimmer + ')';
+      else ctx.fillStyle = 'rgba(255,255,255,' + (shimmer * 0.92) + ')';
+      ctx.fillRect(-p.len, -p.len * 0.5, p.len * 2, p.len);
+      ctx.restore();
+    }
+    ctx.restore();
+
+    // water top ellipse highlight
+    ctx.beginPath();
+    ctx.ellipse((iw.x0 + iw.x1) / 2, waterTop, (iw.x1 - iw.x0) / 2, 7, 0, 0, Math.PI * 2);
+    ctx.fillStyle = 'rgba(255,255,255,' + (dark ? 0.10 : 0.28) + ')';
+    ctx.fill();
+
+    // glass body
+    roundRectPath(body.x0, body.y0, body.x1, body.y1, body.r);
+    ctx.strokeStyle = dark ? 'rgba(200,225,235,0.40)' : 'rgba(70,105,125,0.35)';
+    ctx.lineWidth = 3;
+    ctx.stroke();
+    ctx.strokeStyle = dark ? 'rgba(255,255,255,0.08)' : 'rgba(255,255,255,0.55)';
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+
+    // neck + lid
+    ctx.fillStyle = dark ? 'rgba(200,225,235,0.10)' : 'rgba(120,150,170,0.14)';
+    ctx.fillRect(W * 0.36, body.y0 - H * 0.055, W * 0.28, H * 0.06);
+    var lidG = ctx.createLinearGradient(0, H * 0.02, 0, H * 0.13);
+    if (dark) { lidG.addColorStop(0, '#3a4a52'); lidG.addColorStop(0.5, '#5b7078'); lidG.addColorStop(1, '#3a4a52'); }
+    else { lidG.addColorStop(0, '#b9c6ce'); lidG.addColorStop(0.5, '#e7eef1'); lidG.addColorStop(1, '#aeb9c1'); }
+    roundRectPath(W * 0.30, H * 0.025, W * 0.70, H * 0.125, 8);
+    ctx.fillStyle = lidG;
+    ctx.fill();
+
+    // left highlight streak on glass
+    roundRectPath(body.x0, body.y0, body.x1, body.y1, body.r);
+    ctx.save();
+    ctx.clip();
+    var hg = ctx.createLinearGradient(body.x0, 0, body.x0 + (body.x1 - body.x0) * 0.5, 0);
+    hg.addColorStop(0, 'rgba(255,255,255,' + (dark ? 0.06 : 0.16) + ')');
+    hg.addColorStop(1, 'rgba(255,255,255,0)');
+    ctx.fillStyle = hg;
+    ctx.fillRect(body.x0, body.y0, (body.x1 - body.x0) * 0.5, body.y1 - body.y0);
+    ctx.restore();
+  }
+
+  // ---------- state label + waiting messages ----------
+  var stateLabel = document.getElementById('stateLabel');
+  var waitingMsg = document.getElementById('waitingMsg');
+  var WAITING = [
+    'อารมณ์ที่พุ่งขึ้นแรงๆ มักจะค่อยๆ เบาลงเองภายในไม่กี่นาที',
+    'ยังไม่ต้องรีบตัดสินใจอะไรตอนนี้ก็ได้ รอให้ใจนิ่งลงก่อน',
+    'ลองหายใจเข้าช้าๆ แล้วปล่อยออกยาวๆ ไปพร้อมกับกลิตเตอร์',
+    'สังเกตความรู้สึกในตัวเฉยๆ ไม่ต้องผลักไส ไม่ต้องไล่ตาม',
+    'ไม่เป็นไรถ้ายังไม่หายทั้งหมด แค่เบาลงสักนิดก็พอแล้ว'
+  ];
+  var SETTLED_MSG = 'กลิตเตอร์นิ่งแล้ว ลองสังเกตว่าตอนนี้ใจเบาลงกว่าตอนเริ่มไหม ถ้ายังรู้สึกไม่นิ่ง เขย่าอีกครั้งก็ได้';
+  var waitIdx = 0, waitTimer = null;
+
+  function setMsg(text) {
+    if (waitingMsg.textContent === text) return;
+    waitingMsg.style.opacity = '0';
+    setTimeout(function () { waitingMsg.textContent = text; waitingMsg.style.opacity = '1'; }, 300);
+  }
+  function startWaitingRotation() {
+    if (waitTimer) return;
+    waitTimer = setInterval(function () {
+      if (settled) return;
+      waitIdx = (waitIdx + 1) % WAITING.length;
+      setMsg(WAITING[waitIdx]);
+    }, 6500);
+  }
+
+  function updateLabels() {
+    if (settled) {
+      stateLabel.textContent = 'นิ่งแล้ว ✨';
+      setMsg(SETTLED_MSG);
+      return;
+    }
+    var c = clarity();
+    if (turb > 0.35 || c < 0.35) stateLabel.textContent = 'กำลังหมุนวน… อยู่กับมันไปก่อน';
+    else if (c < 0.8) stateLabel.textContent = 'ค่อยๆ ตกตะกอน…';
+    else stateLabel.textContent = 'เกือบนิ่งแล้ว…';
+  }
+
+  // ---------- chime ----------
+  var audioCtx = null;
+  function chime() {
+    if (!settings.sound) return;
+    try {
+      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+      var now = audioCtx.currentTime;
+      [528, 792].forEach(function (freq, k) {
+        var o = audioCtx.createOscillator();
+        var g = audioCtx.createGain();
+        o.type = 'sine';
+        o.frequency.value = freq;
+        g.gain.setValueAtTime(0.0001, now);
+        g.gain.exponentialRampToValueAtTime(0.12 - k * 0.05, now + 0.06);
+        g.gain.exponentialRampToValueAtTime(0.0001, now + 1.6);
+        o.connect(g); g.connect(audioCtx.destination);
+        o.start(now); o.stop(now + 1.7);
+      });
+    } catch (e) {}
+  }
+
+  // ---------- breathing ----------
+  var breathOrb = document.getElementById('breathOrb');
+  var breathLabel = document.getElementById('breathLabel');
+  var breathTimer = null;
+  var IN_D = 4, OUT_D = 6;
+
+  function breathLoop() {
+    stopBreath(true);
+    if (!settings.breath) return;
+    breathOrb.style.opacity = '1';
+    breathLabel.style.opacity = '1';
+    var phases = [
+      { name: 'inhale', d: IN_D, label: 'หายใจเข้า…' },
+      { name: 'hold1', d: 1, label: 'หยุดไว้…' },
+      { name: 'exhale', d: OUT_D, label: 'หายใจออก…' },
+      { name: 'hold2', d: 1, label: '' }
+    ];
+    var idx = 0;
+    (function next() {
+      var p = phases[idx % phases.length];
+      breathLabel.textContent = p.label;
+      if (p.name === 'inhale' || p.name === 'exhale') {
+        breathOrb.className = 'breath-orb';
+        breathOrb.style.setProperty('--dur', p.d + 's');
+        void breathOrb.offsetWidth;
+        breathOrb.classList.add(p.name);
+      }
+      idx++;
+      breathTimer = setTimeout(next, p.d * 1000);
+    })();
+  }
+  function stopBreath(keepVisible) {
+    if (breathTimer) { clearTimeout(breathTimer); breathTimer = null; }
+    if (!keepVisible) {
+      breathOrb.style.opacity = '0';
+      breathLabel.style.opacity = '0';
+      breathOrb.className = 'breath-orb';
+    }
+  }
+
+  // ---------- main loop ----------
+  var wasSettled = false;
+  function frame() {
+    if (!(settled && !dragging)) step();
+    if (!settled && turb < 0.08 && clarity() > 0.95) {
+      settled = true;
+    }
+    if (settled && !wasSettled && !chimePlayed) { chime(); chimePlayed = true; }
+    wasSettled = settled;
+    draw();
+    updateLabels();
+  }
+
+  // ---------- input ----------
+  var dragging = false, lastX = 0;
+  function pointerPos(e) {
+    var rect = canvas.getBoundingClientRect();
+    var cx = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
+    return cx * (W / rect.width);
+  }
+  canvas.addEventListener('pointerdown', function (e) {
+    dragging = true; lastX = pointerPos(e);
+    canvas.setPointerCapture && canvas.setPointerCapture(e.pointerId);
+  });
+  canvas.addEventListener('pointermove', function (e) {
+    if (!dragging) return;
+    var x = pointerPos(e);
+    slosh(x - lastX);
+    lastX = x;
+  });
+  function endDrag() { dragging = false; startWaitingRotation(); }
+  canvas.addEventListener('pointerup', endDrag);
+  canvas.addEventListener('pointercancel', endDrag);
+  canvas.addEventListener('pointerleave', function () { if (dragging) endDrag(); });
+
+  document.getElementById('shakeBtn').addEventListener('click', function () {
+    addShake(1.3);
+    if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+  });
+  document.getElementById('calmBtn').addEventListener('click', calmNow);
+
+  // ---------- toggles + swatches ----------
+  var breathToggle = document.getElementById('breathToggle');
+  var soundToggle = document.getElementById('soundToggle');
+  var motionToggle = document.getElementById('motionToggle');
+
+  function syncChip(el, on) { el.setAttribute('aria-pressed', on ? 'true' : 'false'); }
+  syncChip(breathToggle, settings.breath);
+  syncChip(soundToggle, settings.sound);
+
+  breathToggle.addEventListener('click', function () {
+    settings.breath = !settings.breath; saveSettings(); syncChip(breathToggle, settings.breath);
+    if (settings.breath) breathLoop(); else stopBreath(false);
+  });
+  soundToggle.addEventListener('click', function () {
+    settings.sound = !settings.sound; saveSettings(); syncChip(soundToggle, settings.sound);
+    if (settings.sound) {
+      try {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+      } catch (e) {}
+      chime();
+    }
+  });
+
+  var swatchLine = document.getElementById('swatchLine');
+  var presetBtns = [];
+
+  function refreshSwatches() {
+    presetBtns.forEach(function (o) { o.el.classList.toggle('active', !isCustom() && o.key === settings.color); });
+    customSwatch.classList.toggle('active', isCustom());
+    customSwatch.style.background = settings.custom;
+  }
+
+  WATER_COLORS.forEach(function (c) {
+    var b = document.createElement('button');
+    b.className = 'swatch';
+    b.type = 'button';
+    b.style.background = c.hex;
+    b.setAttribute('aria-label', 'สีน้ำ ' + c.key);
+    b.addEventListener('click', function () {
+      settings.color = c.key; saveSettings(); refreshSwatches();
+    });
+    swatchLine.appendChild(b);
+    presetBtns.push({ el: b, key: c.key });
+  });
+
+  var customSwatch = document.createElement('label');
+  customSwatch.className = 'swatch swatch-custom';
+  customSwatch.title = 'เลือกสีเอง';
+  customSwatch.setAttribute('aria-label', 'เลือกสีน้ำเอง');
+  var customInput = document.createElement('input');
+  customInput.type = 'color';
+  customInput.value = settings.custom;
+  customInput.addEventListener('input', function () {
+    settings.color = customInput.value;
+    settings.custom = customInput.value;
+    saveSettings(); refreshSwatches();
+  });
+  customSwatch.appendChild(customInput);
+  swatchLine.appendChild(customSwatch);
+
+  refreshSwatches();
+
+  // ---------- device motion (optional) ----------
+  var motionEnabled = false, lastMotion = 0;
+  function onMotion(e) {
+    var a = e.accelerationIncludingGravity || e.acceleration;
+    if (!a) return;
+    var mag = Math.abs(a.x || 0) + Math.abs(a.y || 0) + Math.abs(a.z || 0);
+    var now = Date.now();
+    if (mag > 32 && now - lastMotion > 400) {
+      lastMotion = now;
+      addShake(0.9);
+    }
+  }
+  if (typeof DeviceMotionEvent !== 'undefined') {
+    motionToggle.hidden = false;
+    motionToggle.addEventListener('click', function () {
+      if (motionEnabled) {
+        window.removeEventListener('devicemotion', onMotion);
+        motionEnabled = false; syncChip(motionToggle, false);
+        return;
+      }
+      var reqPerm = DeviceMotionEvent.requestPermission;
+      if (typeof reqPerm === 'function') {
+        reqPerm().then(function (res) {
+          if (res === 'granted') {
+            window.addEventListener('devicemotion', onMotion);
+            motionEnabled = true; syncChip(motionToggle, true);
+          }
+        }).catch(function () {});
+      } else {
+        window.addEventListener('devicemotion', onMotion);
+        motionEnabled = true; syncChip(motionToggle, true);
+      }
+    });
+  }
+
+  // ---------- boot ----------
+  layout();
+  initParts();
+  for (var i = 0; i < parts.length; i++) { parts[i].y = iw.y1 - Math.random() * 30; }
+  settled = true; wasSettled = true; chimePlayed = true;
+  if (settings.breath) breathLoop();
+  frame();
+  setInterval(frame, 1000 / 60);
+
+  var rTimer = null;
+  window.addEventListener('resize', function () {
+    clearTimeout(rTimer);
+    rTimer = setTimeout(function () {
+      var keepColor = settings.color;
+      layout(); initParts();
+      for (var j = 0; j < parts.length; j++) { parts[j].y = iw.y1 - Math.random() * 30; }
+      settled = true;
+      settings.color = keepColor;
+    }, 200);
+  });
+})();
+</script>
+</body>
+</html>

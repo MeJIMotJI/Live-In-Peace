@@ -1,9 +1,12 @@
-.git
-src
+# Keep source, docs and tooling out of the public site
+# (same syntax as .gitignore)
+.git*
+.assetsignore
+.claude/
+.wrangler/
+agents/
+discord-bot/
+src/
 wrangler.jsonc
 CLAUDE.md
-agents
-discord-bot
-.claude
-.wrangler
-.gitignore
+*.py

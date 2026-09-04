@@ -164,6 +164,14 @@ PM: รายงาน "เสร็จแล้ว ✓"
 - ใช้ภาษา stigmatize: "บ้า", "จิตฟั่นเฟือน", "อ่อนแอ", "แกล้งทำ"
 - แต่งข้อมูลทางการแพทย์
 - mix ภาษาอังกฤษใน UI (นอกจาก medical term ที่ยอมรับกันทั่วไป)
+- **`wrangler deploy` จาก branch ที่ไม่ใช่ `main` ที่ update แล้ว** — ทั้งเว็บ deploy ไป Cloudflare Worker `live-in-peace` ตัวเดียว ใคร deploy หลังสุดทับหมด (เคยทำ visitor counter หายทั้งเว็บมาแล้ว)
+
+### 🚀 Deployment
+- เว็บทั้งหมด = Cloudflare Worker `live-in-peace` ตัวเดียว (static assets + `src/index.js` + `Counter` Durable Object)
+- **Deploy จาก `main` ที่ update ล่าสุดเท่านั้น** — ก่อน deploy: `git fetch && git merge origin/main` (หรือ rebase) ให้ branch ตัวเองตามทัน main แล้วค่อย merge PR ก่อน
+- คำสั่ง: `node discord-bot/node_modules/wrangler/bin/wrangler.js deploy` (หรือ `npx --yes wrangler@4 deploy`) จาก repo root
+- `wrangler.jsonc` บน main ต้องมี `main`, `assets.binding`, `durable_objects`, `migrations` เสมอ — ห้าม revert กลับเป็นแบบ assets-only
+- `wrangler dev` ใช้ไม่ได้ (reload loop เพราะ `assets.directory: "."`) — เทสต์ด้วย `python -m http.server` หรือ deploy จริง
 
 ---
 
@@ -228,7 +236,7 @@ line-height: 1.8–1.9;
 | ฟีเจอร์ | สถานะ | หมายเหตุ |
 |------|--------|----------|
 | Dark mode | ✅ v1 | ทั้ง 15 หน้า (รวม worry.html) — ปุ่มสลับ 🌙/☀️ ลอยมุมขวาบน, จำค่าใน localStorage (`lip-theme`), ไม่มี FOUC. บล็อก `<style>`+`<script>` เหมือนกันทุกไฟล์ (แทรกก่อน `</head>`) + dark override เฉพาะหน้าสำหรับ accent/กล่องสีพิเศษ |
-| Visitor counter | ✅ v1 | นับผู้เข้าใช้ทั้งเว็บ — Cloudflare Worker (`src/index.js`) + Durable Object `Counter` (SQLite, singleton `global`) เก็บ `views` (page views รวม ทุกหน้า) กับ `visitors` (unique 1/เครื่อง ครั้งแรกที่เข้าเว็บ ตัดจาก localStorage `lip-visited`). `counter.js` โหลดในทุกหน้า (`<script src="/counter.js" defer>` ก่อน `</head>`) ยิง `POST /api/hit {unique}`; index.html แสดงยอดใน footer (`#stat-views` / `#stat-visitors`). `GET /api/stats` อ่านอย่างเดียว ไม่บวก. `.assetsignore` กัน src/agents/CLAUDE.md/discord-bot ออกจาก public. Deploy: `wrangler deploy` (ใช้ wrangler ใน `discord-bot/node_modules`) |
+| Visitor counter | ✅ v1 | นับผู้เข้าใช้ทั้งเว็บ — Cloudflare Worker (`src/index.js`) + Durable Object `Counter` (SQLite, singleton `global`) เก็บ `views` (page views รวม ทุกหน้า) กับ `visitors` (unique 1/เครื่อง ครั้งแรกที่เข้าเว็บ ตัดจาก localStorage `lip-visited`). `counter.js` โหลดในทุกหน้า (`<script src="/counter.js" defer>` ก่อน `</head>`) ยิง `POST /api/hit {unique}`; index.html แสดงยอดใน footer (`#stat-views` / `#stat-visitors`). `GET /api/stats` อ่านอย่างเดียว ไม่บวก. `.assetsignore` กัน src/agents/CLAUDE.md/discord-bot ออกจาก public. Deploy: ดูหัวข้อ 🚀 Deployment (จาก main เท่านั้น) |
 
 ### Open Items
 - [ ] Researcher review: ตรวจสอบความถูกต้องเนื้อหาทุกหน้า

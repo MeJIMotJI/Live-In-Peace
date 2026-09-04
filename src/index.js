@@ -3,7 +3,7 @@ import { DurableObject } from 'cloudflare:workers';
 /**
  * ตัวนับผู้เข้าใช้เว็บ Live In Peace
  * - views    = จำนวนครั้งที่เปิดหน้าใดก็ได้ในเว็บ (page views รวม)
- * - visitors = จำนวนผู้เข้าใช้แบบไม่ซ้ำ (นับ 1 ต่อเครื่องต่อวัน ตัดสินจากฝั่ง client)
+ * - visitors = จำนวนผู้เข้าใช้แบบไม่ซ้ำ (นับ 1 ต่อเครื่อง ครั้งแรกที่เข้าเว็บ ตัดสินจากฝั่ง client)
  * เก็บใน Durable Object ตัวเดียว (singleton) เพื่อให้บวกแบบ atomic ไม่ชนเพดานการเขียนแบบ KV
  */
 export class Counter extends DurableObject {
@@ -20,6 +20,11 @@ export class Counter extends DurableObject {
       views: (await this.ctx.storage.get('views')) || 0,
       visitors: (await this.ctx.storage.get('visitors')) || 0,
     };
+  }
+
+  async reset() {
+    await this.ctx.storage.put({ views: 0, visitors: 0 });
+    return { views: 0, visitors: 0 };
   }
 }
 
@@ -50,6 +55,13 @@ export default {
 
     if (url.pathname === '/api/stats' && request.method === 'GET') {
       const data = await stub(env).stats();
+      return new Response(JSON.stringify(data), { headers: JSON_HEADERS });
+    }
+
+    // รีเซ็ตตัวนับ — ล็อกด้วย secret RESET_KEY (ตั้งผ่าน `wrangler secret put RESET_KEY`)
+    // ไม่ตั้ง secret ไว้ = ปิดใช้งาน endpoint นี้
+    if (url.pathname === '/api/reset' && env.RESET_KEY && url.searchParams.get('key') === env.RESET_KEY) {
+      const data = await stub(env).reset();
       return new Response(JSON.stringify(data), { headers: JSON_HEADERS });
     }
 
